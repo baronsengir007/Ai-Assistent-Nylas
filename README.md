@@ -1,79 +1,63 @@
-# Data Project Template
+# GenAI Accelerator Labs
 
-<a target="_blank" href="https://datalumina.com/">
-    <img src="https://img.shields.io/badge/Datalumina-Project%20Template-2856f7" alt="Datalumina Project" />
-</a>
+Welcome to the official repository for the AI Engineering Accelerator program's hands-on labs! This repository contains all the practical exercises, code examples, and projects you'll be working on throughout the six-week accelerator.
 
-## Cookiecutter Data Science
-This project template is a simplified version of the [Cookiecutter Data Science](https://cookiecutter-data-science.drivendata.org) template, created to suit the needs of Datalumina and made available as a GitHub template.
+## Overview
 
-## Adjusting .gitignore
+This repository is structured to follow the course curriculum, with dedicated folders for each week's exercises. As you progress through the accelerator, you'll build increasingly complex AI applications, culminating in a complete project that leverages the GenAI Launchpad framework.
 
-Ensure you adjust the `.gitignore` file according to your project needs. For example, since this is a template, the `/data/` folder is commented out and data will not be exlucded from source control:
-
-```plaintext
-# exclude data from source control by default
-# /data/
-```
-
-Typically, you want to exclude this folder if it contains either sensitive data that you do not want to add to version control or large files.
-
-## Duplicating the .env File
-To set up your environment variables, you need to duplicate the `.env.example` file and rename it to `.env`. You can do this manually or using the following terminal command:
-
-```bash
-cp .env.example .env # Linux, macOS, Git Bash, WSL
-copy .env.example .env # Windows Command Prompt
-```
-
-This command creates a copy of `.env.example` and names it `.env`, allowing you to configure your environment variables specific to your setup.
-
-
-## Project Organization
+<!-- ## Repository Structure
 
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── README.md          <- The top-level README for developers using this project
-├── data
-│   ├── external       <- Data from third party sources
-│   ├── interim        <- Intermediate data that has been transformed
-│   ├── processed      <- The final, canonical data sets for modeling
-│   └── raw            <- The original, immutable data dump
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-└── src                         <- Source code for this project
-    │
-    ├── __init__.py             <- Makes src a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    │    
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    ├── plots.py                <- Code to create visualizations 
-    │
-    └── services                <- Service classes to connect with external platforms, tools, or APIs
-        └── __init__.py 
-```
+genai-accelerator-labs/
+├── week1/           # Python Fundamentals & Development Environment
+├── week2/           # Large Language Models & Foundation Models
+├── week3/           # Generative AI Frameworks & API Integration
+├── week4/           # Advanced RAG & Vector Databases
+├── week5/           # AI Application Development
+├── week6/           # Project Implementation & Best Practices
+└── resources/       # Shared resources, utilities and reference materials
+``` -->
 
---------
+## Getting Started
+
+1. Clone this repository to your local machine:
+   ```bash
+   git clone https://github.com/datalumina/genai-accelerator-labs.git
+   cd genai-accelerator-labs
+   ```
+
+2. Each week's folder contains a README with specific setup instructions and exercise details.
+
+3. Complete the exercises in order, as each builds upon skills learned in previous sessions.
+
+4. Track your progress by checking off completed exercises in the provided checklists.
+
+## Prerequisites
+
+- Python 3.10 or newer
+- Cursor IDE (recommended) or VS Code
+- UV package manager
+- GitHub account
+- Basic Python programming knowledge
+
+## How to Use This Repository
+
+- **Start with Week 1**: Complete the environment setup before proceeding to other exercises
+- **Read All Instructions**: Each lab includes detailed instructions and learning objectives
+- **Commit Regularly**: Track your progress with descriptive commit messages
+- **Ask Questions**: Use the program's discussion channels when you need help
+- **Review Solutions**: Reference branches contain solution code after assignment deadlines
+
+## Resources
+
+Additional resources, documentation, and references can be found in the `resources` directory and in the course materials.
+
+## Support
+
+If you encounter any issues with the labs or exercises, please:
+
+1. Check the FAQ section in each week's README
+2. Contact your coach via email
+3. Discuss this at our office hours
+
