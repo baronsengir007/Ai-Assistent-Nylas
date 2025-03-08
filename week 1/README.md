@@ -44,9 +44,9 @@ UV installs packages up to 10-100x faster than pip, handles complex dependency g
 
 1. Install Python 3.10+ on your system and verify the installation:
 
-```bash
-python --version
-```
+    ```bash
+    python --version
+    ```
 
 2. Download and install Cursor IDE from [cursor.com](https://cursor.com)
 
@@ -58,24 +58,24 @@ python --version
 
 4. Install UV using the instructions from the [Getting Started with UV guide](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
    
-```bash
+    ```bash
 
-# macOS (using Homebrew)
-brew install uv
+    # macOS (using Homebrew)
+    brew install uv
 
 
-# On macOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
+    # On macOS/Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# On Windows
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+    # On Windows
+    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 5. Verify UV installation:
 
-```bash
-uv --version
-   ```
+    ```bash
+    uv --version
+    ```
 
 ### Exercise 2: Project Configuration
 
