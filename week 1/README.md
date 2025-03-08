@@ -38,6 +38,23 @@ UV installs packages up to 10-100x faster than pip, handles complex dependency g
 **Installation Resources:**
 - [Comprehensive Guide: Getting Started with UV](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
 
+### Ruff Linter and Formatter
+
+We will also use Ruff, an extremely fast Python linter and formatter written in Rust. It combines the functionality of multiple Python tools (like flake8, black, isort, and more) into a single, high-performance package.
+
+Key benefits of Ruff include:
+
+- 10-100x faster than traditional Python linters
+- Automatic code fixing capabilities
+- Comprehensive rule set covering style, bugs, and complexity
+- Configurable to match your project's coding standards
+
+Ruff helps maintain code quality and consistency across your AI projects, which is essential when working in teams or on complex systems.
+
+**Installation Resources:**
+- [Ruff Documentation](https://docs.astral.sh/ruff/)
+- [VS Code/Cursor Extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
+
 ## Week 1 Exercises
 
 ### Exercise 1: Environment Setup
@@ -51,12 +68,23 @@ UV installs packages up to 10-100x faster than pip, handles complex dependency g
 2. Download and install Cursor IDE from [cursor.com](https://cursor.com)
 
 3. Configure Cursor with the following extensions:
-   - Python
-   - Pylance
-   - GitHub Copilot (if available)
-   - Python Indent
+   - [Python Extension Package](https://marketplace.visualstudio.com/items?itemName=donjayamanne.python-extension-pack)
+   - [Jupyter](https://marketplace.cursorapi.com/items?itemName=ms-toolsai.jupyter)
+   - [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
 
-4. Install UV using the instructions from the [Getting Started with UV guide](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
+4. You can configure Ruff to format Python code on-save by enabling the `editor.formatOnSave` action in `settings.json`, and setting Ruff as your default formatter:
+
+    ```
+    {
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff"
+        }
+    }
+    ```
+
+
+5. Install UV using the instructions from the [Getting Started with UV guide](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
    
     ```bash
 
@@ -69,7 +97,7 @@ UV installs packages up to 10-100x faster than pip, handles complex dependency g
 
     # On Windows
     powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
+    ```
 
 5. Verify UV installation:
 
@@ -79,12 +107,12 @@ UV installs packages up to 10-100x faster than pip, handles complex dependency g
 
 ### Exercise 2: Project Configuration
 
-1. Create a new GitHub repository named "ai-accelerator-projects"
+1. Create a new GitHub repository named "genai-accelerator-projects"
 
 2. Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/yourusername/ai-accelerator-projects.git
-   cd ai-accelerator-projects
+   git clone https://github.com/yourusername/genai-accelerator-projects.git
+   cd genai-accelerator-projects
    ```
 
 3. Create a Python virtual environment using UV:
@@ -92,7 +120,7 @@ UV installs packages up to 10-100x faster than pip, handles complex dependency g
    uv venv
    ```
 
-4. Activate the virtual environment:
+4. Activate the virtual environment by selecting it within your IDE or by using the terminal via:
    ```bash
    # On macOS/Linux
    source .venv/bin/activate
