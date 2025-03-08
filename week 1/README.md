@@ -181,4 +181,4 @@ Ruff helps maintain code quality and consistency across your AI projects, which 
    git push origin main
    ```
 
-By completing these exercises, you'll have established a robust development environment that we'll build upon throughout the accelerator program. This foundation will enable you to focus on learning AI engineering concepts rather than troubleshooting environment issues.
+By completing these exercises, you'll have established a solid development environment that we'll build upon throughout the accelerator program. This foundation will enable you to focus on learning AI engineering concepts rather than troubleshooting environment issues.
