@@ -2,7 +2,7 @@
 
 ## Overview
 
-This week, we'll explore three essential design patterns that are particularly useful when building applications with Large Language Models (LLMs):
+This week, we'll explore three essential design patterns that are particularly useful when building applications with LLMs:
 
 1. **Chain of Responsibility Pattern**: Passing requests along a chain of handlers
 2. **Strategy Pattern**: Defining a family of algorithms and making them interchangeable
@@ -20,19 +20,7 @@ Before diving into the design patterns, we recommend reviewing the `1-python-cla
 - Basic Class Structure
 - Creating and Using Objects
 - Inheritance (basic concept)
-
-As you progress, you can revisit the more advanced topics like Abstract Base Classes (ABC), which are used extensively in our design pattern implementations.
-
-## Python Classes and Abstract Base Classes (ABC)
-
-The `1-python-classes.md` guide covers:
-
-- Basic class definition and features
-- Inheritance and method overriding
-- Abstract base classes and interfaces
-- Properties and special methods
-- Class vs. instance variables
-- Class and static methods
+- Abstract Base Classes (ABC)
 
 Understanding these concepts will help you work with design patterns effectively, but remember that learning is an iterative process. You'll become more comfortable with these concepts as you practice.
 
@@ -61,6 +49,7 @@ In `2-chain-of-responsibility-pattern.py`, we've implemented a simple text proce
 Your task:
 
 - Review the implementation and understand how the chain is constructed and processed
+- Try to add another step to the end of the chain
 
 ## Exercise 2: Strategy Pattern
 
@@ -96,7 +85,7 @@ The Adapter pattern converts the interface of a class into another interface cli
 
 ### AI Engineering Context
 
-When building LLM applications, we often need to integrate with external APIs and services that have different interfaces, such as weather services.
+When building LLM applications, we often need to integrate with external APIs and services that have different interfaces.
 
 ### Exercise
 
