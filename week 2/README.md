@@ -1,0 +1,111 @@
+# Week 2: Design Patterns for AI Engineering
+
+## Overview
+
+This week, we'll explore three essential design patterns that are particularly useful when building applications with Large Language Models (LLMs):
+
+1. **Chain of Responsibility Pattern**: Passing requests along a chain of handlers
+2. **Strategy Pattern**: Defining a family of algorithms and making them interchangeable
+3. **Adapter Pattern**: Converting the interface of a class into another interface clients expect
+
+Understanding these patterns will help you build more maintainable, flexible, and robust AI applications.
+
+## Getting Started: Understanding Python Classes
+
+Before diving into the design patterns, we recommend reviewing the `1-python-classes.md` document first. This guide provides a concise overview of how classes work in Python, which is essential for understanding the design patterns we'll be implementing.
+
+**Note for beginners**: Don't worry if you don't fully understand all the concepts in the classes guide yet! The goal is to get familiar with the terminology and basic structure of classes. You'll gain a deeper understanding as you work through the exercises. The most important sections to focus on initially are:
+
+- What Are Classes?
+- Basic Class Structure
+- Creating and Using Objects
+- Inheritance (basic concept)
+
+As you progress, you can revisit the more advanced topics like Abstract Base Classes (ABC), which are used extensively in our design pattern implementations.
+
+## Python Classes and Abstract Base Classes (ABC)
+
+The `1-python-classes.md` guide covers:
+
+- Basic class definition and features
+- Inheritance and method overriding
+- Abstract base classes and interfaces
+- Properties and special methods
+- Class vs. instance variables
+- Class and static methods
+
+Understanding these concepts will help you work with design patterns effectively, but remember that learning is an iterative process. You'll become more comfortable with these concepts as you practice.
+
+## Exercise 1: Chain of Responsibility Pattern
+
+### Concept
+
+The Chain of Responsibility pattern passes requests along a chain of handlers. Each handler decides either to process the request or to pass it to the next handler in the chain.
+
+### AI Engineering Context
+
+In LLM applications, we often need to process data through multiple stages (preprocessing, prompt construction, post-processing, etc.). The Chain of Responsibility pattern allows us to:
+
+- Create modular processing steps
+- Easily add, remove, or reorder steps
+- Handle errors at appropriate levels
+
+### Exercise
+
+In `2-chain-of-responsibility-pattern.py`, we've implemented a simple text processing pipeline for an AI application. The pipeline consists of several handlers:
+
+1. **TextNormalizationHandler**: Cleans and normalizes text
+2. **PromptConstructionHandler**: Builds a prompt for the LLM
+3. **LLMProcessingHandler**: Sends the prompt to an LLM
+
+Your task:
+
+- Review the implementation and understand how the chain is constructed and processed
+
+## Exercise 2: Strategy Pattern
+
+### Concept
+
+The Strategy pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. It lets the algorithm vary independently from clients that use it.
+
+### AI Engineering Context
+
+When working with LLMs, we often need different strategies for:
+
+- Different text processing approaches
+- Different prompt techniques
+- Different output parsing approaches
+
+### Exercise
+
+In `3-strategy-pattern.py`, we've implemented a system that can use different text processing strategies:
+
+1. **SummarizationStrategy**: Extracts the first and last sentences
+2. **KeywordExtractionStrategy**: Identifies and counts important keywords
+3. **SentimentAnalysisStrategy**: Analyzes the sentiment of the text
+
+Your task:
+
+- Review the implementation and understand how strategies can be swapped at runtime
+
+## Exercise 3: Adapter Pattern
+
+### Concept
+
+The Adapter pattern converts the interface of a class into another interface clients expect. It allows classes to work together that couldn't otherwise because of incompatible interfaces.
+
+### AI Engineering Context
+
+When building LLM applications, we often need to integrate with external APIs and services that have different interfaces, such as weather services.
+
+### Exercise
+
+In `4-adapter-pattern.py`, we've implemented a system that adapts the Open-Meteo weather API to a consistent interface that our application can use.
+
+Your task:
+
+- Review the implementation and understand how the adapter translates between interfaces
+
+## Resources
+
+- [Refactoring Guru: Design Patterns](https://refactoring.guru/design-patterns)
