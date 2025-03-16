@@ -95,6 +95,43 @@ Your task:
 
 - Review the implementation and understand how the adapter translates between interfaces
 
+## Exercise 4: Structured Output with Instructor
+
+### Concept
+
+Structured output transforms free-form LLM responses into well-defined data structures that your application can reliably use for decision-making and routing.
+
+### AI Engineering Context
+
+When building AI applications, we often need to:
+
+- Extract specific information from LLM outputs
+- Make routing decisions based on content classification
+- Ensure responses contain all required fields in expected formats
+- Connect LLM outputs directly to other systems
+
+The Instructor library provides a clean interface for extracting structured data from LLMs using Pydantic models.
+
+### Exercise
+
+In `5-structured-output.py`, we've implemented a customer inquiry classification system that:
+
+1. Takes customer messages as input
+2. Uses Instructor to extract structured data with the OpenAI API
+3. Classifies the inquiry type, priority, and other attributes
+4. Routes the inquiry to the appropriate handler based on the classification
+
+Your tasks:
+
+1. **Try with your own custom message**: Enter a customer inquiry and see how the system classifies and routes it
+2. **Modify the model**: Add a 'suggested_response' field to the CustomerInquiry model and update the route_inquiry function to print this suggested response
+3. **Create a new handler type**: Add a 'technical_support' handler that triggers when the inquiry is a question about a product with confidence > 0.8
+4. **Error handling challenge**: Add error handling to catch and handle validation errors that might occur during structured output extraction
+
+This exercise demonstrates how well-designed data models can control application flow and make intelligent routing decisions with minimal code.
+
 ## Resources
 
 - [Refactoring Guru: Design Patterns](https://refactoring.guru/design-patterns)
+- [Instructor Documentation](https://python.useinstructor.com/)
+- [Pydantic Documentation](https://docs.pydantic.dev/)
