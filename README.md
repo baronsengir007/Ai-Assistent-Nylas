@@ -12,7 +12,7 @@ This repository is structured to follow the course curriculum, with dedicated fo
 genai-accelerator-labs/
 ├── week1/           # Python Fundamentals & Development Environment
 ├── week2/           # Design Patterns for AI Engineering
-├── week3/           # Coming soon
+├── week3/           # Event-Driven Architecture & Containerization
 ├── week4/           # Coming soon
 ├── week5/           # Coming soon
 ├── week6/           # Coming soon
