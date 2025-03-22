@@ -5,14 +5,14 @@ This week provides hands-on experience with essential infrastructure components 
 ## Lab Exercises
 
 ### 1. Configuration Management with Pydantic
-**File**: `a_pydantic_settings.py`
+**File**: `e1_pydantic_settings.py`
 - Learn how to manage application settings
 - Handle environment variables securely
 - Validate configuration with Pydantic
 - Set up OpenAI API credentials
 
 ### 2. Building AI Endpoints with FastAPI
-**File**: `b_fastapi_quickstart.py`
+**File**: `e2_fastapi_quickstart.py` and `e3_test_fastapi.py`
 - Create a FastAPI application
 - Implement structured LLM outputs with Instructor
 - Define type-safe request/response models
@@ -26,7 +26,7 @@ This week provides hands-on experience with essential infrastructure components 
 - Connect to the database
 
 ### 4. Database Operations
-**File**: `d_database_setup.py`
+**File**: `e4_database_setup.py`
 - Define SQLAlchemy models
 - Implement basic CRUD operations
 - Store AI processing events
