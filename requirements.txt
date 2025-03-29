@@ -134,3 +134,5 @@ xlsxwriter==3.2.2
 yarl==1.18.3
 tiktoken==0.9.0
 lancedb==0.21.2
+tantivy==0.22.2
+pylance==0.25.1

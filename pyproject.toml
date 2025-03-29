@@ -12,8 +12,10 @@ dependencies = [
     "lancedb>=0.21.2",
     "openai>=1.69.0",
     "psycopg2-binary>=2.9.10",
+    "pylance>=0.25.1",
     "python-dotenv>=1.1.0",
     "sqlalchemy>=2.0.40",
+    "tantivy>=0.22.2",
     "tiktoken>=0.9.0",
     "uvicorn>=0.34.0",
 ]

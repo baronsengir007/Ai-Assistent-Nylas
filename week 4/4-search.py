@@ -47,7 +47,7 @@ print(f"Total chunks in database: {table.count_rows()}")
 # Create the index
 # --------------------------------------------------------------
 
-table.create_index(num_partitions=2, num_sub_vectors=4)
+table.create_fts_index("text", replace=True)
 
 # --------------------------------------------------------------
 # Implement different search strategies
@@ -138,40 +138,4 @@ def display_search_results(query, query_type, alpha=None):
 # Run all three search types
 vector_df = display_search_results(query, "vector")
 text_df = display_search_results(query, "fts")
-hybrid_df = display_search_results(
-    query, "hybrid", alpha=0.7
-)  # Favor vector search slightly
-
-# --------------------------------------------------------------
-# Filters and advanced options
-# --------------------------------------------------------------
-"""
-LanceDB also supports filtering by metadata, which can be combined with
-any search strategy to narrow down results.
-"""
-
-print("\n--- FILTERED SEARCH EXAMPLE ---")
-print("Query: 'Bitcoin mining' filtered to specific section")
-
-# Search with metadata filter
-filtered_results = table.search(
-    query="Bitcoin mining",
-    query_type="hybrid",
-    where="metadata.title LIKE '%Introduction%'",  # SQL-like filtering
-).limit(3)
-
-print("\nResults from Introduction section only:")
-for i, row in enumerate(filtered_results.to_pandas().iterrows(), 1):
-    data = row[1]
-    print(f"{i}. {data['metadata'].get('title', 'Untitled Section')}")
-    print(f"   Text snippet: {data['text'][:150]}...\n")
-
-# --------------------------------------------------------------
-# Your Turn: Experiment with different queries and search parameters
-# --------------------------------------------------------------
-"""
-1. Try different queries related to Bitcoin concepts
-2. Experiment with different alpha values for hybrid search
-3. Try combining filters with different search strategies
-4. Compare the results to identify which strategy works best for different query types
-"""
+hybrid_df = display_search_results(query, "hybrid")  # Favor vector search slightly
