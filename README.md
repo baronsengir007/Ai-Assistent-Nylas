@@ -13,7 +13,7 @@ genai-accelerator-labs/
 ├── week1/           # Python Fundamentals & Development Environment
 ├── week2/           # Design Patterns for AI Engineering
 ├── week3/           # Event-Driven Architecture & Containerization
-├── week4/           # Coming soon
+├── week4/           # Retrieval Augmented Generation (RAG)
 ├── week5/           # Coming soon
 ├── week6/           # Coming soon
 ```
