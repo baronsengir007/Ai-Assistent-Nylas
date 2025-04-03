@@ -138,4 +138,4 @@ def display_search_results(query, query_type, alpha=None):
 # Run all three search types
 vector_df = display_search_results(query, "vector")
 text_df = display_search_results(query, "fts")
-hybrid_df = display_search_results(query, "hybrid")  # Favor vector search slightly
+hybrid_df = display_search_results(query, "hybrid")

@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "cohere>=5.14.2",
     "docling>=2.28.4",
     "fastapi>=0.115.12",
     "instructor>=1.7.7",
