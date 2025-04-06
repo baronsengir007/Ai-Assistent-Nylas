@@ -137,3 +137,4 @@ lancedb==0.21.2
 tantivy==0.22.2
 pylance==0.25.1
 cohere==5.14.2
+langfuse==2.60.2
