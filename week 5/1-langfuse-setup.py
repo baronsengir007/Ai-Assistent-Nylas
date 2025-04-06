@@ -12,6 +12,10 @@ LANGFUSE_HOST=your-langfuse-host-here
 
 load_dotenv()
 
+# --------------------------------------------------------------
+# Using the observe decorator to log the LLM calls
+# --------------------------------------------------------------
+
 
 @observe()
 def story():
@@ -31,9 +35,23 @@ def story():
     )
 
 
+# --------------------------------------------------------------
+# Run the main function
+# --------------------------------------------------------------
+
+
 @observe()
 def main():
     return story()
 
 
 main()
+
+# --------------------------------------------------------------
+# Check the Langfuse dashboard to see the logged LLM calls
+# --------------------------------------------------------------
+
+"""
+You can see the logged LLM calls in the Langfuse dashboard:
+https://us.cloud.langfuse.com/ or https://eu.cloud.langfuse.com/
+"""
