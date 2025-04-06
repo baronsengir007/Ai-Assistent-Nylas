@@ -14,7 +14,7 @@ genai-accelerator-labs/
 ├── week2/           # Design Patterns for AI Engineering
 ├── week3/           # Event-Driven Architecture & Containerization
 ├── week4/           # Retrieval Augmented Generation (RAG)
-├── week5/           # Coming soon
+├── week5/           # LLM Observability, Monitoring & Evaluation
 ├── week6/           # Coming soon
 ```
 
