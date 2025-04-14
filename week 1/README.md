@@ -1,4 +1,4 @@
-# Week 1: Python Fundamentals & Development Environment Setup
+# Week 1 — Foundations of AI Engineering
 
 ## Setting Up Your Local Development Environment
 

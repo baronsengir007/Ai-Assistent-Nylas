@@ -27,8 +27,10 @@ converter = DocumentConverter()
 # --------------------------------------------------------------
 # Basic PDF extraction using docling
 # --------------------------------------------------------------
+
 # Extract the Bitcoin whitepaper - a common test document for RAG systems
 # Notice how we can pass a URL and Docling handles the downloading and extraction
+
 result = converter.convert("https://bitcoin.org/bitcoin.pdf")
 
 # Get the standardized document object

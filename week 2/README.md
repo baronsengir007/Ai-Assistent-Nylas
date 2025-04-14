@@ -1,4 +1,4 @@
-# Week 2: Design Patterns for AI Engineering
+# Week 2 — Design Patterns for AI Engineering
 
 ## Overview
 

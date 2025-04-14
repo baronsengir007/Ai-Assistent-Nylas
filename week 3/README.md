@@ -1,4 +1,4 @@
-# Week 3: Event-Driven Architecture & Containerization
+# Week 3 — Event-Driven Architecture & Containerization
 
 This week provides hands-on experience with essential infrastructure components for AI applications. We'll explore each component individually to understand its role in building production-ready AI systems.
 
