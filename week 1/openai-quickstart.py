@@ -2,6 +2,10 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
+"""
+This script demonstrates how to generate a response using the OpenAI API.
+"""
+
 # --------------------------------------------------------------
 # Load environment variables
 # --------------------------------------------------------------
