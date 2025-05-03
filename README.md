@@ -15,7 +15,7 @@ genai-accelerator-labs/
 ├── week3/           # Event-Driven Architecture & Containerization
 ├── week4/           # Retrieval Augmented Generation (RAG)
 ├── week5/           # LLM Observability, Monitoring & Evaluation
-├── week6/           # Coming soon
+├── week6/           # Deploying Your AI Applications
 ```
 
 ## Getting Started
