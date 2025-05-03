@@ -1,8 +1,0 @@
-python-dotenv
-openai
-instructor
-pydantic
-fastapi
-uvicorn
-sqlalchemy 
-psycopg2-binary 
