@@ -12,6 +12,14 @@ Ensure you have Python 3.10 or newer installed on your system. This provides the
 - [Python Downloads Page](https://www.python.org/downloads/)
 - [Official Installation Guide](https://docs.python.org/3/using/index.html)
 
+### Git Installation
+
+Make sure you have Git installed to manage your code repositories and collaborate with others effectively.
+
+**Installation Resources:**
+- [Git Downloads Page](https://git-scm.com/downloads)
+- [Git Installation Guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
 ### IDE Configuration
 
 For this program, we strongly recommend using Cursor IDE—a VS Code clone specifically optimized for AI development workflows.
@@ -36,7 +44,7 @@ We'll be using UV, a modern Python package manager that significantly improves u
 UV installs packages up to 10-100x faster than pip, handles complex dependency graphs more reliably, and creates consistent environments across different systems—critical for production AI applications.
 
 **Installation Resources:**
-- [Comprehensive Guide: Getting Started with UV](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
+- [Getting Started with UV](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
 
 ### Ruff Linter and Formatter
 
@@ -55,6 +63,16 @@ Ruff helps maintain code quality and consistency across your AI projects, which 
 - [Ruff Documentation](https://docs.astral.sh/ruff/)
 - [VS Code/Cursor Extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
 
+
+### Jupyter Notebooks
+
+Jupyter Notebooks are interactive documents that let you combine code, text, and visual output (like charts or tables) in one place. They originally gained popularity in data science because they're perfect for exploring data, running small code snippets step by step, and documenting your findings along the way. Instead of writing one long script, you can test and explain things cell by cell, making your workflow more flexible and transparent. Throughout the lab exercises, you'll see that some parts are in regular Python files, while others are in Jupyter Notebooks, depending on what fits best for the task.
+
+```bash
+python_file.py
+jupyter_notebook_file.ipynb
+```
+
 ## Week 1 Exercises
 
 ### Exercise 1: Environment Setup
@@ -65,14 +83,43 @@ Ruff helps maintain code quality and consistency across your AI projects, which 
     python --version
     ```
 
-2. Download and install Cursor IDE from [cursor.com](https://cursor.com)
+2. Clone the GenAI Accelerator Labs repository:
 
-3. Configure Cursor with the following extensions:
+    ```bash
+    git clone https://github.com/datalumina/genai-accelerator-labs.git
+    cd genai-accelerator-labs
+    ```
+
+3. Create a virtual environment using UV:
+
+    ```bash
+    uv venv
+    ```
+
+4. Activate the virtual environment:
+   - On macOS/Linux:
+     ```bash
+     source .venv/bin/activate
+     ```
+   - On Windows:
+     ```bash
+     .venv\Scripts\activate
+     ```
+
+5. Sync dependencies with UV:
+
+    ```bash
+    uv sync
+    ```
+
+6. Download and install Cursor IDE from [cursor.sh](https://cursor.sh)
+
+7. Configure Cursor with the following extensions:
    - [Python Extension Package](https://marketplace.visualstudio.com/items?itemName=donjayamanne.python-extension-pack)
    - [Jupyter](https://marketplace.cursorapi.com/items?itemName=ms-toolsai.jupyter)
    - [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
 
-4. You can configure Ruff to format Python code on-save by enabling the `editor.formatOnSave` action in `settings.json`, and setting Ruff as your default formatter:
+8. You can configure Ruff to format Python code on-save by enabling the `editor.formatOnSave` action in `settings.json`, and setting Ruff as your default formatter:
 
     ```
     {
@@ -83,102 +130,19 @@ Ruff helps maintain code quality and consistency across your AI projects, which 
     }
     ```
 
+### Exercise 2: Run the Jupyter Notebook Example
 
-5. Install UV using the instructions from the [Getting Started with UV guide](https://daveebbelaar.com/blog/2024/03/20/getting-started-with-uv-the-ultra-fast-python-package-manager/)
-   
-    ```bash
+1. With your environment activated, open the repository in Cursor IDE
 
-    # macOS (using Homebrew)
-    brew install uv
+2. Navigate to `week 1/notebook-introduction.ipynb`
 
+3. Select the right kernel (your newly created venv)
 
-    # On macOS/Linux
-    curl -LsSf https://astral.sh/uv/install.sh | sh
+4. Run each cell in the notebook by pressing `Shift+Enter`
 
-    # On Windows
-    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-    ```
+5. Experiment with:
+   - Creating new cells (press `Esc` then `a` for above or `b` for below)
+   - Converting cells between code and markdown (press `Esc` then `m` for markdown or `y` for code)
+   - Writing your own code and markdown
 
-5. Verify UV installation:
-
-    ```bash
-    uv --version
-    ```
-
-### Exercise 2: Project Configuration
-
-1. Create a new GitHub repository named "genai-accelerator-projects"
-
-2. Clone the repository to your local machine:
-   ```bash
-   git clone https://github.com/yourusername/genai-accelerator-projects.git
-   cd genai-accelerator-projects
-   ```
-
-3. Create a Python virtual environment using UV:
-   ```bash
-   uv venv
-   ```
-
-4. Activate the virtual environment by selecting it within your IDE or by using the terminal via:
-   ```bash
-   # On macOS/Linux
-   source .venv/bin/activate
-   
-   # On Windows
-   .venv\Scripts\activate
-   ```
-
-5. Create a `requirements.txt` file with the following packages:
-   ```
-   numpy
-   pandas
-   matplotlib
-   openai
-   tiktoken
-   python-dotenv
-   ```
-
-6. Install the requirements using UV:
-   ```bash
-   uv pip install -r requirements.txt
-   ```
-
-7. Create a simple Python script named `environment_test.py` that imports all the installed packages and prints a success message:
-
-   ```python
-   import numpy as np
-   import pandas as pd
-   import matplotlib.pyplot as plt
-   import openai
-   import tiktoken
-   import os
-   from dotenv import load_dotenv
-   
-   def check_environment():
-       print("Environment successfully configured!")
-       print(f"Python version: {os.sys.version}")
-       print("\nInstalled packages:")
-       print(f"- NumPy: {np.__version__}")
-       print(f"- Pandas: {pd.__version__}")
-       print(f"- Matplotlib: {plt.matplotlib.__version__}")
-       print(f"- OpenAI: {openai.__version__}")
-       print(f"- Tiktoken: {tiktoken.__version__}")
-   
-   if __name__ == "__main__":
-       check_environment()
-   ```
-
-8. Run the script to verify your environment:
-   ```bash
-   python environment_test.py
-   ```
-
-9. Commit and push your changes to GitHub:
-   ```bash
-   git add .
-   git commit -m "Initial setup and environment configuration"
-   git push origin main
-   ```
-
-By completing these exercises, you'll have established a solid development environment that we'll build upon throughout the accelerator program. This foundation will enable you to focus on learning AI engineering concepts rather than troubleshooting environment issues.
+6. This exercise will help you become comfortable with Jupyter notebooks, which we'll use throughout the course for interactive exercises and demonstrations.
