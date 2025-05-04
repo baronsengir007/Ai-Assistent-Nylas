@@ -63,7 +63,6 @@ Ruff helps maintain code quality and consistency across your AI projects, which 
 - [Ruff Documentation](https://docs.astral.sh/ruff/)
 - [VS Code/Cursor Extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
 
-
 ### Jupyter Notebooks
 
 Jupyter Notebooks are interactive documents that let you combine code, text, and visual output (like charts or tables) in one place. They originally gained popularity in data science because they're perfect for exploring data, running small code snippets step by step, and documenting your findings along the way. Instead of writing one long script, you can test and explain things cell by cell, making your workflow more flexible and transparent. Throughout the lab exercises, you'll see that some parts are in regular Python files, while others are in Jupyter Notebooks, depending on what fits best for the task.
@@ -112,14 +111,7 @@ jupyter_notebook_file.ipynb
     uv sync
     ```
 
-6. Download and install Cursor IDE from [cursor.sh](https://cursor.sh)
-
-7. Configure Cursor with the following extensions:
-   - [Python Extension Package](https://marketplace.visualstudio.com/items?itemName=donjayamanne.python-extension-pack)
-   - [Jupyter](https://marketplace.cursorapi.com/items?itemName=ms-toolsai.jupyter)
-   - [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
-
-8. You can configure Ruff to format Python code on-save by enabling the `editor.formatOnSave` action in `settings.json`, and setting Ruff as your default formatter:
+6. You can configure Ruff to format Python code on-save by enabling the `editor.formatOnSave` action in `settings.json`, and setting Ruff as your default formatter:
 
     ```
     {
