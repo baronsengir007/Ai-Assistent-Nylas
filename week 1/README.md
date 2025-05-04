@@ -130,7 +130,15 @@ jupyter_notebook_file.ipynb
     }
     ```
 
-### Exercise 2: Run the Jupyter Notebook Example
+### Exercise 2: Run Python File
+
+1. With your environment activated, open the repository in Cursor IDE
+
+2. Navigate to `week 1/python-venv-check.py`
+
+3. Execute the file
+
+### Exercise 3: Run the Jupyter Notebook Example
 
 1. With your environment activated, open the repository in Cursor IDE
 
