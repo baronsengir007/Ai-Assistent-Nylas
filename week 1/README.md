@@ -59,6 +59,27 @@ Key benefits of Ruff include:
 
 Ruff helps maintain code quality and consistency across your AI projects, which is essential when working in teams or on complex systems.
 
+To enable auto-formatting on save, you can either:
+
+1. Open user settings via Command Palette:
+   - Windows/Linux: `Ctrl + Shift + P`
+   - Mac: `Cmd + Shift + P`
+   Then type "Open User Settings (JSON)"
+
+2. Add this to your `settings.json`:
+    ```json
+    {
+        "editor.formatOnSave": true,
+        "[python]": {
+            "editor.defaultFormatter": "charliermarsh.ruff"
+        }
+    }
+    ```
+
+3. Or use the Settings UI:
+    - Set "Default Formatter" to "Ruff"
+    - Check "Format On Save"
+
 **Installation Resources:**
 - [Ruff Documentation](https://docs.astral.sh/ruff/)
 - [VS Code/Cursor Extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
