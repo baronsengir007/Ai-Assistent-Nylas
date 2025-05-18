@@ -4,6 +4,23 @@
 
 FastAPI is a modern, high-performance web framework for building APIs with Python. For AI apps, it serves as the interface between your AI models and the outside world, allowing external systems to send data to your models and receive predictions or processing results. What makes FastAPI particularly appealing is its simplicity and elegance - it provides everything you need without unnecessary complexity.
 
+```mermaid
+---
+config:
+  theme: neutral
+---
+sequenceDiagram
+    participant App as Application
+    participant API as FastAPI Layer
+    participant LLM as AI/LLM Service
+    
+    App->>API: Send request with data
+    API->>API: Validate data
+    API->>LLM: Process with AI model
+    LLM->>API: Return results
+    API->>App: Deliver formatted response
+```
+
 ### Why FastAPI for AI Engineering?
 
 - **Speed**: Built on Starlette and Pydantic, FastAPI is one of the fastest Python frameworks available
