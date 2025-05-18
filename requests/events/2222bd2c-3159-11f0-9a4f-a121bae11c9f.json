@@ -1,0 +1,56 @@
+{
+    "specversion": "1.0",
+    "type": "message.created",
+    "source": "/google/emails/realtime",
+    "id": "6moNTd5kwnDMaPm7LtTpUF1933",
+    "time": 1747291933,
+    "webhook_delivery_attempt": 1,
+    "data": {
+        "application_id": "424c5480-6c18-4ceb-ad86-e0ceb4d575c9",
+        "object": {
+            "attachments": [
+                {
+                    "content_disposition": "attachment; filename=\"sample-invoice.pdf\"",
+                    "content_id": "f_map0hytk0",
+                    "content_type": "application/pdf; name=\"sample-invoice.pdf\"",
+                    "filename": "sample-invoice.pdf",
+                    "grant_id": "5cadfdf0-59fb-48d1-9a2b-e22a1c156b85",
+                    "id": "v0:c2FtcGxlLWludm9pY2UucGRm:YXBwbGljYXRpb24vcGRmOyBuYW1lPSJzYW1wbGUtaW52b2ljZS5wZGYi:381709",
+                    "is_inline": false,
+                    "size": 381709
+                }
+            ],
+            "bcc": [],
+            "body": "<div dir=\"ltr\"><div>Dear customer, please find attached the invoice #DATAL-384920 for your order placed on May 12th. Let us know if you have any questions.</div></div>\r\n",
+            "cc": [],
+            "date": 1747291931,
+            "folders": [
+                "UNREAD",
+                "IMPORTANT",
+                "SENT",
+                "INBOX"
+            ],
+            "from": [
+                {
+                    "email": "dave@datalumina.com",
+                    "name": "Dave Ebbelaar"
+                }
+            ],
+            "grant_id": "5cadfdf0-59fb-48d1-9a2b-e22a1c156b85",
+            "id": "196d2b7033e0cb59",
+            "object": "message",
+            "reply_to": [],
+            "snippet": "Dear customer, please find attached the invoice #DATAL-384920 for your order placed on May 12th. Let us know if you have any questions.",
+            "starred": false,
+            "subject": "Invoice for your recent purchase",
+            "thread_id": "196d2b69b1232375",
+            "to": [
+                {
+                    "email": "dave@datalumina.com",
+                    "name": "Dave Ebbelaar"
+                }
+            ],
+            "unread": true
+        }
+    }
+}

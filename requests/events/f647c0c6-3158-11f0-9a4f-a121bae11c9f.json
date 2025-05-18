@@ -1,0 +1,45 @@
+{
+    "specversion": "1.0",
+    "type": "message.created",
+    "source": "/google/emails/realtime",
+    "id": "zxnyjrhn3oyUhrveV7jUpV1860",
+    "time": 1747291860,
+    "webhook_delivery_attempt": 1,
+    "data": {
+        "application_id": "424c5480-6c18-4ceb-ad86-e0ceb4d575c9",
+        "object": {
+            "attachments": [],
+            "bcc": [],
+            "body": "<div dir=\"ltr\"><div>Congratulations! You&#39;ve been selected to receive a brand new iPhone. Click this link to claim your reward: <a href=\"http://scammyphish.biz/claim\">http://scammyphish.biz/claim</a></div></div>\r\n",
+            "cc": [],
+            "date": 1747291857,
+            "folders": [
+                "UNREAD",
+                "IMPORTANT",
+                "SENT",
+                "INBOX"
+            ],
+            "from": [
+                {
+                    "email": "dave@datalumina.com",
+                    "name": "Dave Ebbelaar"
+                }
+            ],
+            "grant_id": "5cadfdf0-59fb-48d1-9a2b-e22a1c156b85",
+            "id": "196d2b5e3c484fa5",
+            "object": "message",
+            "reply_to": [],
+            "snippet": "Congratulations! You've been selected to receive a brand new iPhone. Click this link to claim your reward: http://scammyphish.biz/claim",
+            "starred": false,
+            "subject": "You won a free iPhone – Claim Now!",
+            "thread_id": "196d2b57e37a8cb0",
+            "to": [
+                {
+                    "email": "dave@datalumina.com",
+                    "name": "Dave Ebbelaar"
+                }
+            ],
+            "unread": true
+        }
+    }
+}
