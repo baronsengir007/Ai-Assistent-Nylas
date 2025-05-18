@@ -23,11 +23,11 @@ sequenceDiagram
 
 ### Why FastAPI for AI Engineering?
 
-- **Speed**: Built on Starlette and Pydantic, FastAPI is one of the fastest Python frameworks available
-- **Data Validation**: Leverages Pydantic for automatic data validation and serialization, allowing you to define exact schemas for your AI model inputs and outputs using simple Python classes
-- **Interactive Documentation**: Automatically generates API documentation, making it easier for others to use your AI services
-- **Async Support**: Efficiently handles long-running AI inference tasks without blocking
-- **Simple Yet Powerful**: Provides a clean, intuitive API that's easy to learn while offering all the features needed for production AI applications
+1. **Performance**: Built on Starlette and Pydantic, FastAPI is fast and just works.
+2. **Automatic Documentation**: FastAPI automatically generates interactive API documentation (via Swagger UI and ReDoc) from your code and type annotations, making it easier for teams to collaborate.
+3. **Type Safety**: Leveraging Pydantic, FastAPI provides automatic request validation and clear error messages, reducing the likelihood of runtime errors.
+4. **Asynchronous Support**: Native support for async/await patterns allows your API to handle multiple requests efficiently while waiting for AI model responses.
+5. **WebSocket Support**: For streaming AI responses or building real-time applications, FastAPI provides first-class WebSocket support.
 
 ## Learn More
 
