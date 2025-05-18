@@ -12,6 +12,10 @@ FastAPI is a modern, high-performance web framework for building APIs with Pytho
 - **Async Support**: Efficiently handles long-running AI inference tasks without blocking
 - **Simple Yet Powerful**: Provides a clean, intuitive API that's easy to learn while offering all the features needed for production AI applications
 
+## Learn More
+
+Beyond this README, [this tutorial](https://fastapi.tiangolo.com/tutorial/) shows you how to use FastAPI with most of its features, step by step. 
+
 ## Quick Start
 
 1. Install dependencies:
