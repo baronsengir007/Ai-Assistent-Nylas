@@ -16,7 +16,7 @@ FastAPI is a modern, high-performance web framework for building APIs with Pytho
 
 1. Install dependencies:
    ```bash
-   uv add install fastapi uvicorn
+   uv sync
    ```
 
 2. Run the application:
