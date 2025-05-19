@@ -18,7 +18,7 @@ class EventSchema(BaseModel):
 
 
 """
-Beccuase of the router, every endpoint in this file is prefixed with /events/
+Becuase of the router, every endpoint in this file is prefixed with /events/
 """
 
 

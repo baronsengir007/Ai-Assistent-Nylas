@@ -42,6 +42,7 @@ Beyond this README, [this tutorial](https://fastapi.tiangolo.com/tutorial/) show
 
 2. Run the application:
    ```bash
+   cd week-3/fastapi-tutorial/
    uvicorn main:app --reload
    ```
 
