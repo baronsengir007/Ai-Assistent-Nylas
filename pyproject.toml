@@ -15,4 +15,6 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "tiktoken>=0.1.1",
     "fastapi>=0.115.12",
+    "sqlalchemy>=2.0.41",
+    "psycopg2>=2.9.10",
 ]
