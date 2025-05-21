@@ -19,5 +19,5 @@ dependencies = [
     "psycopg2>=2.9.10",
     "celery>=5.5.2",
     "redis>=6.1.0",
-    "mcp>=1.8.1",
+    "mcp[cli]>=1.8.1",
 ]
