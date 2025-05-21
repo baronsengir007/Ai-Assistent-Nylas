@@ -4,7 +4,33 @@ A simple Celery application with Redis as the message broker and result backend.
 
 ## Introduction to Celery
 
-Celery is a distributed task queue system that allows you to run tasks asynchronously across multiple workers. It's particularly useful for handling time-consuming operations that shouldn't block your main application. Think of it as a way to delegate work to other processes or machines, allowing your main application to remain responsive.
+[Celery](https://docs.celeryq.dev/en/stable/) is a distributed task queue system that enables event-driven architecture by allowing you to run tasks asynchronously across multiple workers. It's particularly useful for handling time-consuming operations that shouldn't block your main application. Think of it as a way to delegate work to other processes or machines, allowing your main application to remain responsive.
+
+### Event-Driven Architecture
+
+Celery implements event-driven architecture through its message broker system. In this pattern:
+- Components communicate through events (messages)
+- Services are loosely coupled
+- The system is highly scalable and resilient
+- Components can be added or removed without affecting others
+
+Our implementation uses Redis as both the message broker and result backend, but Celery supports various other backends:
+
+**Message Brokers:**
+- RabbitMQ (recommended for production)
+- Amazon SQS
+- Apache Kafka
+- MongoDB
+- SQLAlchemy (database)
+
+**Result Backends:**
+- Redis (our choice)
+- Memcached
+- Database backends (PostgreSQL, MySQL, etc.)
+- MongoDB
+- Elasticsearch
+
+For more information about different backends and their configurations, visit the [Celery Backends Documentation](https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-backend-settings).
 
 ### System Architecture
 
@@ -128,3 +154,14 @@ docker compose -f docker/docker-compose.yml down
 ```
 
 This will stop and remove the containers. Add `-v` if you also want to remove the Redis data volume (`docker-compose -f docker/docker-compose.yml down -v`).
+
+## Learn More
+
+To dive deeper into Celery, here are some recommended resources:
+
+- [Celery Official Documentation](https://docs.celeryq.dev/en/stable/) - The complete reference guide
+- [Celery User Guide](https://docs.celeryq.dev/en/stable/userguide/index.html) - Detailed explanations of Celery concepts
+- [Celery Tutorial](https://docs.celeryq.dev/en/stable/getting-started/introduction.html) - Step-by-step guide for beginners
+- [Celery Best Practices](https://docs.celeryq.dev/en/stable/userguide/tasks.html#best-practices) - Guidelines for writing efficient tasks
+- [Celery Security](https://docs.celeryq.dev/en/stable/userguide/security.html) - Security considerations and recommendations
+- [Celery Monitoring](https://docs.celeryq.dev/en/stable/userguide/monitoring.html) - Tools and techniques for monitoring Celery applications
