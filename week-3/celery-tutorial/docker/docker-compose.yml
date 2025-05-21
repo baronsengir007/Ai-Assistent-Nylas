@@ -1,0 +1,32 @@
+name: celery-app
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - celery_network
+
+  celery_worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ..:/app
+    networks:
+      - celery_network
+
+volumes:
+  redis_data:
+
+networks:
+  celery_network:

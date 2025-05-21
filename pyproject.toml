@@ -17,4 +17,6 @@ dependencies = [
     "fastapi>=0.115.12",
     "sqlalchemy>=2.0.41",
     "psycopg2>=2.9.10",
+    "celery>=5.5.2",
+    "redis>=6.1.0",
 ]
