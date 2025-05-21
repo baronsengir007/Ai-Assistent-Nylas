@@ -6,6 +6,52 @@ A simple Celery application with Redis as the message broker and result backend.
 
 Celery is a distributed task queue system that allows you to run tasks asynchronously across multiple workers. It's particularly useful for handling time-consuming operations that shouldn't block your main application. Think of it as a way to delegate work to other processes or machines, allowing your main application to remain responsive.
 
+### System Architecture
+
+Here's a visual representation of how our Celery system works:
+
+```mermaid
+---
+config:
+  theme: neutral
+---
+sequenceDiagram
+    participant Client as Client (client.py)
+    participant Redis as Redis Broker/Backend
+    participant Worker as Celery Worker
+    participant Tasks as Task Functions
+
+    Note over Client, Tasks: Example Task Flow
+    
+    %% Example 1: Using task.delay()
+    Client->>Redis: 1. add.delay(x=4, y=4)
+    Redis->>Worker: 2. Worker picks up task
+    Worker->>Tasks: 3. Executes add(x=4, y=4)
+    Tasks-->>Worker: 4. Returns result (8)
+    Worker->>Redis: 5. Stores result
+    Client->>Redis: 6. result.get()
+    Redis-->>Client: 7. Returns result (8)
+
+    %% Example 2: Using send_task()
+    Client->>Redis: 8. send_task('tasks.add', args=[5,5])
+    Redis->>Worker: 9. Worker picks up task
+    Worker->>Tasks: 10. Executes add(5,5)
+    Tasks-->>Worker: 11. Returns result (10)
+    Worker->>Redis: 12. Stores result
+    Client->>Redis: 13. result.get()
+    Redis-->>Client: 14. Returns result (10)
+
+    Note over Client, Tasks: Task States
+    Note over Client, Tasks: PENDING → STARTED → SUCCESS
+```
+
+The diagram shows:
+1. How tasks are sent using both `delay()` and `send_task()`
+2. The flow of messages through Redis
+3. How the worker processes tasks
+4. How results are stored and retrieved
+5. The complete lifecycle of a task
+
 ### Key Components
 
 - **Message Broker (Redis)**: The message broker acts as a middleman between your application and the workers. When you send a task, it goes to the broker first. Redis, in our case, stores these messages in a queue until a worker is ready to process them. This decoupling allows your application to continue running without waiting for tasks to complete.
@@ -50,19 +96,6 @@ Tasks can be in various states:
 - `SUCCESS`: The task has completed successfully.
 - `FAILURE`: The task has failed.
 - `RETRY`: The task is being retried.
-
-### Best Practices
-
-1. **Task Design**: Keep tasks focused and atomic. Each task should do one thing well. This makes your system more maintainable and easier to debug.
-
-2. **Error Handling**: Always include proper error handling in your tasks. Celery will retry failed tasks by default, but you should handle expected errors gracefully.
-
-3. **Result Backend**: Use a result backend in development to help with debugging. In production, you might want to disable result storage for tasks where you don't need the result.
-
-4. **Task Timeouts**: Set appropriate timeouts for your tasks. This prevents workers from getting stuck on tasks that take too long.
-
-5. **Monitoring**: Use tools like Flower (a web-based Celery monitoring tool) to monitor your Celery workers and tasks in production.
-
 
 ## Setup & Running
 
