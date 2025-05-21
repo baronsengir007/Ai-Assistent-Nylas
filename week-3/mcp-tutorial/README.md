@@ -18,10 +18,7 @@ Let's start by setting up our environment. The MCP Python SDK provides everythin
 
 ```bash
 # Using uv (recommended)
-uv pip install -r requirements.txt
-
-# Or using pip
-pip install -r requirements.txt
+uv sync
 ```
 
 The MCP CLI tools provide helpful utilities for development and testing:
