@@ -8,17 +8,17 @@ Celery is a distributed task queue system that allows you to run tasks asynchron
 
 ### Key Components
 
-**Message Broker (Redis)**: The message broker acts as a middleman between your application and the workers. When you send a task, it goes to the broker first. Redis, in our case, stores these messages in a queue until a worker is ready to process them. This decoupling allows your application to continue running without waiting for tasks to complete.
+- **Message Broker (Redis)**: The message broker acts as a middleman between your application and the workers. When you send a task, it goes to the broker first. Redis, in our case, stores these messages in a queue until a worker is ready to process them. This decoupling allows your application to continue running without waiting for tasks to complete.
 
-**Celery Workers**: These are the processes that actually execute your tasks. They continuously monitor the message broker for new tasks and process them as they arrive. In our setup, we run the worker in a Docker container, but in production, you might have multiple workers across different machines.
+- **Celery Workers**: These are the processes that actually execute your tasks. They continuously monitor the message broker for new tasks and process them as they arrive. In our setup, we run the worker in a Docker container, but in production, you might have multiple workers across different machines.
 
-**Result Backend (Redis)**: After a worker completes a task, it stores the result in the result backend. This allows your application to check the status of tasks and retrieve their results when needed. We're using Redis for this as well, but you could use other backends like databases.
+- **Result Backend (Redis)**: After a worker completes a task, it stores the result in the result backend. This allows your application to check the status of tasks and retrieve their results when needed. We're using Redis for this as well, but you could use other backends like databases.
 
 ### Flow of Operations
 
 When you run a Celery task, here's what happens behind the scenes:
 
-1. Your application (the client) sends a task to the message broker using `task.delay()` or `task.apply_async()`. This is non-blocking, meaning your application continues running immediately.
+1. Your application (the client) sends a task to the message broker using `task.delay()`, `task.apply_async()`, or `app.send_task()`. This is non-blocking, meaning your application continues running immediately.
 
 2. The Celery worker, which is constantly monitoring the message broker, picks up the task and starts processing it. During this time, your application is free to do other things.
 
@@ -32,6 +32,10 @@ When you run a Celery task, here's what happens behind the scenes:
 - `@celery_app.task`: This decorator turns a Python function into a Celery task. It's how you define what can be executed asynchronously.
 - `task.delay(*args, **kwargs)`: A shortcut for sending tasks. It's equivalent to `task.apply_async(args, kwargs)`.
 - `task.apply_async(args, kwargs)`: The more flexible way to send tasks, allowing you to specify additional options like countdown, eta, or routing.
+- `app.send_task(name, args, kwargs)`: The most low-level way to send tasks. It doesn't require importing the task function, just the task name as a string. This is useful when:
+  - You don't have access to the task function (e.g., sending tasks from a different application)
+  - You want to send tasks dynamically based on task names
+  - You're working with task names as strings rather than function references
 
 **Result Handling**:
 - `result.id`: A unique identifier for the task execution. Useful for tracking tasks across your system.
