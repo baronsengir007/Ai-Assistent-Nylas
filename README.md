@@ -10,12 +10,12 @@ This repository is structured to follow the course curriculum, with dedicated fo
 
 ```
 genai-accelerator-labs/
-├── week1/           # Python Fundamentals & Development Environment
-├── week2/           # Design Patterns for AI Engineering
-├── week3/           # Event-Driven Architecture & Containerization
-├── week4/           # Retrieval Augmented Generation (RAG)
-├── week5/           # LLM Observability, Monitoring & Evaluation
-├── week6/           # Deploying Your AI Applications
+├── week-1/           # Python Fundamentals & Development Environment
+├── week-2/           # Design Patterns for AI Engineering
+├── week-3/           # Event-Driven Architecture & Containerization
+├── week-4/           # Retrieval Augmented Generation (RAG)
+├── week-5/           # LLM Observability, Monitoring & Evaluation
+├── week-6/           # Deploying Your AI Applications
 ```
 
 ## Getting Started
@@ -34,7 +34,7 @@ genai-accelerator-labs/
 ## Prerequisites
 
 - Python 3.10 or newer
-- Cursor IDE (recommended) or VS Code
+- Python IDE (Cursor, PyCharm, VS Code, Windsurf, etc.)
 - UV package manager
 - GitHub account
 - Basic Python programming knowledge

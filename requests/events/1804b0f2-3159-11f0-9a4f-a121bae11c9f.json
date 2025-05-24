@@ -1,0 +1,45 @@
+{
+    "specversion": "1.0",
+    "type": "message.created",
+    "source": "/google/emails/incremental",
+    "id": "39np84W5fQh6NLw7bNKVm70528",
+    "time": 1747230528,
+    "webhook_delivery_attempt": 1,
+    "data": {
+        "application_id": "424c5480-6c18-4ceb-ad86-e0ceb4d575c9",
+        "object": {
+            "attachments": [],
+            "bcc": [],
+            "body": "<div dir=\"ltr\">Hi team, here’s a quick summary of our meeting today. Let me know if I missed anything important. Next steps: finish the dashboard update by Friday..<br><br>Kind regards,<br><br>Dave</div>\r\n",
+            "cc": [],
+            "date": 1747230527,
+            "folders": [
+                "UNREAD",
+                "IMPORTANT",
+                "SENT",
+                "INBOX"
+            ],
+            "from": [
+                {
+                    "email": "dave@datalumina.com",
+                    "name": "Dave Ebbelaar"
+                }
+            ],
+            "grant_id": "5cadfdf0-59fb-48d1-9a2b-e22a1c156b85",
+            "id": "196cf0e10243c1f3",
+            "object": "message",
+            "reply_to": [],
+            "snippet": "Hi Dave, This is a test email. Kind regards, Dave",
+            "starred": false,
+            "subject": "Meeting recap and action items",
+            "thread_id": "196cf0dd635a27f3",
+            "to": [
+                {
+                    "email": "dave@datalumina.com",
+                    "name": "Dave Ebbelaar"
+                }
+            ],
+            "unread": true
+        }
+    }
+}
