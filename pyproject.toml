@@ -21,4 +21,5 @@ dependencies = [
     "mcp[cli]>=1.8.1",
     "pgvector>=0.4.1",
     "psycopg[binary]>=3.2.9",
+    "docling>=2.15.1",
 ]

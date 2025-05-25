@@ -1,3 +1,14 @@
+"""
+SQLAlchemy Integration with pgvector
+
+This file demonstrates how to use pgvector with SQLAlchemy ORM, showing:
+- SQLAlchemy model definition with vector columns
+- Type-safe document operations
+- Metadata filtering
+- Full-text search integration
+- Proper session management
+"""
+
 import os
 from typing import List, Optional
 
@@ -183,10 +194,10 @@ def create_tables():
 
 def main():
     # Create tables
-    # create_tables()
+    create_tables()
 
     # Insert documents
-    # insert_documents()
+    insert_documents()
 
     # Search without filter
     search_documents(

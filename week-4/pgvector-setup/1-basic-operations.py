@@ -1,3 +1,14 @@
+"""
+Basic Vector Operations with pgvector
+
+This file demonstrates fundamental vector operations using pgvector and OpenAI embeddings,
+including document insertion and similarity search. It shows how to:
+- Connect to PostgreSQL with pgvector
+- Generate embeddings using OpenAI
+- Insert documents with their embeddings
+- Perform similarity search using inner product
+"""
+
 import os
 
 import psycopg
@@ -126,7 +137,7 @@ def search_documents(query: str, limit: int = 5):
 
 def main():
     # Create tables
-    # insert_documents()
+    insert_documents()
 
     # Search for similar documents
     search_documents(query="What is neural network?")
