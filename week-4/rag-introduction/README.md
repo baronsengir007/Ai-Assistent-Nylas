@@ -118,8 +118,6 @@ graph LR
     class F,G similarity
 ```
 
-### Why Vector Embeddings Matter
-
 Traditional keyword search would struggle to connect "benefits of exercise" with "physical activity helps health" because they don't share common words. Vector embeddings capture semantic meaning, allowing the system to understand that these phrases are related conceptually, even with different vocabulary.
 
 This is why RAG systems can find relevant information even when your question uses different terminology than the source documents. The embedding model has learned to represent similar concepts with similar mathematical patterns.
@@ -170,59 +168,6 @@ sequenceDiagram
 6. **Prompt Construction**: Your question and context are combined into a structured prompt
 7. **Generation**: The LLM creates a response based on the augmented prompt
 8. **Output Processing**: The response is formatted and returned to you
-
-## Vector Databases: Specialized Storage for Semantic Search
-
-Vector databases are specialized systems designed to store and search through high-dimensional vector embeddings efficiently. Unlike traditional databases that excel at exact matches, vector databases excel at finding approximate matches in semantic space.
-
-```mermaid
----
-config:
-  theme: neutral
----
-graph TD
-    subgraph "Document Processing"
-        A[Original Documents] --> B[Split into Chunks]
-        B --> C[Generate Embeddings]
-        C --> D[Store with Metadata]
-    end
-    
-    subgraph "Vector Database"
-        D --> E[(Vector Index)]
-        F[Query Vector] --> G[Similarity Search]
-        E --> G
-        G --> H[Ranked Results]
-    end
-    
-    subgraph "Metadata Storage"
-        I[Document Title]
-        J[Source URL]
-        K[Creation Date]
-        L[Tags/Categories]
-    end
-    
-    D -.-> I
-    D -.-> J
-    D -.-> K
-    D -.-> L
-    
-    classDef processing fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef storage fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef metadata fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    
-    class A,B,C,D processing
-    class E,F,G,H storage
-    class I,J,K,L metadata
-```
-
-### Why Vector Databases Are Essential
-
-Vector databases provide several capabilities that make RAG systems practical:
-
-- **Efficient Similarity Search**: They can quickly find the most similar vectors among millions of stored embeddings
-- **Metadata Filtering**: You can combine semantic search with traditional filters (date, author, category)
-- **Scalability**: They're designed to handle large-scale deployments with billions of vectors
-- **Real-time Updates**: New documents can be added without rebuilding the entire index
 
 ## Context Injection: How Retrieved Information Reaches the LLM
 
