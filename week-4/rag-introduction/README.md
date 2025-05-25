@@ -8,20 +8,20 @@ Welcome to your introduction to Retrieval Augmented Generation (RAG) - one of th
   - [Table of Contents](#table-of-contents)
   - [What is RAG?](#what-is-rag)
     - [The RAG Advantage](#the-rag-advantage)
+  - [The Two-Phase RAG Process](#the-two-phase-rag-process)
+    - [1. Retrieval Phase](#1-retrieval-phase)
+    - [2. Generation Phase](#2-generation-phase)
+  - [How RAG Works: The Complete Pipeline](#how-rag-works-the-complete-pipeline)
+    - [Understanding the Data Flow](#understanding-the-data-flow)
   - [Understanding Vector Embeddings](#understanding-vector-embeddings)
     - [What are Vector Embeddings?](#what-are-vector-embeddings)
+    - [How Embeddings Make Meaning Searchable](#how-embeddings-make-meaning-searchable)
     - [Popular Embedding Models](#popular-embedding-models)
     - [Key Considerations](#key-considerations)
     - [Getting Started](#getting-started)
   - [Understanding Cosine Similarity and Vector Distance](#understanding-cosine-similarity-and-vector-distance)
     - [What is Cosine Similarity?](#what-is-cosine-similarity)
     - [The Inner Product for Normalized Vectors](#the-inner-product-for-normalized-vectors)
-  - [The Two-Phase RAG Process](#the-two-phase-rag-process)
-    - [1. Retrieval Phase](#1-retrieval-phase)
-    - [2. Generation Phase](#2-generation-phase)
-  - [How RAG Works: The Complete Pipeline](#how-rag-works-the-complete-pipeline)
-    - [Understanding the Data Flow](#understanding-the-data-flow)
-  - [Vector Embeddings: Making Meaning Searchable](#vector-embeddings-making-meaning-searchable)
   - [The Query Lifecycle: From Question to Answer](#the-query-lifecycle-from-question-to-answer)
     - [Understanding Each Step](#understanding-each-step)
   - [Context Injection: How Retrieved Information Reaches the LLM](#context-injection-how-retrieved-information-reaches-the-llm)
@@ -43,6 +43,74 @@ RAG offers several critical benefits over standalone LLMs:
 - **Reduced Hallucinations**: By grounding responses in retrieved facts, RAG significantly reduces the LLM's tendency to generate plausible-sounding but incorrect information
 - **Cost Efficiency**: Storing knowledge externally is more cost-effective than increasing model size
 
+## The Two-Phase RAG Process
+
+RAG systems operate in two distinct phases that work together seamlessly:
+
+### 1. Retrieval Phase
+The retrieval phase is like having an intelligent research assistant that finds relevant information based on your question. This involves:
+- Converting your query into a format the system can search with
+- Finding semantically similar content in the knowledge base
+- Selecting the most relevant documents or passages
+- Preparing this information for the LLM to use
+
+### 2. Generation Phase
+The generation phase is where the LLM synthesizes the retrieved information with your question to create a coherent, contextually appropriate response. The LLM uses its reasoning capabilities to:
+- Analyze the retrieved information
+- Apply it to your specific question
+- Generate a response that incorporates the external knowledge
+- Cite sources when appropriate
+
+## How RAG Works: The Complete Pipeline
+
+Let's walk through what happens when you ask a RAG system a question. The following diagram shows the complete process from your question to the final answer:
+
+```mermaid
+---
+config:
+  theme: neutral
+---
+graph TB
+    subgraph "Data Ingestion Layer"
+        A[Documents] --> B[Document Parser]
+        B --> C[Text Chunker]
+        C --> D[Embedding Model]
+        D --> E[(Vector Database)]
+    end
+    
+    subgraph "Query Processing Layer"
+        F[User Query] --> G[Query Processor]
+        G --> H[Query Embedder]
+        H --> I[Similarity Search]
+        E --> I
+        I --> J[Reranker]
+        J --> K[Context Assembler]
+    end
+    
+    subgraph "Generation Layer"
+        K --> L[Prompt Template]
+        L --> M[Large Language Model]
+        M --> N[Response Parser]
+        N --> O[Final Response]
+    end
+    
+    classDef ingestion fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef processing fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef generation fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class A,B,C,D,E ingestion
+    class F,G,H,I,J,K processing
+    class L,M,N,O generation
+```
+
+### Understanding the Data Flow
+
+The diagram above shows three distinct layers that work together:
+
+- **Data Ingestion Layer (Blue)**: This happens offline, before any user queries. Your documents are parsed, split into manageable chunks, converted into mathematical representations called embeddings, and stored in a specialized vector database.
+- **Query Processing Layer (Orange)**: This happens in real-time when you ask a question. Your query gets processed and converted into the same mathematical format as the stored documents, allowing the system to find semantically similar content.
+- **Generation Layer (Green)**: The retrieved context gets formatted into a prompt template and sent to the LLM, which generates a response based on both your question and the relevant retrieved information.
+
 ## Understanding Vector Embeddings
 
 Vector embeddings are the foundation of semantic search in RAG systems. They convert text into numerical vectors that capture meaning, allowing computers to understand relationships between words and phrases.
@@ -54,6 +122,43 @@ Think of vector embeddings as a way to translate human language into a mathemati
 <div align="center">
 <img src="https://weaviate.io/assets/images/image10-ebe747ac9f2e03dba758f1ed3ea7e82c.jpg" alt="Vector Space Visualization: Words clustered by meaning in a 2D space, showing how similar concepts are positioned closer together" width="600">
 </div>
+
+### How Embeddings Make Meaning Searchable
+
+One of the most crucial concepts in RAG is how vector embeddings enable semantic search. Think of embeddings as a way to convert text into a mathematical "fingerprint" that captures its meaning.
+
+```mermaid
+---
+config:
+  theme: neutral
+---
+graph LR
+    subgraph "Text to Vector Conversion"
+        A["'What are the benefits of exercise?'"] --> B[Embedding Model]
+        B --> C["[0.2, -0.1, 0.8, 0.3, ...]"]
+        
+        D["'How does physical activity help health?'"] --> B
+        B --> E["[0.3, -0.2, 0.7, 0.4, ...]"]
+    end
+    
+    subgraph "Similarity Calculation"
+        C --> F[Cosine Similarity]
+        E --> F
+        F --> G["High Similarity = 0.89"]
+    end
+    
+    classDef text fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef vector fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef similarity fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class A,D text
+    class C,E,B vector
+    class F,G similarity
+```
+
+Traditional keyword search would struggle to connect "benefits of exercise" with "physical activity helps health" because they don't share common words. Vector embeddings capture semantic meaning, allowing the system to understand that these phrases are related conceptually, even with different vocabulary.
+
+This is why RAG systems can find relevant information even when your question uses different terminology than the source documents. The embedding model has learned to represent similar concepts with similar mathematical patterns.
 
 ### Popular Embedding Models
 
@@ -136,111 +241,6 @@ similarity = cosine_similarity(embedding1, embedding2)
 The inner product is computationally faster since it skips the normalization step, making it the preferred choice for production systems using normalized embeddings.
 
 **Note on PGVector**: In PostgreSQL with PGVector, the `<#>` operator computes the **negative** inner product. This means for normalized vectors, you'll often see `-(embedding <#> query)` in SQL queries to get the standard similarity score (-1 to 1 range). This maintains the same mathematical meaning as cosine similarity but with faster computation.
-
-## The Two-Phase RAG Process
-
-RAG systems operate in two distinct phases that work together seamlessly:
-
-### 1. Retrieval Phase
-The retrieval phase is like having an intelligent research assistant that finds relevant information based on your question. This involves:
-- Converting your query into a format the system can search with
-- Finding semantically similar content in the knowledge base
-- Selecting the most relevant documents or passages
-- Preparing this information for the LLM to use
-
-### 2. Generation Phase
-The generation phase is where the LLM synthesizes the retrieved information with your question to create a coherent, contextually appropriate response. The LLM uses its reasoning capabilities to:
-- Analyze the retrieved information
-- Apply it to your specific question
-- Generate a response that incorporates the external knowledge
-- Cite sources when appropriate
-
-## How RAG Works: The Complete Pipeline
-
-Let's walk through what happens when you ask a RAG system a question. The following diagram shows the complete process from your question to the final answer:
-
-```mermaid
----
-config:
-  theme: neutral
----
-graph TB
-    subgraph "Data Ingestion Layer"
-        A[Documents] --> B[Document Parser]
-        B --> C[Text Chunker]
-        C --> D[Embedding Model]
-        D --> E[(Vector Database)]
-    end
-    
-    subgraph "Query Processing Layer"
-        F[User Query] --> G[Query Processor]
-        G --> H[Query Embedder]
-        H --> I[Similarity Search]
-        E --> I
-        I --> J[Reranker]
-        J --> K[Context Assembler]
-    end
-    
-    subgraph "Generation Layer"
-        K --> L[Prompt Template]
-        L --> M[Large Language Model]
-        M --> N[Response Parser]
-        N --> O[Final Response]
-    end
-    
-    classDef ingestion fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    classDef processing fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef generation fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    
-    class A,B,C,D,E ingestion
-    class F,G,H,I,J,K processing
-    class L,M,N,O generation
-```
-
-### Understanding the Data Flow
-
-The diagram above shows three distinct layers that work together:
-
-- **Data Ingestion Layer (Blue)**: This happens offline, before any user queries. Your documents are parsed, split into manageable chunks, converted into mathematical representations called embeddings, and stored in a specialized vector database.
-- **Query Processing Layer (Orange)**: This happens in real-time when you ask a question. Your query gets processed and converted into the same mathematical format as the stored documents, allowing the system to find semantically similar content.
-- **Generation Layer (Green)**: The retrieved context gets formatted into a prompt template and sent to the LLM, which generates a response based on both your question and the relevant retrieved information.
-
-## Vector Embeddings: Making Meaning Searchable
-
-One of the most crucial concepts in RAG is vector embeddings. Think of embeddings as a way to convert text into a mathematical "fingerprint" that captures its meaning.
-
-```mermaid
----
-config:
-  theme: neutral
----
-graph LR
-    subgraph "Text to Vector Conversion"
-        A["'What are the benefits of exercise?'"] --> B[Embedding Model]
-        B --> C["[0.2, -0.1, 0.8, 0.3, ...]"]
-        
-        D["'How does physical activity help health?'"] --> B
-        B --> E["[0.3, -0.2, 0.7, 0.4, ...]"]
-    end
-    
-    subgraph "Similarity Calculation"
-        C --> F[Cosine Similarity]
-        E --> F
-        F --> G["High Similarity = 0.89"]
-    end
-    
-    classDef text fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
-    classDef vector fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef similarity fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    
-    class A,D text
-    class C,E,B vector
-    class F,G similarity
-```
-
-Traditional keyword search would struggle to connect "benefits of exercise" with "physical activity helps health" because they don't share common words. Vector embeddings capture semantic meaning, allowing the system to understand that these phrases are related conceptually, even with different vocabulary.
-
-This is why RAG systems can find relevant information even when your question uses different terminology than the source documents. The embedding model has learned to represent similar concepts with similar mathematical patterns.
 
 ## The Query Lifecycle: From Question to Answer
 
@@ -359,4 +359,4 @@ Instructions:
 - Cite sources when making claims
 - If information is missing, acknowledge it
 - Be concise and accurate
-```
+``` 
