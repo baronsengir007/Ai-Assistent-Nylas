@@ -25,47 +25,7 @@ Vector embeddings are the foundation of semantic search in RAG systems. They con
 
 Think of vector embeddings as a way to translate human language into a mathematical space where similar concepts are positioned close together. Each word or phrase becomes a point in this high-dimensional space, and the distance between points represents their semantic similarity.
 
-```mermaid
----
-config:
-  theme: neutral
----
-graph TB
-    subgraph "2D Vector Space (Simplified)"
-        A((Python)) --- B((Programming))
-        B --- C((Code))
-        A --- C
-        D((Weather)) --- E((Sunny))
-        E --- F((Rain))
-        D --- F
-        
-        style A fill:#e3f2fd,stroke:#1976d2
-        style B fill:#e3f2fd,stroke:#1976d2
-        style C fill:#e3f2fd,stroke:#1976d2
-        style D fill:#fff3e0,stroke:#f57c00
-        style E fill:#fff3e0,stroke:#f57c00
-        style F fill:#fff3e0,stroke:#f57c00
-    end
-    
-    subgraph "Distance Represents Meaning"
-        G[Python] --- H[Programming]
-        H --- I[Code]
-        J[Weather] --- K[Sunny]
-        K --- L[Rain]
-        
-        style G fill:#e3f2fd,stroke:#1976d2
-        style H fill:#e3f2fd,stroke:#1976d2
-        style I fill:#e3f2fd,stroke:#1976d2
-        style J fill:#fff3e0,stroke:#f57c00
-        style K fill:#fff3e0,stroke:#f57c00
-        style L fill:#fff3e0,stroke:#f57c00
-    end
-```
-
-In this simplified 2D visualization:
-- Programming-related terms (blue) are clustered together
-- Weather-related terms (orange) form their own cluster
-- The distance between clusters represents their conceptual difference
+![Vector Space Visualization: Words clustered by meaning in a 2D space, showing how similar concepts are positioned closer together](https://weaviate.io/assets/images/image10-ebe747ac9f2e03dba758f1ed3ea7e82c.jpg)
 
 ### Popular Embedding Models
 
