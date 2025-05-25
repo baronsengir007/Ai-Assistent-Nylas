@@ -27,10 +27,6 @@ Welcome to your introduction to Retrieval Augmented Generation (RAG) - one of th
   - [Context Injection: How Retrieved Information Reaches the LLM](#context-injection-how-retrieved-information-reaches-the-llm)
     - [The Anatomy of a RAG Prompt](#the-anatomy-of-a-rag-prompt)
     - [Example Prompt](#example-prompt)
-  - [Best Practices for RAG Implementation](#best-practices-for-rag-implementation)
-    - [Document Preparation](#document-preparation)
-    - [Retrieval Optimization](#retrieval-optimization)
-    - [Generation Quality](#generation-quality)
 
 ## What is RAG?
 
@@ -393,23 +389,3 @@ If the context doesn't contain the requested information:
 ```
 
 This structure ensures the LLM understands its role, has access to relevant information, and knows exactly what question to answer.
-
-## Best Practices for RAG Implementation
-
-### Document Preparation
-- **Chunk Size**: Aim for 500-1000 tokens per chunk to balance context and specificity
-- **Overlap**: Use 10-20% overlap between chunks to avoid losing information at boundaries
-- **Metadata**: Include rich metadata (source, date, author, tags) to enable filtering
-- **Quality Control**: Remove or clean low-quality content before ingestion
-
-### Retrieval Optimization
-- **Multiple Retrievers**: Combine semantic and keyword search for better coverage
-- **Query Expansion**: Use techniques like query rewriting or expansion to improve recall
-- **Reranking**: Implement a second-stage ranking model for better precision
-- **Filtering**: Use metadata filters to narrow results to relevant subsets
-
-### Generation Quality
-- **Clear Instructions**: Provide specific, detailed instructions in your system prompts
-- **Source Attribution**: Include source information in retrieved context
-- **Confidence Indicators**: Train the LLM to express uncertainty when appropriate
-- **Output Validation**: Implement checks for response quality and relevance
