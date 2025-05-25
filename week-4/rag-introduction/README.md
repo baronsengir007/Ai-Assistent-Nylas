@@ -25,7 +25,9 @@ Vector embeddings are the foundation of semantic search in RAG systems. They con
 
 Think of vector embeddings as a way to translate human language into a mathematical space where similar concepts are positioned close together. Each word or phrase becomes a point in this high-dimensional space, and the distance between points represents their semantic similarity.
 
-![Vector Space Visualization: Words clustered by meaning in a 2D space, showing how similar concepts are positioned closer together](https://weaviate.io/assets/images/image10-ebe747ac9f2e03dba758f1ed3ea7e82c.jpg)
+<div align="center">
+<img src="https://weaviate.io/assets/images/image10-ebe747ac9f2e03dba758f1ed3ea7e82c.jpg" alt="Vector Space Visualization: Words clustered by meaning in a 2D space, showing how similar concepts are positioned closer together" width="600">
+</div>
 
 ### Popular Embedding Models
 
