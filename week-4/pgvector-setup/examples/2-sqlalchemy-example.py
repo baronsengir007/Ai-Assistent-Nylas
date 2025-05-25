@@ -1,5 +1,4 @@
 import os
-from datetime import datetime, UTC
 from typing import List, Optional
 
 from dotenv import load_dotenv
@@ -8,14 +7,15 @@ from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     JSON,
     Column,
+    Computed,
     DateTime,
     Integer,
     String,
     create_engine,
     text,
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.postgresql import TSVECTOR
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
@@ -31,13 +31,16 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class Document(Base):
-    __tablename__ = "documents2"
+    __tablename__ = "documents_sqlalchemy"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     content = Column(String, nullable=False)
-    metadata_ = Column("metadata", JSON)
+    metadata_json = Column("metadata", JSON)
     embedding = Column(Vector(1536))
-    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    fts = Column(TSVECTOR, Computed("to_tsvector('english', content)", persisted=True))
+    created_at = Column(
+        DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP")
+    )
 
 
 def get_embedding(text: str) -> List[float]:
@@ -56,7 +59,9 @@ class VectorStore:
         """Add a document to the vector store."""
         embedding = get_embedding(content)
 
-        doc = Document(content=content, metadata_=metadata or {}, embedding=embedding)
+        doc = Document(
+            content=content, metadata_json=metadata or {}, embedding=embedding
+        )
 
         self.session.add(doc)
         self.session.commit()
@@ -72,8 +77,10 @@ class VectorStore:
         query_obj = self.session.query(
             Document.id,
             Document.content,
-            Document.metadata_,
-            Document.embedding.cosine_distance(query_embedding).label("distance"),
+            Document.metadata_json,
+            (1 - Document.embedding.max_inner_product(query_embedding)).label(
+                "similarity"
+            ),
         )
 
         # Apply metadata filter if provided
@@ -86,17 +93,16 @@ class VectorStore:
                 ).params(value=str(value))
                 print(f"Filtering for {key}={value}")
 
-        # Order by similarity and limit results
-        results = query_obj.order_by("distance").limit(limit).all()
+        # Order by similarity (ascending since we want higher similarity scores)
+        results = query_obj.order_by(text("similarity")).limit(limit).all()
         print(f"Found {len(results)} results")
 
-        # Convert distance to similarity score
         return [
             {
                 "id": r.id,
                 "content": r.content,
-                "metadata_": r.metadata_,
-                "similarity": 1 - r.distance,
+                "metadata": r.metadata_json,
+                "similarity": r.similarity,
             }
             for r in results
         ]
@@ -140,9 +146,10 @@ def insert_documents():
             ),
         ]
 
-        for content, metadata in docs:
-            doc_id = store.add_document(content, metadata)
-            print(f"Added document {doc_id}: {content}")
+        print("Inserting documents...")
+        for doc in docs:
+            doc_id = store.add_document(doc[0], doc[1])
+            print(f"Inserted document {doc_id}: {doc[0][:50]}...")
     finally:
         store.close()
 
@@ -161,23 +168,40 @@ def search_documents(
         for r in results:
             print(f"Similarity: {r['similarity']:.4f} - {r['content']}")
             if metadata_filter:
-                print(f"Metadata: {r['metadata_']}")
+                print(f"Metadata: {r['metadata']}")
     finally:
         store.close()
 
 
-def main():
+def create_tables():
+    """Create tables in the database."""
+    # Drop existing tables to ensure clean state
+    Base.metadata.drop_all(bind=engine)
     # Create tables
     Base.metadata.create_all(bind=engine)
 
+
+def main():
+    # Create tables
+    # create_tables()
+
     # Insert documents
-    insert_documents()
+    # insert_documents()
 
     # Search without filter
-    search_documents("container technology", limit=5)
+    search_documents(
+        query="container technology",
+        limit=5,
+    )
 
     # Search with metadata filter
-    search_documents("programming", limit=5, metadata_filter={"type": "programming"})
+    search_documents(
+        query="programming",
+        limit=5,
+        metadata_filter={
+            "type": "programming",
+        },
+    )
 
 
 if __name__ == "__main__":

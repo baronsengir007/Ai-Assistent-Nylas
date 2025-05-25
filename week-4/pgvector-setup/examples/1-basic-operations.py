@@ -1,4 +1,5 @@
 import os
+
 import psycopg
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -48,17 +49,16 @@ def insert_document(conn, content: str, metadata: dict = None):
 
 
 def search_similar_documents(conn, query: str, limit: int = 5):
-    """Search for similar documents using cosine similarity."""
-    query = "What is neural network?"
+    """Search for similar documents using inner product similarity."""
     query_embedding = get_embedding(query)
 
     with conn.cursor() as cur:
         cur.execute(
             """
             SELECT id, content, metadata, 
-                   1 - (embedding <=> %s::vector) as similarity
+                   1 - (embedding <#> %s::vector) as similarity
             FROM documents
-            ORDER BY embedding <=> %s::vector
+            ORDER BY embedding <#> %s::vector
             LIMIT %s
         """,
             (query_embedding, query_embedding, limit),
@@ -126,7 +126,7 @@ def search_documents(query: str, limit: int = 5):
 
 def main():
     # Create tables
-    insert_documents()
+    # insert_documents()
 
     # Search for similar documents
     search_documents(query="What is neural network?")
