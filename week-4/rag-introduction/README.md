@@ -84,20 +84,7 @@ When working with vector embeddings, we need a way to measure how similar two pi
 
 ### What is Cosine Similarity?
 
-Cosine similarity measures the angle between two vectors in high-dimensional space. Instead of caring about the magnitude (length) of the vectors, it focuses purely on their direction. This makes it perfect for comparing text embeddings.
-
-#### The Mathematics
-
-Given two vectors A and B, cosine similarity is calculated as:
-
-```
-cosine_similarity(A, B) = (A · B) / (||A|| × ||B||)
-
-Where:
-- A · B is the dot product of the vectors
-- ||A|| is the magnitude (length) of vector A
-- ||B|| is the magnitude (length) of vector B
-```
+Cosine similarity measures the angle between two vectors in high-dimensional space. Instead of caring about the magnitude (length) of the vectors, it focuses purely on their direction. This makes it perfect for comparing text embeddings. For the mathematical formula and detailed explanation, see the [Wikipedia article on Cosine Similarity](https://en.wikipedia.org/wiki/Cosine_similarity). 
 
 The result is always between -1 and 1:
 - **1**: Vectors point in exactly the same direction (identical meaning)
