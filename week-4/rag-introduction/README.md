@@ -95,12 +95,7 @@ The result is always between -1 and 1:
 
 Modern embedding models like OpenAI's `text-embedding-3` series produce **normalized vectors** - vectors with a magnitude of 1. This has a beautiful mathematical property:
 
-**For normalized vectors, the dot product equals the cosine similarity:**
-
-```
-If ||A|| = 1 and ||B|| = 1, then:
-A · B = cosine_similarity(A, B)
-```
+**For normalized vectors, the dot product equals the cosine similarity**
 
 This is why you'll often see code using the inner product (dot product) directly:
 
