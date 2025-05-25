@@ -17,6 +17,105 @@ RAG offers several critical benefits over standalone LLMs:
 - **Reduced Hallucinations**: By grounding responses in retrieved facts, RAG significantly reduces the LLM's tendency to generate plausible-sounding but incorrect information
 - **Cost Efficiency**: Storing knowledge externally is more cost-effective than increasing model size
 
+## Understanding Vector Embeddings
+
+Vector embeddings are the foundation of semantic search in RAG systems. They convert text into numerical vectors that capture meaning, allowing computers to understand relationships between words and phrases.
+
+### What are Vector Embeddings?
+
+Think of vector embeddings as a way to translate human language into a mathematical space where similar concepts are positioned close together. Each word or phrase becomes a point in this high-dimensional space, and the distance between points represents their semantic similarity.
+
+```mermaid
+---
+config:
+  theme: neutral
+---
+graph TB
+    subgraph "2D Vector Space (Simplified)"
+        A((Python)) --- B((Programming))
+        B --- C((Code))
+        A --- C
+        D((Weather)) --- E((Sunny))
+        E --- F((Rain))
+        D --- F
+        
+        style A fill:#e3f2fd,stroke:#1976d2
+        style B fill:#e3f2fd,stroke:#1976d2
+        style C fill:#e3f2fd,stroke:#1976d2
+        style D fill:#fff3e0,stroke:#f57c00
+        style E fill:#fff3e0,stroke:#f57c00
+        style F fill:#fff3e0,stroke:#f57c00
+    end
+    
+    subgraph "Distance Represents Meaning"
+        G[Python] --- H[Programming]
+        H --- I[Code]
+        J[Weather] --- K[Sunny]
+        K --- L[Rain]
+        
+        style G fill:#e3f2fd,stroke:#1976d2
+        style H fill:#e3f2fd,stroke:#1976d2
+        style I fill:#e3f2fd,stroke:#1976d2
+        style J fill:#fff3e0,stroke:#f57c00
+        style K fill:#fff3e0,stroke:#f57c00
+        style L fill:#fff3e0,stroke:#f57c00
+    end
+```
+
+In this simplified 2D visualization:
+- Programming-related terms (blue) are clustered together
+- Weather-related terms (orange) form their own cluster
+- The distance between clusters represents their conceptual difference
+
+### Popular Embedding Models
+
+Several embedding models are commonly used in production RAG systems:
+
+1. **OpenAI Embeddings**
+   - `text-embedding-3-small`: 1536 dimensions, fast and efficient
+   - `text-embedding-3-large`: 3072 dimensions, higher accuracy
+   - Best for: General-purpose applications, English text
+
+2. **Open Source Alternatives**
+   - `all-MiniLM-L6-v2`: 384 dimensions, lightweight
+   - `BAAI/bge-small-en`: 384 dimensions, good performance
+   - Best for: Cost-sensitive applications, non-English text
+
+3. **Specialized Models**
+   - `intfloat/e5-large`: Optimized for retrieval
+   - `BAAI/bge-large-en`: Strong performance on benchmarks
+   - Best for: High-accuracy requirements, multilingual support
+
+### Key Considerations
+
+When choosing an embedding model, consider:
+
+- **Dimension Size**: Higher dimensions can capture more nuance but require more storage
+- **Model Size**: Larger models are more accurate but slower and more expensive
+- **Language Support**: Some models work better with specific languages
+- **Domain Specialization**: Consider models trained on domain-specific data
+- **Cost**: Balance between API costs and self-hosted infrastructure
+
+### Getting Started
+
+The `embeddings.py` file in this repository provides a simple example of working with embeddings:
+
+```python
+# Create embeddings
+text = "I love programming in Python"
+embedding = create_embedding(text)
+
+# Calculate similarity
+similarity = calculate_similarity(embedding1, embedding2)
+```
+
+This example demonstrates:
+- Creating embeddings using OpenAI's API
+- Calculating similarity between texts
+- Understanding how different phrases relate to each other
+
+Try running the example with different texts to see how the similarity scores change based on meaning rather than just word overlap.
+
 ## The Two-Phase RAG Process
 
 RAG systems operate in two distinct phases that work together seamlessly:
@@ -227,10 +326,10 @@ A well-constructed RAG prompt contains three essential components:
 
 ```text
 # Role and Objective
-You are an expert assistant. Your task is to answer the user’s query using only the provided context. Do not use outside knowledge or make unsupported claims.
+You are an expert assistant. Your task is to answer the user's query using only the provided context. Do not use outside knowledge or make unsupported claims.
 
 # Instructions
-- Carefully read the user’s question.
+- Carefully read the user's question.
 - Review the provided context documents.
 - If the answer is found in the context, cite the relevant sources using their indices.
 - If the information is missing or insufficient, state this clearly.
@@ -258,6 +357,14 @@ You are an expert assistant. Your task is to answer the user’s query using onl
 # Final Instructions
 - Only answer based on the provided context.
 - Be concise, accurate, and avoid repetition.
+
+# Handling Missing Information
+If the context doesn't contain the requested information:
+1. Acknowledge the gap: "I don't have enough information in the provided context to answer this question."
+2. Explain what's missing: "The context doesn't include details about [specific missing information]."
+3. Suggest alternatives: "You might want to try rephrasing your question or providing additional context about [topic]."
+4. Stay within scope: Do not make assumptions or provide information from outside the context.
+5. Be transparent: Clearly state when you're uncertain or when the information is incomplete.
 ```
 
 This structure ensures the LLM understands its role, has access to relevant information, and knows exactly what question to answer.
