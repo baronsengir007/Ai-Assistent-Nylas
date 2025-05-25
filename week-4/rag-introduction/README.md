@@ -2,6 +2,36 @@
 
 Welcome to your introduction to Retrieval Augmented Generation (RAG) - one of the most powerful and practical techniques in modern AI engineering. This guide will help you understand what RAG is, why it's essential for building production AI applications, and how the different components work together to create intelligent systems.
 
+## Table of Contents
+
+- [Understanding Retrieval Augmented Generation (RAG)](#understanding-retrieval-augmented-generation-rag)
+  - [Table of Contents](#table-of-contents)
+  - [What is RAG?](#what-is-rag)
+    - [The RAG Advantage](#the-rag-advantage)
+  - [Understanding Vector Embeddings](#understanding-vector-embeddings)
+    - [What are Vector Embeddings?](#what-are-vector-embeddings)
+    - [Popular Embedding Models](#popular-embedding-models)
+    - [Key Considerations](#key-considerations)
+    - [Getting Started](#getting-started)
+  - [Understanding Cosine Similarity and Vector Distance](#understanding-cosine-similarity-and-vector-distance)
+    - [What is Cosine Similarity?](#what-is-cosine-similarity)
+    - [The Inner Product for Normalized Vectors](#the-inner-product-for-normalized-vectors)
+  - [The Two-Phase RAG Process](#the-two-phase-rag-process)
+    - [1. Retrieval Phase](#1-retrieval-phase)
+    - [2. Generation Phase](#2-generation-phase)
+  - [How RAG Works: The Complete Pipeline](#how-rag-works-the-complete-pipeline)
+    - [Understanding the Data Flow](#understanding-the-data-flow)
+  - [Vector Embeddings: Making Meaning Searchable](#vector-embeddings-making-meaning-searchable)
+  - [The Query Lifecycle: From Question to Answer](#the-query-lifecycle-from-question-to-answer)
+    - [Understanding Each Step](#understanding-each-step)
+  - [Context Injection: How Retrieved Information Reaches the LLM](#context-injection-how-retrieved-information-reaches-the-llm)
+    - [The Anatomy of a RAG Prompt](#the-anatomy-of-a-rag-prompt)
+    - [Example Prompt](#example-prompt)
+  - [Best Practices for RAG Implementation](#best-practices-for-rag-implementation)
+    - [Document Preparation](#document-preparation)
+    - [Retrieval Optimization](#retrieval-optimization)
+    - [Generation Quality](#generation-quality)
+
 ## What is RAG?
 
 Think of RAG as giving your AI system access to an "open-book exam." While traditional language models are limited to the knowledge they were trained on, RAG systems can access external information sources to provide more accurate, up-to-date, and contextually relevant responses.
