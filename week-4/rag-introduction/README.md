@@ -70,7 +70,7 @@ Let's walk through what happens when you ask a RAG system a question. The follow
 config:
   theme: neutral
 ---
-graph TB
+graph LR
     subgraph "Data Ingestion Layer"
         A[Documents] --> B[Document Parser]
         B --> C[Text Chunker]
