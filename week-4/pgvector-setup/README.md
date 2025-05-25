@@ -277,6 +277,26 @@ Choose SQLAlchemy when:
 
 The `3-hybrid-search.py` implements a sophisticated hybrid search system that combines semantic and keyword search. This approach often outperforms pure vector search for real-world applications.
 
+```mermaid
+---
+config:
+  theme: neutral
+---
+graph LR
+    A[User Query] --> B[Query Processing]
+    
+    B --> C[Semantic Search]
+    B --> D[Keyword Search]
+    
+    C --> E[Vector Results]
+    D --> F[Full Text Search]
+    
+    E --> G[Result Fusion]
+    F --> G[Result Fusion]
+
+    class A,B,C,D,E,F,G flow
+```
+
 ### Understanding Hybrid Search
 
 Hybrid search addresses limitations of both semantic and keyword search:

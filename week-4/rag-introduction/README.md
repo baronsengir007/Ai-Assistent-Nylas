@@ -81,11 +81,9 @@ graph TB
 
 The diagram above shows three distinct layers that work together:
 
-**Data Ingestion Layer (Blue)**: This happens offline, before any user queries. Your documents are parsed, split into manageable chunks, converted into mathematical representations called embeddings, and stored in a specialized vector database.
-
-**Query Processing Layer (Orange)**: This happens in real-time when you ask a question. Your query gets processed and converted into the same mathematical format as the stored documents, allowing the system to find semantically similar content.
-
-**Generation Layer (Green)**: The retrieved context gets formatted into a prompt template and sent to the LLM, which generates a response based on both your question and the relevant retrieved information.
+- **Data Ingestion Layer (Blue)**: This happens offline, before any user queries. Your documents are parsed, split into manageable chunks, converted into mathematical representations called embeddings, and stored in a specialized vector database.
+- **Query Processing Layer (Orange)**: This happens in real-time when you ask a question. Your query gets processed and converted into the same mathematical format as the stored documents, allowing the system to find semantically similar content.
+- **Generation Layer (Green)**: The retrieved context gets formatted into a prompt template and sent to the LLM, which generates a response based on both your question and the relevant retrieved information.
 
 ## Vector Embeddings: Making Meaning Searchable
 
@@ -280,126 +278,44 @@ A well-constructed RAG prompt contains three essential components:
 2. **Retrieved Context**: Formatted chunks of relevant information with source attribution
 3. **User Question**: The original query, clearly marked and preserved
 
+### Example Prompt
+
+```text
+# Role and Objective
+You are an expert assistant. Your task is to answer the user’s query using only the provided context. Do not use outside knowledge or make unsupported claims.
+
+# Instructions
+- Carefully read the user’s question.
+- Review the provided context documents.
+- If the answer is found in the context, cite the relevant sources using their indices.
+- If the information is missing or insufficient, state this clearly.
+- Think step by step and explain your reasoning before giving the final answer.
+- Do not guess or fabricate information.
+
+# Context
+[Insert retrieved documents or excerpts here, each labeled with a unique index.]
+
+# Reasoning Steps
+- Analyze the question and identify key requirements.
+- Search the context for relevant information.
+- Explain how the context supports your answer, citing sources.
+- If context is lacking, describe what is missing.
+
+# Output Format
+- Provide a concise, well-structured answer.
+- Use markdown headers and lists where appropriate.
+- Include citations in brackets after each relevant statement.
+- Do not include references or links at the end.
+
+# User Query
+[Insert user question here]
+
+# Final Instructions
+- Only answer based on the provided context.
+- Be concise, accurate, and avoid repetition.
+```
+
 This structure ensures the LLM understands its role, has access to relevant information, and knows exactly what question to answer.
-
-## Common RAG Architectures and Patterns
-
-RAG systems can be implemented in various ways depending on your specific needs. Here are the most common architectural patterns:
-
-### Simple RAG Architecture
-
-```mermaid
----
-config:
-  theme: neutral
----
-graph LR
-    A[User Query] --> B[Embedding]
-    B --> C[Vector Search]
-    C --> D[Top-K Retrieval]
-    D --> E[Context + Query]
-    E --> F[LLM Generation]
-    F --> G[Response]
-    
-    classDef flow fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    class A,B,C,D,E,F,G flow
-```
-
-This is the most straightforward RAG implementation, perfect for getting started and understanding core concepts.
-
-### Advanced RAG with Reranking
-
-```mermaid
----
-config:
-  theme: neutral
----
-graph LR
-    A[User Query] --> B[Query Processing]
-    B --> C[Embedding]
-    C --> D[Vector Search]
-    D --> E[Top-20 Candidates]
-    E --> F[Reranking Model]
-    F --> G[Top-5 Refined]
-    G --> H[Context Assembly]
-    H --> I[LLM Generation]
-    I --> J[Response]
-    
-    classDef flow fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    class A,B,C,D,E,F,G,H,I,J flow
-```
-
-This architecture adds a reranking step that uses a more sophisticated model to refine the initial retrieval results, improving overall quality.
-
-### Hybrid Search RAG
-
-```mermaid
----
-config:
-  theme: neutral
----
-graph TB
-    A[User Query] --> B[Query Processing]
-    
-    B --> C[Semantic Search]
-    B --> D[Keyword Search]
-    
-    C --> E[Vector Results]
-    D --> F[BM25 Results]
-    
-    E --> G[Result Fusion]
-    F --> G
-    
-    G --> H[Unified Ranking]
-    H --> I[Context Assembly]
-    I --> J[LLM Generation]
-    J --> K[Response]
-    
-    classDef flow fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    class A,B,C,D,E,F,G,H,I,J,K flow
-```
-
-Hybrid search combines semantic similarity with traditional keyword matching, providing the best of both worlds for different types of queries.
-
-## Error Handling and Edge Cases
-
-Production RAG systems must handle various edge cases and error conditions gracefully:
-
-```mermaid
----
-config:
-  theme: neutral
----
-stateDiagram-v2
-    [*] --> QueryReceived
-    QueryReceived --> ValidateQuery
-    ValidateQuery --> ProcessQuery: Valid Input
-    ValidateQuery --> InvalidQuery: Malformed/Empty
-    ProcessQuery --> SearchVectorDB
-    SearchVectorDB --> DocumentsFound: Results > 0
-    SearchVectorDB --> NoResults: No Matches
-    DocumentsFound --> QualityCheck
-    QualityCheck --> GenerateResponse: High Quality
-    QualityCheck --> FallbackSearch: Low Quality
-    FallbackSearch --> GenerateResponse
-    NoResults --> FallbackResponse
-    GenerateResponse --> ResponseValidation
-    ResponseValidation --> ReturnResponse: Valid
-    ResponseValidation --> Regenerate: Invalid
-    Regenerate --> GenerateResponse
-    ReturnResponse --> [*]
-    FallbackResponse --> [*]
-    InvalidQuery --> [*]
-```
-
-### Handling Common Issues
-
-Your RAG system should be prepared for:
-
-- **No relevant documents found**: Provide a helpful message explaining that the information isn't available in the knowledge base
-- **Low-quality retrievals**: Implement fallback strategies like expanding the search or using alternative retrieval methods
-- **Malformed queries**: Validate and clean user input before processing
-- **LLM generation failures**: Have retry mechanisms and fallback responses ready
 
 ## Best Practices for RAG Implementation
 
@@ -420,17 +336,3 @@ Your RAG system should be prepared for:
 - **Source Attribution**: Include source information in retrieved context
 - **Confidence Indicators**: Train the LLM to express uncertainty when appropriate
 - **Output Validation**: Implement checks for response quality and relevance
-
-## Next Steps in Your RAG Journey
-
-Now that you understand the fundamentals of RAG, you're ready to start building your own systems. Here's what to focus on next:
-
-1. **Hands-on Implementation**: Start with a simple RAG system using a framework like LangChain or LlamaIndex
-2. **Experiment with Embeddings**: Try different embedding models to see how they affect retrieval quality
-3. **Optimize Chunking**: Experiment with different chunking strategies for your specific content type
-4. **Evaluate Performance**: Implement evaluation metrics to measure and improve your system's quality
-5. **Scale Considerations**: Learn about production deployment, monitoring, and optimization
-
-RAG represents a fundamental shift in how we build AI applications - from trying to memorize everything to learning how to find and use information effectively. As you continue your AI engineering journey, you'll find that RAG patterns and principles apply across many different types of intelligent systems.
-
-Remember: the goal isn't to build the most complex RAG system possible, but to build the most effective one for your specific use case. Start simple, measure performance, and iterate based on real user needs and feedback.
