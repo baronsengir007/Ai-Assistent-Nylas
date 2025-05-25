@@ -1,0 +1,15 @@
+# Core dependencies
+openai==1.35.3
+tiktoken==0.7.0
+psycopg[binary]==3.2.1
+pgvector==0.3.6
+sqlalchemy==2.0.31
+python-dotenv==1.0.0
+
+# Document processing
+docling==2.9.0
+docling-core==2.9.0
+
+# Utilities
+numpy==1.26.4
+tqdm==4.66.4 

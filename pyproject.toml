@@ -23,3 +23,8 @@ dependencies = [
     "psycopg[binary]>=3.2.9",
     "docling>=2.15.1",
 ]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]
