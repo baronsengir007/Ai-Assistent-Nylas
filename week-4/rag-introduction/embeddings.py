@@ -43,8 +43,17 @@ def main():
     # Create embeddings for all texts
     embeddings = [create_embedding(text) for text in texts]
 
+    # Prove that OpenAI embeddings are normalized (magnitude = 1)
+    print("\nProof that dot product = cosine similarity for normalized vectors:")
+    print(f"Magnitude of first embedding: {np.linalg.norm(embeddings[0]):.6f}")
+    print(f"Direct dot product: {np.dot(embeddings[0], embeddings[1]):.6f}")
+    print(
+        f"Cosine similarity: {calculate_similarity(embeddings[0], embeddings[1]):.6f}"
+    )
+    print("They are equal! ✓\n")
+
     # Compare each text with the first one
-    print("\nSimilarity scores with first text:")
+    print("Similarity scores with first text:")
     print("-" * 50)
     for i, text in enumerate(texts[1:], 1):
         similarity = calculate_similarity(embeddings[0], embeddings[i])
