@@ -89,7 +89,7 @@ class VectorStore:
             Document.id,
             Document.content,
             Document.metadata_json,
-            (1 - Document.embedding.max_inner_product(query_embedding)).label(
+            (-Document.embedding.max_inner_product(query_embedding)).label(
                 "similarity"
             ),
         )
@@ -104,8 +104,8 @@ class VectorStore:
                 ).params(value=str(value))
                 print(f"Filtering for {key}={value}")
 
-        # Order by similarity (ascending since we want higher similarity scores)
-        results = query_obj.order_by(text("similarity")).limit(limit).all()
+        # Order by similarity (descending since higher similarity scores are better)
+        results = query_obj.order_by(text("similarity DESC")).limit(limit).all()
         print(f"Found {len(results)} results")
 
         return [
@@ -194,10 +194,10 @@ def create_tables():
 
 def main():
     # Create tables
-    create_tables()
+    # create_tables()
 
     # Insert documents
-    insert_documents()
+    # insert_documents()
 
     # Search without filter
     search_documents(

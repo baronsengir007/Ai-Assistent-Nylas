@@ -67,7 +67,7 @@ def search_similar_documents(conn, query: str, limit: int = 5):
         cur.execute(
             """
             SELECT id, content, metadata, 
-                   1 - (embedding <#> %s::vector) as similarity
+                   -(embedding <#> %s::vector) as similarity
             FROM documents
             ORDER BY embedding <#> %s::vector
             LIMIT %s
@@ -137,7 +137,7 @@ def search_documents(query: str, limit: int = 5):
 
 def main():
     # Create tables
-    insert_documents()
+    # insert_documents()
 
     # Search for similar documents
     search_documents(query="What is neural network?")

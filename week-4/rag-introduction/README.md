@@ -102,32 +102,6 @@ The result is always between -1 and 1:
 - **0**: Vectors are perpendicular (unrelated meanings)
 - **-1**: Vectors point in opposite directions (opposite meanings)
 
-### From Similarity to Distance
-
-In practice, we often want a distance metric where smaller values mean "more similar." This is where cosine distance comes in:
-
-```
-cosine_distance = 1 - cosine_similarity
-```
-
-This transformation gives us:
-- **0**: Identical vectors (minimum distance)
-- **1**: Perpendicular vectors (neutral)
-- **2**: Opposite vectors (maximum distance)
-
-Here's why this matters:
-```python
-# High cosine similarity = Low cosine distance
-similarity = 0.95  # Very similar
-distance = 1 - 0.95 = 0.05  # Very close
-
-# Low cosine similarity = High cosine distance  
-similarity = 0.2   # Not very similar
-distance = 1 - 0.2 = 0.8  # Far apart
-```
-
-In essence: Cosine similarity tells you how similar two vectors are in terms of direction, while cosine distance tells you how different they are. They are essentially inverse measures of each other
-
 ### The Inner Product for Normalized Vectors
 
 Modern embedding models like OpenAI's `text-embedding-3` series produce **normalized vectors** - vectors with a magnitude of 1. This has a beautiful mathematical property:
@@ -151,75 +125,7 @@ similarity = cosine_similarity(embedding1, embedding2)
 
 The inner product is computationally faster since it skips the normalization step, making it the preferred choice for production systems using normalized embeddings.
 
-### PGVector Implementation: The `<#>` Operator
-
-In PostgreSQL with PGVector, we use a special operator for inner product calculations. Throughout our examples, you'll see this pattern:
-
-```sql
-1 - (embedding <#> %s::vector) as similarity
-```
-
-Let's break this down:
-
-1. **The `<#>` operator**: This is PGVector's **negative inner product** operator
-   - It returns the negative of the dot product between two vectors
-   - For normalized vectors, this equals the negative cosine similarity
-
-2. **Why negative?** The `<#>` operator returns:
-   - `-1` for identical vectors (perfect match)
-   - `0` for perpendicular vectors (unrelated)
-   - `1` for opposite vectors (complete opposite)
-
-3. **The transformation `1 - (embedding <#> vector)`**: This converts the negative inner product to a similarity score:
-   - Identical vectors: `1 - (-1) = 2` (highest similarity)
-   - Perpendicular vectors: `1 - 0 = 1` (neutral)
-   - Opposite vectors: `1 - 1 = 0` (lowest similarity)
-
-Here's how it works in practice:
-
-```sql
--- Calculate similarity score
-SELECT 
-    content,
-    1 - (embedding <#> %s::vector) as similarity
-FROM documents
-WHERE 1 - (embedding <#> %s::vector) >= 0.7  -- Only results with similarity >= 0.7
-ORDER BY embedding <#> %s::vector              -- Order by distance (ascending = most similar first)
-LIMIT 5;
-```
-
-**Important**: This scoring system ranges from 0 to 2 (not the typical -1 to 1 for cosine similarity):
-- **2.0**: Nearly identical content
-- **1.5-2.0**: Very similar
-- **1.0-1.5**: Related
-- **0.5-1.0**: Somewhat related
-- **0-0.5**: Unrelated or opposite
-
-This is why our examples use thresholds like `0.7` - they're calibrated for this 0-2 scale, not the traditional cosine similarity scale.
-
-### Understanding Similarity Scores in Practice
-
-Here's what different similarity scores typically mean in real-world applications:
-
-| Cosine Similarity | Cosine Distance | Interpretation | Example |
-|------------------|-----------------|----------------|---------|
-| 0.95 - 1.00 | 0.00 - 0.05 | Nearly identical | "dog" vs "canine" |
-| 0.80 - 0.95 | 0.05 - 0.20 | Very similar | "happy birthday" vs "birthday wishes" |
-| 0.60 - 0.80 | 0.20 - 0.40 | Related | "computer" vs "software" |
-| 0.40 - 0.60 | 0.40 - 0.60 | Somewhat related | "cooking" vs "kitchen" |
-| 0.20 - 0.40 | 0.60 - 0.80 | Distantly related | "ocean" vs "travel" |
-| 0.00 - 0.20 | 0.80 - 1.00 | Unrelated | "quantum physics" vs "birthday cake" |
-
-### Important Nuances and Considerations
-
-Similarity scores are **highly dependent** on the embedding model used. A score of 0.8 from one model might mean something very different from 0.8 in another model. This is because:
-
-- Different models have different embedding spaces
-- Models are trained on different datasets
-- Embedding dimensions vary (384, 768, 1536, etc.)
-- Training objectives differ between models
-
-**Never directly compare scores from different embedding models!**
+**Note on PGVector**: In PostgreSQL with PGVector, the `<#>` operator computes the **negative** inner product. This means for normalized vectors, you'll often see `-(embedding <#> query)` in SQL queries to get the standard similarity score (-1 to 1 range). This maintains the same mathematical meaning as cosine similarity but with faster computation.
 
 ## The Two-Phase RAG Process
 

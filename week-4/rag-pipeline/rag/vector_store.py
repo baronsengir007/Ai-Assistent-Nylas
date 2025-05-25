@@ -103,14 +103,14 @@ class VectorStore:
                     id,
                     content,
                     metadata,
-                    1 - (embedding <#> %s::vector) as similarity,
+                    -(embedding <#> %s::vector) as similarity,
                     created_at
                 FROM documents
             """
 
             # Add threshold filter if specified
             if threshold is not None:
-                query += f" WHERE 1 - (embedding <#> %s::vector) >= {threshold}"
+                query += f" WHERE -(embedding <#> %s::vector) >= {threshold}"
 
             # Order by similarity and limit (using inner product)
             query += " ORDER BY embedding <#> %s::vector LIMIT %s"
