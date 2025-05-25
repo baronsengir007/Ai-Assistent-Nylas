@@ -346,46 +346,17 @@ A well-constructed RAG prompt contains three essential components:
 ### Example Prompt
 
 ```text
-# Role and Objective
-You are an expert assistant. Your task is to answer the user's query using only the provided context. Do not use outside knowledge or make unsupported claims.
+You are a helpful assistant. Answer the user's question using ONLY the provided context.
+If the answer isn't in the context, say so clearly.
 
-# Instructions
-- Carefully read the user's question.
-- Review the provided context documents.
-- If the answer is found in the context, cite the relevant sources using their indices.
-- If the information is missing or insufficient, state this clearly.
-- Think step by step and explain your reasoning before giving the final answer.
-- Do not guess or fabricate information.
+Context:
+[Retrieved documents will be inserted here]
 
-# Context
-[Insert retrieved documents or excerpts here, each labeled with a unique index.]
+Question: [User's question will be inserted here]
 
-# Reasoning Steps
-- Analyze the question and identify key requirements.
-- Search the context for relevant information.
-- Explain how the context supports your answer, citing sources.
-- If context is lacking, describe what is missing.
-
-# Output Format
-- Provide a concise, well-structured answer.
-- Use markdown headers and lists where appropriate.
-- Include citations in brackets after each relevant statement.
-- Do not include references or links at the end.
-
-# User Query
-[Insert user question here]
-
-# Final Instructions
-- Only answer based on the provided context.
-- Be concise, accurate, and avoid repetition.
-
-# Handling Missing Information
-If the context doesn't contain the requested information:
-1. Acknowledge the gap: "I don't have enough information in the provided context to answer this question."
-2. Explain what's missing: "The context doesn't include details about [specific missing information]."
-3. Suggest alternatives: "You might want to try rephrasing your question or providing additional context about [topic]."
-4. Stay within scope: Do not make assumptions or provide information from outside the context.
-5. Be transparent: Clearly state when you're uncertain or when the information is incomplete.
+Instructions:
+- Base your answer solely on the provided context
+- Cite sources when making claims
+- If information is missing, acknowledge it
+- Be concise and accurate
 ```
-
-This structure ensures the LLM understands its role, has access to relevant information, and knows exactly what question to answer.
