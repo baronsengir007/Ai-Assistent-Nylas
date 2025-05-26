@@ -12,25 +12,25 @@ from docling.document_converter import DocumentConverter
 def extract_pdf_document(url: str):
     """Extract text from a PDF document."""
     doc = DocumentConverter().convert(url).document
-    return doc.export_to_text()
+    return doc.export_to_markdown()
 
 
 def extract_web_page(url: str):
     """Extract text from a web page."""
     doc = DocumentConverter().convert(url).document
-    return doc.export_to_text()
+    return doc.export_to_markdown()
 
 
 def extract_local_document(file_path: str):
     """Extract text from a local document."""
     doc = DocumentConverter().convert(file_path).document
-    return doc.export_to_text()
+    return doc.export_to_markdown()
 
 
 def extract_structured_data(file_path: str):
     """Extract text from structured data (CSV, tables)."""
     doc = DocumentConverter().convert(file_path).document
-    return doc.export_to_text()
+    return doc.export_to_markdown()
 
 
 def batch_extract(sources: list[str]):
@@ -39,7 +39,7 @@ def batch_extract(sources: list[str]):
     for source in sources:
         try:
             doc = DocumentConverter().convert(source).document
-            text = doc.export_to_text()
+            text = doc.export_to_markdown()
             results.append((source, text))
         except Exception as e:
             results.append((source, f"Error: {str(e)}"))
@@ -81,6 +81,7 @@ def main():
 
     structured_text = extract_structured_data("sample_data.csv")
     print(f"Structured data extraction: {len(structured_text)} characters")
+    print(structured_text)
 
     # 5. Batch Processing
     sources = ["sample_doc.md", "sample_data.csv", "https://httpbin.org/html"]

@@ -60,7 +60,7 @@ Example use cases:
 
 ### 2. Chunking
 
-Chunking is crucial for RAG performance using [`2-chunking.py`](2-chunking.py). We use Docling's HybridChunker because it:
+Chunking is crucial for RAG performance using [`2-chunking.py`](2-chunking.py). We use [Docling's HybridChunker](https://docling-project.github.io/docling/examples/hybrid_chunking/) because it:
 
 - **Preserves Context**: Maintains document structure and hierarchy
 - **Token-Aware**: Respects model token limits
