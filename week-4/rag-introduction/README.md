@@ -78,7 +78,7 @@ graph LR
         D --> E[(Vector Database)]
     end
     
-    subgraph "Query Processing Layer"
+    subgraph "Retrieval Layer"
         F[User Query] --> G[Query Processor]
         G --> H[Query Embedder]
         H --> I[Similarity Search]
