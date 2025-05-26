@@ -111,7 +111,7 @@ The diagram above shows three distinct layers that work together:
 
 ## Understanding Vector Embeddings
 
-Vector embeddings are the foundation of semantic search in RAG systems. They convert text into numerical vectors that capture meaning, allowing computers to understand relationships between words and phrases.
+[Vector embeddings](https://platform.openai.com/docs/guides/embeddings) are the foundation of semantic search in RAG systems. They convert text into numerical vectors that capture meaning, allowing computers to understand relationships between words and phrases.
 
 ### What are Vector Embeddings?
 
