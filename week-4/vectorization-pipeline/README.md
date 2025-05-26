@@ -42,9 +42,9 @@ graph TD
 
 ## Pipeline Components
 
-### 1. Extraction (`1-extraction.py`)
+### 1. Extraction
 
-The first step is extracting text from various document formats. We use [Docling](https://docling-project.github.io/docling/) for this purpose because:
+The first step is extracting text from various document formats using [`1-extraction.py`](1-extraction.py). We use [Docling](https://docling-project.github.io/docling/) for this purpose because:
 
 - **Unified Interface**: Handles multiple document types (PDF, DOCX, HTML, etc.)
 - **Standardized Output**: Converts all documents to a consistent format
@@ -58,9 +58,9 @@ Example use cases:
 - Structured data (CSV/Excel)
 - Scanned documents (Images with OCR)
 
-### 2. Chunking (`2-chunking.py`)
+### 2. Chunking
 
-Chunking is crucial for RAG performance. We use Docling's HybridChunker because it:
+Chunking is crucial for RAG performance using [`2-chunking.py`](2-chunking.py). We use Docling's HybridChunker because it:
 
 - **Preserves Context**: Maintains document structure and hierarchy
 - **Token-Aware**: Respects model token limits
@@ -73,9 +73,9 @@ Key considerations:
 - Too large: Dilutes relevance
 - Overlap helps maintain context between chunks
 
-### 3. Embedding (`3-embeddings.py`)
+### 3. Embedding
 
-The final step converts text chunks into vector embeddings using OpenAI's models:
+The final step converts text chunks into vector embeddings using [`3-embeddings.py`](3-embeddings.py) and OpenAI's models:
 
 - **text-embedding-3-small**: 1536 dimensions, faster, cheaper
 - **text-embedding-3-large**: 3072 dimensions, more accurate
