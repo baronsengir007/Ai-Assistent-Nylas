@@ -12,8 +12,8 @@ This comprehensive guide walks you through setting up PostgreSQL as a powerful v
 6. [Basic Vector Operations](#basic-vector-operations)
 7. [SQLAlchemy Integration](#sqlalchemy-integration)
 8. [Advanced Hybrid Search](#advanced-hybrid-search)
-9.[Metadata Filtering](#metadata-filtering)
-10.[Additional Resources](#additional-resources)
+9. [Metadata Filtering](#metadata-filtering)
+10. [Additional Resources](#additional-resources)
 
 ## Introduction
 
