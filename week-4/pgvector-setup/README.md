@@ -207,15 +207,6 @@ You'll notice we use `vector_ip_ops` (inner product) rather than `vector_cosine_
 - OpenAI embeddings are pre-normalized to unit length
 - Therefore: always use `vector_ip_ops` with OpenAI embeddings
 
-**Mathematical Explanation**:
-```
-For normalized vectors where ||v|| = 1:
-cosine_similarity(a, b) = a · b / (||a|| × ||b||) = a · b / (1 × 1) = a · b
-inner_product(a, b) = a · b
-
-Result: They're identical, but inner product skips the division!
-```
-
 **When to Use Each Operator**:
 - `vector_ip_ops`: OpenAI, Cohere, and most modern embedding models (pre-normalized)
 - `vector_cosine_ops`: Older models or custom embeddings that aren't normalized
