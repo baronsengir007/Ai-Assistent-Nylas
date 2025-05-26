@@ -22,10 +22,8 @@ Welcome to your introduction to Retrieval Augmented Generation (RAG) - one of th
   - [Understanding Cosine Similarity and Vector Distance](#understanding-cosine-similarity-and-vector-distance)
     - [What is Cosine Similarity?](#what-is-cosine-similarity)
     - [The Inner Product for Normalized Vectors](#the-inner-product-for-normalized-vectors)
-  - [The Query Lifecycle: From Question to Answer](#the-query-lifecycle-from-question-to-answer)
-    - [Understanding Each Step](#understanding-each-step)
   - [Context Injection: How Retrieved Information Reaches the LLM](#context-injection-how-retrieved-information-reaches-the-llm)
-    - [The Anatomy of a RAG Prompt](#the-anatomy-of-a-rag-prompt)
+  - [The Anatomy of a RAG Prompt](#the-anatomy-of-a-rag-prompt)
     - [Example Prompt](#example-prompt)
 
 ## What is RAG?
@@ -242,53 +240,6 @@ The inner product is computationally faster since it skips the normalization ste
 
 **Note on PGVector**: In PostgreSQL with PGVector, the `<#>` operator computes the **negative** inner product. This means for normalized vectors, you'll often see `-(embedding <#> query)` in SQL queries to get the standard similarity score (-1 to 1 range). This maintains the same mathematical meaning as cosine similarity but with faster computation.
 
-## The Query Lifecycle: From Question to Answer
-
-When you ask a RAG system a question, here's the detailed sequence of what happens:
-
-```mermaid
----
-config:
-  theme: neutral
----
-sequenceDiagram
-    participant U as User
-    participant Q as Query Processor
-    participant E as Embedding Model
-    participant V as Vector Database
-    participant R as Reranker
-    participant P as Prompt Builder
-    participant L as LLM
-    participant O as Output Handler
-
-    U->>Q: "What are the latest AI developments?"
-    Q->>Q: Clean and normalize query
-    Q->>E: Process query text
-    E->>E: Generate query embedding
-    E->>V: Search for similar documents
-    V->>V: Calculate cosine similarity
-    V->>R: Return top 20 candidates
-    R->>R: Rerank by relevance
-    R->>P: Top 5 most relevant chunks
-    P->>P: Assemble context and prompt
-    P->>L: Send complete prompt
-    L->>L: Generate response
-    L->>O: Raw model output
-    O->>O: Parse and format
-    O->>U: "Based on recent research..."
-```
-
-### Understanding Each Step
-
-1. **Query Processing**: Your question gets cleaned and prepared for embedding
-2. **Embedding Generation**: The query is converted into a vector representation
-3. **Similarity Search**: The system finds documents with similar vector representations
-4. **Reranking**: A more sophisticated model refines the selection for quality
-5. **Context Assembly**: The best chunks are formatted for the LLM
-6. **Prompt Construction**: Your question and context are combined into a structured prompt
-7. **Generation**: The LLM creates a response based on the augmented prompt
-8. **Output Processing**: The response is formatted and returned to you
-
 ## Context Injection: How Retrieved Information Reaches the LLM
 
 The magic of RAG happens when retrieved information gets combined with your original question. This process, called context injection, follows a structured pattern:
@@ -335,7 +286,7 @@ graph TB
     class D,H,I processing
 ```
 
-### The Anatomy of a RAG Prompt
+## The Anatomy of a RAG Prompt
 
 A well-constructed RAG prompt contains three essential components:
 
