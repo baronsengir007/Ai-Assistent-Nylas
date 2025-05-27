@@ -38,15 +38,26 @@ class DocumentProcessor:
             # Get contextualized text (includes headings/context)
             contextualized_text = self.chunker.contextualize(chunk=chunk)
 
+            # Extract page numbers from chunk metadata
+            page_numbers = sorted(
+                set(
+                    prov.page_no
+                    for item in chunk.meta.doc_items
+                    for prov in item.prov
+                    if hasattr(prov, "page_no")
+                )
+            )
+
+            # Extract headings from chunk metadata
+            headings = chunk.meta.headings if hasattr(chunk.meta, "headings") else []
+
             # Create metadata
             metadata = {
                 "chunk_index": i,
                 "total_chunks": len(chunks),
                 "source": source,
-                "page_numbers": list(chunk.page_numbers)
-                if hasattr(chunk, "page_numbers")
-                else [],
-                "headings": chunk.headings if hasattr(chunk, "headings") else [],
+                "page_numbers": page_numbers,
+                "headings": headings,
             }
 
             processed_chunks.append(
