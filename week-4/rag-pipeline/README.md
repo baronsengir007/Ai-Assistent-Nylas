@@ -6,17 +6,17 @@ This directory contains a complete implementation of a Retrieval-Augmented Gener
 
 ```text
 rag-pipeline/
-├── rag_chat.py          # Interactive query interface
-├── examples.py           # Usage examples
-├── build_vectordb.py     # Database setup script (run once)
-├── README.md             # This file
-└── rag/                  # Implementation package (no need to modify)
-    ├── __init__.py
-    ├── config.py         # Configuration settings
-    ├── rag_system.py     # Main orchestrator
-    ├── vector_store.py   # PGVector interface
-    ├── document_processor.py  # Document chunking
-    └── embedding_service.py   # Embedding generation
+├── rag_chat.py                 # Interactive query interface
+├── examples.py                 # Usage examples
+├── build_vectordb.py           # Database setup script (run once)
+├── README.md                   # This file
+└── rag/                        # Implementation package (no need to modify)
+    ├── __init__.py     
+    ├── config.py               # Configuration settings
+    ├── rag_system.py           # Main orchestrator
+    ├── vector_store.py         # PGVector interface
+    ├── document_processor.py   # Document chunking
+    └── embedding_service.py    # Embedding generation
 ```
 
 ## Architecture Overview
