@@ -454,7 +454,6 @@ While not covered in this guide, you can implement BM25 using extensions like `p
 - [BM25 Wikipedia](https://en.wikipedia.org/wiki/Okapi_BM25) - Overview of the algorithm
 - [pg_search by ParadeDB](https://www.paradedb.com/blog/introducing_search) - PostgreSQL extension for BM25
 - [BM25 Paper](https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-356.pdf) - Original research paper
-- [Elasticsearch BM25](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html#bm25)
 
 ## Metadata Filtering
 
