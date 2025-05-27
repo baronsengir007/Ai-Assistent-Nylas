@@ -137,7 +137,7 @@ def search_documents(query: str, limit: int = 5):
 
 def main():
     # Create tables
-    # insert_documents()
+    insert_documents()
 
     # Search for similar documents
     search_documents(query="What is neural network?")

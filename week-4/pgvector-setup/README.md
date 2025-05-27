@@ -319,6 +319,53 @@ Our implementation uses the [RRF algorithm implementation from Supabase](https:/
 
 The smoothing constant `k` (default 50) prevents extreme scores for top-ranked items while maintaining meaningful differences.
 
+### Understanding Rank-Based Scoring
+
+The hybrid search implementation uses rank-based scoring rather than raw similarity scores. This approach has several important implications:
+
+**Why Use Ranks Instead of Raw Scores?**
+- **Normalization**: Raw similarity scores (like cosine similarity or inner product) can have different scales and distributions between semantic and keyword search
+- **Consistency**: Rank-based scoring ensures consistent score ranges regardless of the underlying similarity metrics
+- **Comparability**: Makes it easier to combine results from different search methods fairly
+
+**How the Scores are Calculated:**
+1. Each search method (semantic and keyword) produces its own ranked list
+2. For each result, the rank score is calculated as: `1 / (k + rank)`
+   - `k` is the smoothing constant (default 50)
+   - `rank` is the position in the results (1-based)
+3. The final score is a weighted sum of these rank scores
+
+**Example Calculation from Real Output:**
+```
+Query: "database for storing vectors"
+
+Top result from hybrid search:
+- Ranked #1 in semantic search: score = 1/(50 + 1) = 0.0196
+- Ranked #1 in keyword search: score = 1/(50 + 1) = 0.0196
+- Combined score = 0.0196 + 0.0196 = 0.0392
+
+Second result:
+- Ranked #2 in semantic search: score = 1/(50 + 2) = 0.0192
+- Ranked #2 in keyword search: score = 1/(50 + 2) = 0.0192
+- Combined score = 0.0192 + 0.0189 = 0.0381
+
+Third result:
+- Ranked #3 in semantic search: score = 1/(50 + 3) = 0.0189
+- Ranked #3 in keyword search: score = 1/(50 + 3) = 0.0185
+- Combined score = 0.0185 + 0.0192 = 0.0377
+```
+
+**Why Scores Look Similar:**
+- The `1/(k + rank)` formula creates a compressed score range
+- With k=50, even rank 1 only gets a score of ~0.02
+- This compression helps prevent any single method from dominating
+- The small differences between scores are still meaningful for ranking
+
+This rank-based approach ensures that:
+- Results are fairly combined regardless of the underlying similarity metrics
+- The relative importance of each search method is controlled by weights
+- The final ranking is stable and interpretable
+
 ### Full-Text Search in PostgreSQL
 
 PostgreSQL's full-text search provides powerful keyword matching capabilities:

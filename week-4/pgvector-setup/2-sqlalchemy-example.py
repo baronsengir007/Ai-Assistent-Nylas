@@ -194,10 +194,10 @@ def create_tables():
 
 def main():
     # Create tables
-    # create_tables()
+    create_tables()
 
     # Insert documents
-    # insert_documents()
+    insert_documents()
 
     # Search without filter
     search_documents(

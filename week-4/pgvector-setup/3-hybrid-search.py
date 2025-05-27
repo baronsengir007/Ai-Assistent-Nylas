@@ -347,7 +347,7 @@ def compare_search_modes():
 
         if results:
             for r in results:
-                print(f"Score: {r['fts_raw_score']:.3f} - {r['content'][:50]}...")
+                print(f"Score: {r['fts_raw_score']:.4f} - {r['content'][:50]}...")
         else:
             print("No results - query too restrictive")
 
@@ -365,7 +365,7 @@ def compare_search_modes():
         )
 
         for r in results:
-            print(f"Score: {r['fts_raw_score']:.3f} - {r['content'][:50]}...")
+            print(f"Score: {r['fts_raw_score']:.4f} - {r['content'][:50]}...")
 
         print("\n" + "=" * 60)
 
@@ -401,7 +401,7 @@ def demonstrate_hybrid_search():
         )
 
         for i, r in enumerate(results, 1):
-            print(f"{i}. Score: {r['semantic_score']:.3f} - {r['content'][:50]}...")
+            print(f"{i}. Score: {r['semantic_score']:.4f} - {r['content'][:50]}...")
 
         print()
 
@@ -416,7 +416,7 @@ def demonstrate_hybrid_search():
         )
 
         for i, r in enumerate(results, 1):
-            print(f"{i}. Score: {r['full_text_score']:.3f} - {r['content'][:50]}...")
+            print(f"{i}. Score: {r['full_text_score']:.4f} - {r['content'][:50]}...")
 
         print()
 
@@ -431,9 +431,9 @@ def demonstrate_hybrid_search():
         )
 
         for i, r in enumerate(results, 1):
-            print(f"{i}. Combined Score: {r['combined_score']:.3f}")
-            print(f"   FTS Score: {r['full_text_score']:.3f}")
-            print(f"   Semantic Score: {r['semantic_score']:.3f}")
+            print(f"{i}. Combined Score: {r['combined_score']:.4f}")
+            print(f"   FTS Score: {r['full_text_score']:.4f}")
+            print(f"   Semantic Score: {r['semantic_score']:.4f}")
             print(f"   Content: {r['content'][:50]}...")
             print()
 
@@ -450,9 +450,9 @@ def demonstrate_hybrid_search():
         )
 
         for i, r in enumerate(results, 1):
-            print(f"{i}. Combined Score: {r['combined_score']:.3f}")
-            print(f"   FTS Score: {r['full_text_score']:.3f}")
-            print(f"   Semantic Score: {r['semantic_score']:.3f}")
+            print(f"{i}. Combined Score: {r['combined_score']:.4f}")
+            print(f"   FTS Score: {r['full_text_score']:.4f}")
+            print(f"   Semantic Score: {r['semantic_score']:.4f}")
             print(f"   Content: {r['content'][:50]}...")
             print(f"   Metadata: {r['metadata']}")
             print()
@@ -497,7 +497,7 @@ def weight_tuning_example():
             )
 
             for r in results:
-                print(f"Score: {r['combined_score']:.3f} - {r['content'][:45]}...")
+                print(f"Score: {r['combined_score']:.4f} - {r['content'][:45]}...")
             print()
 
         print("Weight tuning guidelines:")
@@ -511,7 +511,7 @@ def weight_tuning_example():
 
 def main():
     # Uncomment to set up fresh data
-    # insert_documents()
+    insert_documents()
 
     # Compare search modes
     compare_search_modes()
