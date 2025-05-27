@@ -409,6 +409,24 @@ SELECT websearch_to_tsquery('english', 'machine learning');
 - Better for conversational, exploratory searches
 - Always returns some results if possible
 
+### Important Behavior: Zero-Score Results in Keyword-Only Search
+
+When using the hybrid search implementation with `semantic_weight=0.0` (keyword search only), you may still receive results even when no documents match your keywords. These results will have a `fts_raw_score` of 0.0 but will still appear in the output.
+
+**Why This Happens:**
+- The implementation uses a FULL OUTER JOIN between keyword and semantic search results
+- Even with `semantic_weight=0.0`, the semantic search CTE still executes and finds results
+- Documents found only by semantic search get included with zero keyword scores
+- This behavior ensures the query doesn't fail, but may return unexpected results
+
+**Solutions:**
+1. **Filter Results**: Check `fts_raw_score > 0` in your application logic
+2. **Use Flexible Mode**: Switch to flexible mode which is more likely to find keyword matches
+3. **Add Text Match Requirement**: Modify the query to only return documents that matched the keyword search
+4. **Validate Query**: Check if your query terms exist in the document corpus before searching
+
+This behavior is by design to ensure robust search functionality, but understanding it helps you implement appropriate filtering for your specific use case.
+
 ### BM25: An Alternative to Full-Text Search
 
 While PostgreSQL's built-in full-text search is powerful, advanced RAG systems often use BM25 (Best Match 25) for keyword search. BM25 is a probabilistic ranking function that has become the standard for many search engines.

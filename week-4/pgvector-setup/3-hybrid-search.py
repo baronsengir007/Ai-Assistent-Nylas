@@ -197,11 +197,11 @@ class VectorStore:
                         COALESCE(1.0 / (%s + ft.rank_ix), 0.0) * %s + 
                         COALESCE(1.0 / (%s + s.rank_ix), 0.0) * %s
                     ) as combined_score
-                FROM documents d
-                FULL OUTER JOIN full_text ft ON d.id = ft.id
-                FULL OUTER JOIN semantic s ON d.id = s.id
-                WHERE (ft.id IS NOT NULL OR s.id IS NOT NULL)
-                {" AND " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
+                FROM 
+                    full_text ft
+                    FULL OUTER JOIN semantic s ON ft.id = s.id
+                    JOIN documents d ON COALESCE(ft.id, s.id) = d.id
+                {" WHERE " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
                 ORDER BY combined_score DESC
                 LIMIT least(%s, 30)
             """
@@ -345,9 +345,10 @@ def compare_search_modes():
             limit=3,
         )
 
-        if results:
-            for r in results:
-                print(f"Score: {r['fts_raw_score']:.4f} - {r['content'][:50]}...")
+        for r in results:
+            print(
+                f"Raw FTS Score: {r['fts_raw_score']:.4f}, RRF Score: {r['full_text_score']:.4f} - {r['content'][:50]}..."
+            )
         else:
             print("No results - query too restrictive")
 
@@ -365,7 +366,9 @@ def compare_search_modes():
         )
 
         for r in results:
-            print(f"Score: {r['fts_raw_score']:.4f} - {r['content'][:50]}...")
+            print(
+                f"Raw FTS Score: {r['fts_raw_score']:.4f}, RRF Score: {r['full_text_score']:.4f} - {r['content'][:50]}..."
+            )
 
         print("\n" + "=" * 60)
 
