@@ -346,12 +346,12 @@ Top result from hybrid search:
 
 Second result:
 - Ranked #2 in semantic search: score = 1/(50 + 2) = 0.0192
-- Ranked #2 in keyword search: score = 1/(50 + 2) = 0.0192
+- Ranked #3 in keyword search: score = 1/(50 + 3) = 0.0189
 - Combined score = 0.0192 + 0.0189 = 0.0381
 
 Third result:
-- Ranked #3 in semantic search: score = 1/(50 + 3) = 0.0189
-- Ranked #3 in keyword search: score = 1/(50 + 3) = 0.0185
+- Ranked #2 in semantic search: score = 1/(50 + 2) = 0.0192
+- Ranked #4 in keyword search: score = 1/(50 + 4) = 0.0185
 - Combined score = 0.0185 + 0.0192 = 0.0377
 ```
 
