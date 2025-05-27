@@ -6,8 +6,8 @@ This directory contains a complete implementation of a Retrieval-Augmented Gener
 
 ```text
 rag-pipeline/
-├── query_rag.py          # Interactive query interface (main script for students)
-├── examples.py           # Usage examples (for learning)
+├── rag_chat.py          # Interactive query interface
+├── examples.py           # Usage examples
 ├── build_vectordb.py     # Database setup script (run once)
 ├── README.md             # This file
 └── rag/                  # Implementation package (no need to modify)
@@ -65,7 +65,7 @@ This will:
 Run the interactive query interface:
 
 ```bash
-python query_rag.py
+python rag_chat.py
 ```
 
 ### Step 3: Explore Examples
