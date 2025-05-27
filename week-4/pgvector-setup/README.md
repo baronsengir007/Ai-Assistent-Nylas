@@ -409,6 +409,53 @@ SELECT websearch_to_tsquery('english', 'machine learning');
 - Better for conversational, exploratory searches
 - Always returns some results if possible
 
+### BM25: An Alternative to Full-Text Search
+
+While PostgreSQL's built-in full-text search is powerful, advanced RAG systems often use BM25 (Best Match 25) for keyword search. BM25 is a probabilistic ranking function that has become the standard for many search engines.
+
+**What is BM25?**
+- A ranking function based on the probabilistic information retrieval model
+- Considers term frequency, inverse document frequency, and document length
+- Generally provides better relevance ranking than traditional TF-IDF
+- Particularly effective for longer documents and diverse content
+
+**How BM25 Differs from PostgreSQL's Full-Text Search:**
+
+**PostgreSQL Full-Text Search (Current Implementation)**
+- Pros:
+  - Built-in, no additional extensions needed
+  - Good performance with GIN indexes
+  - Supports language-specific features (stemming, stop words)
+  - Integrated with PostgreSQL's query planner
+- Cons:
+  - Less sophisticated ranking than BM25
+  - May not handle document length normalization as well
+  - Limited to PostgreSQL's text search capabilities
+
+**BM25**
+- Pros:
+  - More sophisticated relevance ranking
+  - Better handling of term frequency and document length
+  - Industry standard for many search applications
+  - Can be tuned for specific use cases
+- Cons:
+  - Requires additional extensions (e.g., pg_bm25)
+  - More complex to implement and maintain
+  - May have higher computational overhead
+
+**Implementing BM25 in PostgreSQL:**
+While not covered in this guide, you can implement BM25 using extensions like `pg_search` or by building a custom solution. This is particularly relevant for:
+- Large-scale RAG systems
+- Applications requiring highly precise keyword matching
+- Systems where search quality is critical
+- Complex document collections with varying lengths
+
+**Learn More About BM25:**
+- [BM25 Wikipedia](https://en.wikipedia.org/wiki/Okapi_BM25) - Overview of the algorithm
+- [pg_search by ParadeDB](https://www.paradedb.com/blog/introducing_search) - PostgreSQL extension for BM25
+- [BM25 Paper](https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-356.pdf) - Original research paper
+- [Elasticsearch BM25](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html#bm25)
+
 ## Metadata Filtering
 
 Metadata filtering adds another dimension to search, enabling precise control over results. Our implementation seamlessly integrates with both vector and keyword search.

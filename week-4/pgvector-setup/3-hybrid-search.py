@@ -475,12 +475,11 @@ def weight_tuning_example():
         print("\n--- Weight Tuning Example ---")
         print("=" * 60)
 
-        query = "pgvector extension"
+        query = "storing and finding similar documents"
         print(f"Query: {query}\n")
 
         weight_configs = [
             (1.0, 2.0, "Keyword-heavy (precise matching)"),
-            (1.0, 1.0, "Balanced (equal importance)"),
             (2.0, 1.0, "Semantic-heavy (contextual understanding)"),
         ]
 
@@ -493,7 +492,7 @@ def weight_tuning_example():
                 semantic_weight=semantic_w,
                 full_text_weight=keyword_w,
                 keyword_mode="flexible",
-                limit=2,
+                limit=3,
             )
 
             for r in results:
