@@ -37,48 +37,25 @@ class VectorStore:
     - 'flexible': Any query terms can match (custom OR logic)
     """
 
+    # Constants
+    DEFAULT_LIMIT = 10
+    DEFAULT_RRF_K = 50
+    EMBEDDING_DIMENSIONS = 1536
+    SEARCH_CONFIG = "english"
+    MAX_SEARCH_RESULTS = 30
+
     def __init__(self):
         self.conn = psycopg.connect(DATABASE_URL)
         register_vector(self.conn)
-        self._setup_database()
-
-    def _setup_database(self):
-        """Set up database with full-text search capabilities."""
-        with self.conn.cursor() as cur:
-            # Create HNSW index for vector search
-            cur.execute("""
-                CREATE INDEX IF NOT EXISTS documents_embedding_idx 
-                ON documents USING hnsw (embedding vector_ip_ops)
-            """)
-
-            # Create GIN index for full-text search
-            cur.execute("""
-                CREATE INDEX IF NOT EXISTS documents_fts_idx 
-                ON documents USING GIN(fts)
-            """)
-
-            self.conn.commit()
 
     def get_embedding(self, text: str) -> List[float]:
         """Generate embeddings using OpenAI."""
         response = client.embeddings.create(
-            model="text-embedding-3-small", input=text, dimensions=1536
+            model="text-embedding-3-small",
+            input=text,
+            dimensions=self.EMBEDDING_DIMENSIONS,
         )
         return response.data[0].embedding
-
-    def _build_flexible_tsquery(self, query: str) -> str:
-        """
-        Build a flexible OR-based tsquery from the search terms.
-        Example: "vector database search" becomes "vector | database | search"
-        """
-        with self.conn.cursor() as cur:
-            cur.execute("SELECT websearch_to_tsquery('english', %s)::text", (query,))
-            normalized_query = cur.fetchone()[0]
-
-            if not normalized_query or normalized_query == "''":
-                return "''"
-            or_query = normalized_query.replace(" & ", " | ")
-            return or_query
 
     def search(
         self,
@@ -86,8 +63,8 @@ class VectorStore:
         semantic_weight: float = 1.0,
         full_text_weight: float = 1.0,
         keyword_mode: Literal["strict", "flexible"] = "flexible",
-        rrf_k: int = 50,
-        limit: int = 10,
+        rrf_k: int = DEFAULT_RRF_K,
+        limit: int = DEFAULT_LIMIT,
         metadata_filter: dict = None,
     ) -> List[dict]:
         """
@@ -108,13 +85,22 @@ class VectorStore:
 
         # Use AND logic (all terms must match)
         if keyword_mode == "strict":
-            tsquery_func = "websearch_to_tsquery('english', %s)"
+            tsquery_func = f"websearch_to_tsquery('{self.SEARCH_CONFIG}', %s)"
             fts_query = query
 
         # Use OR logic (any terms can match)
         elif keyword_mode == "flexible":
-            tsquery_func = "to_tsquery('english', %s)"
-            fts_query = self._build_flexible_tsquery(query)
+            tsquery_func = f"to_tsquery('{self.SEARCH_CONFIG}', %s)"
+            # Convert websearch AND query to OR query inline
+            with self.conn.cursor() as cur:
+                cur.execute(
+                    f"SELECT websearch_to_tsquery('{self.SEARCH_CONFIG}', %s)::text",
+                    (query,),
+                )
+                result = cur.fetchone()[0]
+                fts_query = (
+                    result.replace(" & ", " | ") if result and result != "''" else "''"
+                )
         else:
             raise ValueError("keyword_mode must be 'strict' or 'flexible'")
 
@@ -145,7 +131,7 @@ class VectorStore:
                     WHERE fts @@ {tsquery_func}
                     {" AND " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
                     ORDER BY rank_ix
-                    LIMIT least(%s, 30) * 2
+                    LIMIT least(%s, {self.MAX_SEARCH_RESULTS}) * 2
                 ),
                 semantic AS (
                     SELECT 
@@ -154,7 +140,7 @@ class VectorStore:
                     FROM documents
                     {"WHERE " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
                     ORDER BY rank_ix
-                    LIMIT least(%s, 30) * 2
+                    LIMIT least(%s, {self.MAX_SEARCH_RESULTS}) * 2
                 )
                 SELECT 
                     d.*,
@@ -171,30 +157,24 @@ class VectorStore:
                     JOIN documents d ON COALESCE(ft.id, s.id) = d.id
                 {" WHERE " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
                 ORDER BY combined_score DESC
-                LIMIT least(%s, 30)
+                LIMIT least(%s, {self.MAX_SEARCH_RESULTS})
             """
 
-            # Combine all parameters in the correct order
-            params = [
-                fts_query,  # tsquery parameter 1
-                fts_query,  # tsquery parameter 2
-                fts_query,  # tsquery parameter 3
-                *metadata_params,  # metadata filter parameters for full_text CTE
-                limit,  # full_text LIMIT
-                query_embedding,  # semantic embedding
-                *metadata_params,  # metadata filter parameters for semantic CTE
-                limit,  # semantic LIMIT
+            base_params = [fts_query, fts_query, fts_query] + metadata_params + [limit]
+            semantic_params = [query_embedding] + metadata_params + [limit]
+            rrf_params = [
                 rrf_k,
-                full_text_weight,  # full_text_score calculation
+                full_text_weight,
                 rrf_k,
-                semantic_weight,  # semantic_score calculation
+                semantic_weight,
                 rrf_k,
-                full_text_weight,  # combined_score calculation 1
+                full_text_weight,
                 rrf_k,
-                semantic_weight,  # combined_score calculation 2
-                *metadata_params,  # metadata filter parameters for final WHERE
-                limit,  # final LIMIT
+                semantic_weight,
             ]
+            final_params = metadata_params + [limit]
+
+            params = base_params + semantic_params + rrf_params + final_params
 
             cur.execute(sql_query, params)
 
