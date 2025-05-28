@@ -139,7 +139,7 @@ class ContextualRetrieval:
         self.rag_system.vector_store.add_documents(chunks_with_embeddings)
 
         # Print statistics
-        print(f"\nContextual retrieval ingestion complete!")
+        print("\nContextual retrieval ingestion complete!")
         print(f"Total chunks processed: {len(contextual_chunks)}")
         print(
             f"Total documents in store: {self.rag_system.vector_store.get_document_count()}"
@@ -207,9 +207,9 @@ def demonstrate_contextual_retrieval():
         example_chunk = contextual_chunks[2]  # Show the 3rd chunk as example
         print("Original chunk content:")
         print(f"'{example_chunk['metadata']['original_content'][:150]}...'")
-        print(f"\nAdded context:")
+        print("\nAdded context:")
         print(f"'{example_chunk['metadata']['added_context']}'")
-        print(f"\nFinal contextual chunk:")
+        print("\nFinal contextual chunk:")
         print(f"'{example_chunk['content'][:200]}...'")
 
     # Test queries
@@ -219,7 +219,7 @@ def demonstrate_contextual_retrieval():
         "What are the main components of the Docling architecture?",
     ]
 
-    print(f"\n🤖 Testing Contextual Retrieval with Sample Queries")
+    print("\n🤖 Testing Contextual Retrieval with Sample Queries")
     print("=" * 50)
 
     for i, query in enumerate(test_queries, 1):

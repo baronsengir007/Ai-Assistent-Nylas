@@ -271,7 +271,7 @@ def demonstrate_query_expansion():
         "What are the benefits of this system?",  # Vague query that needs expansion
     ]
 
-    print(f"\n🧪 Testing Query Expansion with Sample Queries")
+    print("\n🧪 Testing Query Expansion with Sample Queries")
     print("=" * 50)
 
     for i, query in enumerate(test_queries, 1):
@@ -282,12 +282,12 @@ def demonstrate_query_expansion():
         # Show comparison between standard and expanded retrieval
         comparison = query_expander.compare_with_without_expansion(query)
 
-        print(f"\n📊 RESULTS COMPARISON:")
+        print("\n📊 RESULTS COMPARISON:")
         print("-" * 30)
         print(f"Standard Response: {comparison['standard_response'][:200]}...")
         print(f"\nExpanded Response: {comparison['expanded_response'][:200]}...")
 
-        print(f"\n" + "=" * 60)
+        print("\n" + "=" * 60)
 
 
 if __name__ == "__main__":

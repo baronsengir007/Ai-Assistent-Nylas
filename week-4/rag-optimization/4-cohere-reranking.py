@@ -166,7 +166,7 @@ class CohereReranking:
         initial_docs = self.rag_system.retrieve_context(query, k=initial_k)
 
         if show_rerank_details:
-            print(f"\nInitial retrieval results (top 5):")
+            print("\nInitial retrieval results (top 5):")
             for i, doc in enumerate(initial_docs[:5]):
                 print(
                     f"  {i + 1}. Similarity: {doc['similarity']:.3f} | Content: {doc['content'][:100]}..."
@@ -275,7 +275,7 @@ class CohereReranking:
         """
         Demonstrate different Cohere rerank models.
         """
-        print(f"\n🎯 Comparing Different Rerank Models")
+        print("\n🎯 Comparing Different Rerank Models")
         print("=" * 50)
         print(f"Query: '{query}'")
         print(f"Documents to rerank: {len(documents)}")
@@ -339,7 +339,7 @@ def demonstrate_cohere_reranking():
             "What are the performance benchmarks and evaluation metrics?",
         ]
 
-        print(f"\n🧪 Testing Cohere Reranking with Sample Queries")
+        print("\n🧪 Testing Cohere Reranking with Sample Queries")
         print("=" * 50)
 
         for i, query in enumerate(test_queries, 1):
@@ -352,15 +352,15 @@ def demonstrate_cohere_reranking():
                 question=query, initial_k=15, final_k=5
             )
 
-            print(f"\n📊 RESULTS COMPARISON:")
+            print("\n📊 RESULTS COMPARISON:")
             print("-" * 30)
             print(f"Standard Response: {comparison['standard_response'][:200]}...")
             print(f"\nReranked Response: {comparison['reranked_response'][:200]}...")
 
-            print(f"\n" + "=" * 60)
+            print("\n" + "=" * 60)
 
         # Demonstrate different rerank models
-        print(f"\n🎯 Available Cohere Rerank Models")
+        print("\n🎯 Available Cohere Rerank Models")
         print("=" * 40)
         for model, desc in reranker.available_models.items():
             print(f"• {model}: {desc}")
