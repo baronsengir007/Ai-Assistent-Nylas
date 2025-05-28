@@ -38,7 +38,6 @@ class VectorStore:
     - 'flexible': Any query terms can match (custom OR logic)
     """
 
-    # Constants
     DEFAULT_LIMIT = 10
     DEFAULT_RRF_K = 50
     EMBEDDING_DIMENSIONS = 1536
@@ -120,16 +119,12 @@ class VectorStore:
         else:
             raise ValueError("keyword_mode must be 'strict' or 'flexible'")
 
-        # Get semantic embedding
         query_embedding = self.get_embedding(query)
-
-        # Build metadata filter conditions cleanly
         metadata_where, metadata_and, metadata_params = self._build_metadata_filter(
             metadata_filter
         )
 
         with self.conn.cursor() as cur:
-            # Build SQL with named parameters - much more readable!
             sql_query = f"""
                 WITH full_text AS (
                     SELECT 
@@ -170,7 +165,6 @@ class VectorStore:
                 LIMIT least(%(limit)s, %(max_results)s)
             """
 
-            # Clean parameter mapping
             params = {
                 "fts_query": fts_query,
                 "query_embedding": query_embedding,
