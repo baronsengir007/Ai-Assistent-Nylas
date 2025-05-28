@@ -13,6 +13,7 @@ The implementation shows how to build a production-ready hybrid search system
 that balances semantic understanding with precise keyword matching.
 """
 
+import json
 import os
 from typing import List, Literal
 
@@ -57,6 +58,19 @@ class VectorStore:
         )
         return response.data[0].embedding
 
+    def _build_metadata_filter(
+        self, metadata_filter: dict = None
+    ) -> tuple[str, str, dict]:
+        """Build metadata filter using PostgreSQL's JSON containment operator."""
+        if not metadata_filter:
+            return "", "", {}
+
+        where_clause = " WHERE metadata::jsonb @> %(metadata_filter)s::jsonb"
+        and_clause = " AND metadata::jsonb @> %(metadata_filter)s::jsonb"
+        params = {"metadata_filter": json.dumps(metadata_filter)}
+
+        return where_clause, and_clause, params
+
     def search(
         self,
         query: str,
@@ -85,12 +99,14 @@ class VectorStore:
 
         # Use AND logic (all terms must match)
         if keyword_mode == "strict":
-            tsquery_func = f"websearch_to_tsquery('{self.SEARCH_CONFIG}', %s)"
+            tsquery_func = (
+                f"websearch_to_tsquery('{self.SEARCH_CONFIG}', %(fts_query)s)"
+            )
             fts_query = query
 
         # Use OR logic (any terms can match)
         elif keyword_mode == "flexible":
-            tsquery_func = f"to_tsquery('{self.SEARCH_CONFIG}', %s)"
+            tsquery_func = f"to_tsquery('{self.SEARCH_CONFIG}', %(fts_query)s)"
             # Convert websearch AND query to OR query inline
             with self.conn.cursor() as cur:
                 cur.execute(
@@ -107,16 +123,13 @@ class VectorStore:
         # Get semantic embedding
         query_embedding = self.get_embedding(query)
 
-        # Build metadata filter conditions if provided
-        metadata_conditions = []
-        metadata_params = []
-        if metadata_filter:
-            for key, value in metadata_filter.items():
-                metadata_conditions.append("metadata->>%s = %s")
-                metadata_params.extend([key, str(value)])
+        # Build metadata filter conditions cleanly
+        metadata_where, metadata_and, metadata_params = self._build_metadata_filter(
+            metadata_filter
+        )
 
         with self.conn.cursor() as cur:
-            # Build dynamic SQL with the appropriate tsquery function and metadata filters
+            # Build SQL with named parameters - much more readable!
             sql_query = f"""
                 WITH full_text AS (
                     SELECT 
@@ -128,53 +141,46 @@ class VectorStore:
                                 length(content)
                         ) as rank_ix
                     FROM documents
-                    WHERE fts @@ {tsquery_func}
-                    {" AND " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
+                    WHERE fts @@ {tsquery_func}{metadata_and}
                     ORDER BY rank_ix
-                    LIMIT least(%s, {self.MAX_SEARCH_RESULTS}) * 2
+                    LIMIT least(%(limit)s, %(max_results)s) * 2
                 ),
                 semantic AS (
                     SELECT 
                         id,
-                        row_number() OVER (ORDER BY embedding <#> %s::vector) as rank_ix
-                    FROM documents
-                    {"WHERE " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
+                        row_number() OVER (ORDER BY embedding <#> %(query_embedding)s::vector) as rank_ix
+                    FROM documents{metadata_where}
                     ORDER BY rank_ix
-                    LIMIT least(%s, {self.MAX_SEARCH_RESULTS}) * 2
+                    LIMIT least(%(limit)s, %(max_results)s) * 2
                 )
                 SELECT 
                     d.*,
                     ft.fts_score,
-                    COALESCE(1.0 / (%s + ft.rank_ix), 0.0) * %s as full_text_score,
-                    COALESCE(1.0 / (%s + s.rank_ix), 0.0) * %s as semantic_score,
+                    COALESCE(1.0 / (%(rrf_k)s + ft.rank_ix), 0.0) * %(full_text_weight)s as full_text_score,
+                    COALESCE(1.0 / (%(rrf_k)s + s.rank_ix), 0.0) * %(semantic_weight)s as semantic_score,
                     (
-                        COALESCE(1.0 / (%s + ft.rank_ix), 0.0) * %s + 
-                        COALESCE(1.0 / (%s + s.rank_ix), 0.0) * %s
+                        COALESCE(1.0 / (%(rrf_k)s + ft.rank_ix), 0.0) * %(full_text_weight)s + 
+                        COALESCE(1.0 / (%(rrf_k)s + s.rank_ix), 0.0) * %(semantic_weight)s
                     ) as combined_score
                 FROM 
                     full_text ft
                     FULL OUTER JOIN semantic s ON ft.id = s.id
-                    JOIN documents d ON COALESCE(ft.id, s.id) = d.id
-                {" WHERE " + " AND ".join(metadata_conditions) if metadata_conditions else ""}
+                    JOIN documents d ON COALESCE(ft.id, s.id) = d.id{metadata_where}
                 ORDER BY combined_score DESC
-                LIMIT least(%s, {self.MAX_SEARCH_RESULTS})
+                LIMIT least(%(limit)s, %(max_results)s)
             """
 
-            base_params = [fts_query, fts_query, fts_query] + metadata_params + [limit]
-            semantic_params = [query_embedding] + metadata_params + [limit]
-            rrf_params = [
-                rrf_k,
-                full_text_weight,
-                rrf_k,
-                semantic_weight,
-                rrf_k,
-                full_text_weight,
-                rrf_k,
-                semantic_weight,
-            ]
-            final_params = metadata_params + [limit]
-
-            params = base_params + semantic_params + rrf_params + final_params
+            # Clean parameter mapping
+            params = {
+                "fts_query": fts_query,
+                "query_embedding": query_embedding,
+                "limit": limit,
+                "max_results": self.MAX_SEARCH_RESULTS,
+                "rrf_k": rrf_k,
+                "full_text_weight": full_text_weight,
+                "semantic_weight": semantic_weight,
+                **metadata_params,
+            }
 
             cur.execute(sql_query, params)
 
