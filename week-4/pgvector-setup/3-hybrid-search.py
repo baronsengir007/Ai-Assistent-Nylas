@@ -467,7 +467,7 @@ def weight_tuning_example():
 
 def main():
     # Uncomment to set up fresh data
-    # insert_documents()
+    insert_documents()
 
     # Compare search modes
     compare_search_modes()
