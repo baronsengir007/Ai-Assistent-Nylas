@@ -26,82 +26,73 @@ import cohere
 
 class CohereReranking:
     """
-    Implements Cohere Reranking technique for RAG systems.
-
-    This class uses Cohere's rerank API to reorder retrieved documents
-    based on their relevance to the query, improving result quality.
+    Implements Cohere Reranking technique for RAG systems using Wikipedia articles.
     """
 
-    def __init__(self, cohere_api_key: str = None):
-        """
-        Initialize the Cohere reranking system.
-
-        Args:
-            cohere_api_key: Cohere API key. If None, will try to get from environment.
-        """
+    def __init__(self):
+        """Initialize the Cohere reranking system."""
         self.rag_system = RAGSystem()
+        self.cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
+        self.default_model = "rerank-english-v3.0"
 
-        # Initialize Cohere client
-        if cohere_api_key is None:
-            cohere_api_key = os.getenv("COHERE_API_KEY")
-            if cohere_api_key is None:
-                raise ValueError(
-                    "Cohere API key is required. Set COHERE_API_KEY environment variable "
-                    "or pass it as a parameter. Get your free API key at: "
-                    "https://dashboard.cohere.com/api-keys"
+    def get_data(self):
+        """Clear database and insert Wikipedia article chunks."""
+        print("Clearing existing documents...")
+        self.rag_system.vector_store.clear_all_documents()
+
+        print("Loading Wikipedia articles...")
+
+        urls = [
+            "https://en.wikipedia.org/wiki/Artificial_intelligence",
+            "https://en.wikipedia.org/wiki/Data_science",
+            "https://en.wikipedia.org/wiki/Machine_learning",
+            "https://en.wikipedia.org/wiki/Natural_language_processing",
+            "https://en.wikipedia.org/wiki/Computer_vision",
+            "https://en.wikipedia.org/wiki/Deep_learning",
+            "https://en.wikipedia.org/wiki/Big_data",
+            "https://en.wikipedia.org/wiki/Cloud_computing",
+            "https://en.wikipedia.org/wiki/Internet_of_things",
+            "https://en.wikipedia.org/wiki/Robotics",
+        ]
+
+        total_chunks = 0
+        for i, url in enumerate(urls, 1):
+            print(f"Processing {i}/{len(urls)}: {url.split('/')[-1].replace('_', ' ')}")
+            chunks = self.rag_system.document_processor.process_document(url)
+
+            for chunk in chunks:
+                embedding = self.rag_system.embedding_service.create_embedding(
+                    chunk["content"]
+                )
+                self.rag_system.vector_store.add_document(
+                    content=chunk["content"],
+                    embedding=embedding,
+                    metadata=chunk["metadata"],
                 )
 
-        self.cohere_client = cohere.Client(cohere_api_key)
+            total_chunks += len(chunks)
+            print(f"  Added {len(chunks)} chunks")
 
-        # Available Cohere rerank models
-        self.available_models = {
-            "rerank-english-v3.0": "Latest English rerank model with 4k context length",
-            "rerank-multilingual-v3.0": "Multilingual rerank model supporting 100+ languages",
-            "rerank-english-v2.0": "Previous generation English model",
-            "rerank-multilingual-v2.0": "Previous generation multilingual model",
-        }
-
-        # Default model
-        self.default_model = "rerank-english-v3.0"
+        print(
+            f"✅ Inserted {total_chunks} total chunks from {len(urls)} Wikipedia articles"
+        )
 
     def rerank_documents(
         self,
         query: str,
         documents: List[Dict[str, Any]],
-        model: str = None,
         top_n: int = None,
     ) -> List[Dict[str, Any]]:
-        """
-        Rerank documents using Cohere's rerank API.
-
-        Args:
-            query: The search query
-            documents: List of documents to rerank
-            model: Cohere rerank model to use
-            top_n: Number of top documents to return (None = return all)
-
-        Returns:
-            Reranked list of documents with relevance scores
-        """
+        """Rerank documents using Cohere's rerank API."""
         if not documents:
             return []
 
-        if model is None:
-            model = self.default_model
-
         # Prepare documents for Cohere API
-        # Cohere expects a list of strings (document texts)
-        doc_texts = []
-        for doc in documents:
-            # Use the content field for reranking
-            doc_texts.append(doc["content"])
+        doc_texts = [doc["content"] for doc in documents]
 
         try:
-            # Call Cohere rerank API
-            print(f"🔄 Reranking {len(documents)} documents with Cohere {model}...")
-
             rerank_response = self.cohere_client.rerank(
-                model=model,
+                model=self.default_model,
                 query=query,
                 documents=doc_texts,
                 top_n=top_n,
@@ -111,270 +102,155 @@ class CohereReranking:
             # Process the reranked results
             reranked_docs = []
             for result in rerank_response.results:
-                # Get the original document
                 original_doc = documents[result.index].copy()
-
-                # Add rerank information
                 original_doc["rerank_score"] = result.relevance_score
-                original_doc["original_index"] = result.index
-                original_doc["reranked_text"] = (
-                    result.document.text
-                    if hasattr(result.document, "text")
-                    else doc_texts[result.index]
-                )
-
-                # Update metadata
-                if "metadata" not in original_doc:
-                    original_doc["metadata"] = {}
-                original_doc["metadata"]["rerank_score"] = result.relevance_score
-                original_doc["metadata"]["rerank_model"] = model
-                original_doc["metadata"]["original_rank"] = result.index + 1
-
+                original_doc["original_rank"] = result.index + 1
                 reranked_docs.append(original_doc)
 
-            print(f"✅ Reranking complete. Returned {len(reranked_docs)} documents")
             return reranked_docs
 
         except Exception as e:
-            print(f"❌ Error during reranking: {e}")
-            print("Falling back to original document order...")
+            print(f"Error during reranking: {e}")
             return documents
 
-    def retrieve_and_rerank(
-        self,
-        query: str,
-        initial_k: int = 20,
-        final_k: int = 5,
-        model: str = None,
-        show_rerank_details: bool = False,
-    ) -> List[Dict[str, Any]]:
-        """
-        Retrieve documents and then rerank them.
-
-        Args:
-            query: Search query
-            initial_k: Number of documents to retrieve initially
-            final_k: Number of documents to return after reranking
-            model: Cohere rerank model to use
-            show_rerank_details: Whether to show reranking process details
-
-        Returns:
-            Reranked list of top documents
-        """
-        # Step 1: Initial retrieval
-        print(f"📚 Initial retrieval: getting top {initial_k} documents...")
-        initial_docs = self.rag_system.retrieve_context(query, k=initial_k)
-
-        if show_rerank_details:
-            print("\nInitial retrieval results (top 5):")
-            for i, doc in enumerate(initial_docs[:5]):
-                print(
-                    f"  {i + 1}. Similarity: {doc['similarity']:.3f} | Content: {doc['content'][:100]}..."
-                )
-
-        # Step 2: Rerank documents
-        reranked_docs = self.rerank_documents(
-            query=query, documents=initial_docs, model=model, top_n=final_k
-        )
-
-        if show_rerank_details:
-            print(f"\nReranked results (top {len(reranked_docs)}):")
-            for i, doc in enumerate(reranked_docs):
-                original_rank = doc.get("original_index", -1) + 1
-                rerank_score = doc.get("rerank_score", 0)
-                similarity = doc.get("similarity", 0)
-                print(
-                    f"  {i + 1}. Rerank: {rerank_score:.3f} | Original rank: {original_rank} | "
-                    f"Similarity: {similarity:.3f} | Content: {doc['content'][:100]}..."
-                )
-
-        return reranked_docs
-
-    def query_with_reranking(
-        self,
-        question: str,
-        initial_k: int = 20,
-        final_k: int = 5,
-        model: str = None,
-        show_rerank_details: bool = False,
-    ) -> str:
-        """
-        Perform a complete RAG query with reranking.
-
-        Args:
-            question: User's question
-            initial_k: Number of documents to retrieve initially
-            final_k: Number of documents to use for generation
-            model: Cohere rerank model to use
-            show_rerank_details: Whether to show reranking details
-
-        Returns:
-            Generated response using reranked documents
-        """
-        # Retrieve and rerank documents
-        reranked_docs = self.retrieve_and_rerank(
-            query=question,
-            initial_k=initial_k,
-            final_k=final_k,
-            model=model,
-            show_rerank_details=show_rerank_details,
-        )
-
-        # Generate response using reranked documents
-        if reranked_docs:
-            print("🤖 Generating response with reranked documents...")
-            response = self.rag_system.generate_response(question, reranked_docs)
-        else:
-            print("⚠️ No documents available for generation")
-            response = "I couldn't find relevant information to answer your question."
-
-        return response
-
     def compare_with_without_reranking(
-        self, question: str, initial_k: int = 20, final_k: int = 5
-    ) -> Dict[str, Any]:
-        """
-        Compare results with and without reranking.
-
-        Returns:
-            Dictionary containing both results for comparison
-        """
-        print("🔬 Comparing Reranking vs Standard Retrieval")
+        self, question: str, initial_k: int = 15, final_k: int = 5
+    ):
+        """Compare results with and without reranking."""
+        print(f"\n{'=' * 60}")
+        print(f"COMPARISON: {question}")
         print("=" * 60)
 
-        # Standard retrieval (without reranking)
-        print(f"\n1️⃣ Standard Retrieval (Top {final_k}):")
-        print("-" * 40)
+        # Standard retrieval
+        print("\n1️⃣ STANDARD RETRIEVAL:")
+        print("-" * 30)
         standard_docs = self.rag_system.retrieve_context(question, k=final_k)
-        standard_response = self.rag_system.generate_response(question, standard_docs)
+        print(f"Retrieved top {len(standard_docs)} documents by similarity")
 
-        print(f"Retrieved {len(standard_docs)} documents")
-        for i, doc in enumerate(standard_docs):
-            print(f"  Doc {i + 1}: Similarity {doc['similarity']:.3f}")
+        # Retrieval with reranking
+        print("\n2️⃣ RETRIEVAL WITH RERANKING:")
+        print("-" * 30)
 
-        # Reranked retrieval
-        print(f"\n2️⃣ Reranked Retrieval (Top {initial_k} → Top {final_k}):")
-        print("-" * 40)
-        reranked_response = self.query_with_reranking(
-            question=question,
-            initial_k=initial_k,
-            final_k=final_k,
-            show_rerank_details=True,
-        )
+        # Get more documents initially
+        initial_docs = self.rag_system.retrieve_context(question, k=initial_k)
+        print(f"Initial retrieval: {len(initial_docs)} documents")
+
+        # Rerank them
+        reranked_docs = self.rerank_documents(question, initial_docs, top_n=final_k)
+        print(f"Reranked to top {len(reranked_docs)} most relevant documents")
+
+        # Show ranking changes - this is the key insight!
+        print("\n📊 RANKING CHANGES:")
+        print("-" * 30)
+        significant_changes = []
+        new_discoveries = []
+
+        for i, doc in enumerate(reranked_docs, 1):
+            original_rank = doc.get("original_rank", 0)
+            rerank_score = doc.get("rerank_score", 0)
+            similarity = doc.get("similarity", 0)
+            change = original_rank - i
+
+            if original_rank > 5:
+                direction = f"🆕 NEW (was #{original_rank})"
+                new_discoveries.append(
+                    f"Rank {i} is a new discovery from position #{original_rank}!"
+                )
+            elif change > 0:
+                direction = f"📈 UP {change}"
+                if change >= 3:
+                    significant_changes.append(
+                        f"Rank {i} jumped up {change} positions!"
+                    )
+            elif change < 0:
+                direction = f"📉 DOWN {abs(change)}"
+            else:
+                direction = "➡️ SAME"
+
+            print(
+                f"  Rank {i}: {direction:15} | Rerank: {rerank_score:.3f} | Sim: {similarity:.3f} | Was #{original_rank}"
+            )
+
+        if new_discoveries:
+            print("\n🎉 NEW DISCOVERIES:")
+            for discovery in new_discoveries:
+                print(f"  • {discovery}")
+
+        if significant_changes:
+            print("\n🎯 SIGNIFICANT IMPROVEMENTS:")
+            for change in significant_changes:
+                print(f"  • {change}")
+
+        if not new_discoveries and not significant_changes:
+            print("\n📊 Minor reordering - reranking refined the results")
 
         return {
-            "question": question,
-            "standard_response": standard_response,
-            "reranked_response": reranked_response,
             "standard_docs": standard_docs,
+            "reranked_docs": reranked_docs,
+            "initial_docs": initial_docs,
         }
 
-    def demonstrate_rerank_models(
-        self, query: str, documents: List[Dict[str, Any]]
-    ) -> None:
-        """
-        Demonstrate different Cohere rerank models.
-        """
-        print("\n🎯 Comparing Different Rerank Models")
-        print("=" * 50)
-        print(f"Query: '{query}'")
-        print(f"Documents to rerank: {len(documents)}")
 
-        for model_name, description in self.available_models.items():
-            print(f"\n📊 Model: {model_name}")
-            print(f"Description: {description}")
-            print("-" * 40)
-
-            try:
-                reranked = self.rerank_documents(
-                    query=query, documents=documents, model=model_name, top_n=3
-                )
-
-                for i, doc in enumerate(reranked):
-                    print(
-                        f"  {i + 1}. Score: {doc['rerank_score']:.3f} | "
-                        f"Content: {doc['content'][:80]}..."
-                    )
-
-            except Exception as e:
-                print(f"  ❌ Error with {model_name}: {e}")
+def simple_reranking_example():
+    reranker = CohereReranking()
+    reranked_docs = reranker.rerank_documents(
+        query="What is artificial intelligence?",
+        documents=[
+            {
+                "content": "AI is a branch of computer science that focuses on creating machines that can perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language understanding."
+            },
+            {
+                "content": "AI systems can learn from data, adapt to new situations, and improve their performance over time."
+            },
+            {
+                "content": "AI has applications in various fields, including healthcare, finance, education, and entertainment."
+            },
+            {
+                "content": "AI is a rapidly growing field with many potential applications and opportunities for innovation."
+            },
+            {
+                "content": "Artificial intelligence (AI) is a broad field that encompasses various techniques and applications."
+            },
+        ],
+        top_n=5,
+    )
+    print("Reranked documents:")
+    for doc in reranked_docs:
+        print(f"Score: {doc['rerank_score']}")
+        print(f"Content: {doc['content']}")
+        print()
 
 
 def demonstrate_cohere_reranking():
-    """
-    Demonstrate the Cohere reranking technique with practical examples.
-    """
+    """Demonstrate Cohere reranking with Wikipedia articles."""
     print("🔄 Cohere Reranking Demonstration")
     print("=" * 50)
 
-    # Check for Cohere API key
-    cohere_api_key = os.getenv("COHERE_API_KEY")
-    if not cohere_api_key:
-        print("❌ COHERE_API_KEY environment variable not set!")
-        print("Please set your Cohere API key:")
-        print("export COHERE_API_KEY='your-api-key-here'")
-        print("\nGet your free API key at: https://dashboard.cohere.com/api-keys")
-        return
-
     try:
         # Initialize reranking system
-        reranker = CohereReranking(cohere_api_key)
+        reranker = CohereReranking()
 
-        # Make sure we have documents in the vector store
-        doc_count = reranker.rag_system.vector_store.get_document_count()
-        if doc_count == 0:
-            print("No documents found in vector store. Ingesting sample document...")
-            from rag.config import DOCLING_PAPER_URL
+        # Setup Wikipedia data
+        reranker.get_data()  # This takes ~3 minutes to process
 
-            reranker.rag_system.ingest_document(DOCLING_PAPER_URL)
+        # Demonstrate reranking with a simple example
+        simple_reranking_example()
 
-        print(
-            f"Vector store contains {reranker.rag_system.vector_store.get_document_count()} documents"
-        )
-
-        # Test queries that benefit from reranking
+        # Test queries that should show clear reranking benefits
         test_queries = [
-            "What is document parsing and how does it work?",
-            "How does Docling handle different document formats?",
-            "What are the performance benchmarks and evaluation metrics?",
+            "How does artificial intelligence help with image recognition?",
+            "What are the business applications of big data analytics?",
+            "How do robots use computer vision for navigation?",
         ]
 
-        print("\n🧪 Testing Cohere Reranking with Sample Queries")
-        print("=" * 50)
+        print(f"\n🧪 Testing {len(test_queries)} queries that benefit from reranking")
 
-        for i, query in enumerate(test_queries, 1):
-            print(f"\n{'=' * 60}")
-            print(f"TEST {i}: {query}")
-            print("=" * 60)
-
-            # Show comparison between standard and reranked retrieval
-            comparison = reranker.compare_with_without_reranking(
-                question=query, initial_k=15, final_k=5
-            )
-
-            print("\n📊 RESULTS COMPARISON:")
-            print("-" * 30)
-            print(f"Standard Response: {comparison['standard_response'][:200]}...")
-            print(f"\nReranked Response: {comparison['reranked_response'][:200]}...")
-
-            print("\n" + "=" * 60)
-
-        # Demonstrate different rerank models
-        print("\n🎯 Available Cohere Rerank Models")
-        print("=" * 40)
-        for model, desc in reranker.available_models.items():
-            print(f"• {model}: {desc}")
-
-        # Test with a sample query and documents
-        sample_query = "document processing and parsing"
-        sample_docs = reranker.rag_system.retrieve_context(sample_query, k=5)
-
-        if sample_docs:
-            reranker.demonstrate_rerank_models(sample_query, sample_docs)
+        for query in test_queries:
+            reranker.compare_with_without_reranking(query, initial_k=25, final_k=5)
 
     except Exception as e:
-        print(f"❌ Error initializing Cohere reranking: {e}")
-        print("Please check your API key and internet connection.")
+        print(f"❌ Error: {e}")
+        print("Please check your Cohere API key and internet connection.")
 
 
 if __name__ == "__main__":
