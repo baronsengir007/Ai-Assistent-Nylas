@@ -15,7 +15,6 @@ that balances semantic understanding with precise keyword matching.
 
 import os
 from typing import List, Literal
-import re
 
 import psycopg
 from dotenv import load_dotenv
@@ -67,52 +66,19 @@ class VectorStore:
         )
         return response.data[0].embedding
 
-    def _build_flexible_query(self, query: str) -> str:
+    def _build_flexible_tsquery(self, query: str) -> str:
         """
-        Build a flexible OR query that only includes terms existing in documents.
-
-        Process:
-        1. Extract meaningful terms using PostgreSQL's text processing
-        2. Filter to only terms that exist in our document corpus
-        3. Join with OR operator for flexible matching
+        Build a flexible OR-based tsquery from the search terms.
+        Example: "vector database search" becomes "vector | database | search"
         """
         with self.conn.cursor() as cur:
-            # Get all available tokens from documents
-            cur.execute("""
-                SELECT DISTINCT unnest(tsvector_to_array(fts)) as token
-                FROM documents
-            """)
-            available_tokens = set(row[0] for row in cur.fetchall())
-
-            # Extract terms using PostgreSQL's text processing
             cur.execute("SELECT websearch_to_tsquery('english', %s)::text", (query,))
-            query_string = cur.fetchone()[0]
+            normalized_query = cur.fetchone()[0]
 
-            # Parse extracted terms
-            if query_string and query_string != "''":
-                query_tokens = re.findall(r"'([^']+)'", query_string)
-            else:
-                # Fallback: basic word extraction
-                words = query.lower().split()
-                query_tokens = [word.strip(".,?!") for word in words if len(word) > 2]
-
-            # Keep only terms that exist in our documents
-            matching_tokens = [
-                token for token in query_tokens if token in available_tokens
-            ]
-
-            # Remove duplicates while preserving order
-            unique_tokens = []
-            seen = set()
-            for token in matching_tokens:
-                if token not in seen:
-                    seen.add(token)
-                    unique_tokens.append(token)
-
-            if not unique_tokens:
-                return "vector | search"  # Fallback
-
-            return " | ".join(unique_tokens)
+            if not normalized_query or normalized_query == "''":
+                return "''"
+            or_query = normalized_query.replace(" & ", " | ")
+            return or_query
 
     def search(
         self,
@@ -140,13 +106,15 @@ class VectorStore:
             List of search results with scores and metadata
         """
 
-        # Prepare keyword search query based on mode
+        # Use AND logic (all terms must match)
         if keyword_mode == "strict":
-            fts_query = query
             tsquery_func = "websearch_to_tsquery('english', %s)"
+            fts_query = query
+
+        # Use OR logic (any terms can match)
         elif keyword_mode == "flexible":
-            fts_query = self._build_flexible_query(query)
             tsquery_func = "to_tsquery('english', %s)"
+            fts_query = self._build_flexible_tsquery(query)
         else:
             raise ValueError("keyword_mode must be 'strict' or 'flexible'")
 
@@ -354,7 +322,7 @@ def compare_search_modes():
 
         print()
 
-        # Test flexible mode (custom OR logic)
+        # Test flexible mode (OR-based search)
         print("Flexible Mode (any terms can match)")
         print("Uses custom OR logic - flexible and conversational")
         results = search_engine.search(
@@ -513,7 +481,7 @@ def weight_tuning_example():
 
 def main():
     # Uncomment to set up fresh data
-    insert_documents()
+    # insert_documents()
 
     # Compare search modes
     compare_search_modes()

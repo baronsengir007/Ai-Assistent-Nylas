@@ -26,7 +26,7 @@ genai-accelerator-labs/
    cd genai-accelerator-labs
    ```
 
-2. Each week's folder contains a README with specific setup instructions and exercise details.
+2. Each week's folder contains code exercises and instructions to follow along.
 
 3. Complete the exercises in order, as each builds upon skills learned in previous sessions.
 
