@@ -10,9 +10,9 @@ RAG systems often struggle with retrieval quality, leading to poor response gene
 - **Lack of structured filtering**: Cannot filter by document attributes or metadata
 - **Poor relevance ranking**: Similarity scores don't always reflect semantic relevance
 
-This module implements four cutting-edge optimization techniques that address these challenges:
+This module implements four advanced optimization techniques that address these challenges:
 
-1. **Contextual Retrieval** - Adds context to chunks before embedding (Anthropic)
+1. **Contextual Retrieval** - Adds context to chunks before embedding
 2. **Query Expansion** - Generates multiple related queries for broader coverage
 3. **Self-Query** - Extracts metadata filters from natural language queries
 4. **Reranking with Cohere** - Reorders results using advanced relevance scoring
@@ -34,7 +34,7 @@ Ensure you have the PostgreSQL database with pgvector extension running (see `..
 
 **The Problem**: When documents are split into chunks for vector storage, important contextual information is often lost. A chunk might contain "The company's revenue grew by 3%" but lose the context of which company, which time period, and what the baseline was.
 
-**The Solution**: Contextual Retrieval, introduced by Anthropic, adds contextual information to each chunk before embedding. This preserves the document structure and relationships that would otherwise be lost during chunking.
+**The Solution**: [Contextual Retrieval, introduced by Anthropic](https://www.anthropic.com/news/contextual-retrieval), adds contextual information to each chunk before embedding. This preserves the document structure and relationships that would otherwise be lost during chunking.
 
 **How it works**:
 1. **Document Processing**: The full document is processed and chunked normally
@@ -92,7 +92,7 @@ Expanded queries:
 - **Increases recall** by covering semantic variations
 - **Handles vocabulary mismatch** between query and documents
 - **Improves retrieval for ambiguous queries** by exploring multiple interpretations
-- **Works especially well with keyword-based search** (BM25) systems
+- **Works especially well with keyword-based search** systems
 - **Captures domain-specific terminology** that users might not know
 
 **When to use**: Particularly effective for technical domains, when users are unfamiliar with domain terminology, or when documents use varied vocabulary for similar concepts.
@@ -249,6 +249,3 @@ This comprehensive approach creates a RAG system that is robust, accurate, and c
 - [Cohere Rerank Documentation](https://docs.cohere.com/docs/rerank)
 - [Cohere Rerank API Reference](https://docs.cohere.com/reference/rerank)
 - [Query Expansion Techniques](https://en.wikipedia.org/wiki/Query_expansion)
-- [Self-Query in LangChain](https://python.langchain.com/docs/how_to/self_query/)
-- [RAG Evaluation Best Practices](https://docs.cohere.com/docs/rag-evaluation)
-- [Vector Database Optimization](https://docs.cohere.com/docs/vector-database-optimization)
