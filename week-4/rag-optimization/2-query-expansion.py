@@ -78,6 +78,7 @@ class QueryExpansion:
                     {"role": "user", "content": f"Original question: {original_query}"},
                 ],
                 text_format=ExpandedQueries,
+                temperature=0.0,
             )
 
             # Extract the expanded queries from the structured response

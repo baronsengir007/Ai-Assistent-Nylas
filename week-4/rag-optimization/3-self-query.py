@@ -198,9 +198,9 @@ class SelfQuery:
         metadata_schema_json = MetadataSchema.model_json_schema()
 
         try:
-            response = self.client.beta.chat.completions.parse(
+            response = self.client.responses.parse(
                 model="gpt-4o-mini",
-                messages=[
+                input=[
                     {
                         "role": "system",
                         "content": f"""You are an expert at analyzing search queries and extracting structured information.
@@ -217,12 +217,12 @@ class SelfQuery:
                     },
                     {"role": "user", "content": f"User query: '{query}'"},
                 ],
-                response_format=QueryComponents,
+                text_format=QueryComponents,
                 temperature=0.0,
             )
 
             # Extract the parsed response
-            parsed_result = response.choices[0].message.parsed
+            parsed_result = response.output_parsed
 
             # Convert the Pydantic model to a dictionary for filters
             filters_dict = {}

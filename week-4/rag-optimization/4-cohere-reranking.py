@@ -212,7 +212,7 @@ def simple_reranking_example():
                 "content": "Artificial intelligence (AI) is a broad field that encompasses various techniques and applications."
             },
         ],
-        top_n=5,
+        top_n=3,
     )
     print("Reranked documents:")
     for doc in reranked_docs:
