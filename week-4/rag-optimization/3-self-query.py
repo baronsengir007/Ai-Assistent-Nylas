@@ -206,14 +206,22 @@ class SelfQuery:
                         "content": f"""You are an expert at analyzing search queries and extracting structured information.
 
                         Given a user's natural language query, extract:
-                        1. The main semantic query (what they're looking for content-wise, cleaned of metadata terms)
+                        1. The main semantic query (what they're looking for content-wise, preserving topic keywords but removing explicit metadata terms like 'beginner', 'tutorial', 'documentation')
                         2. Any metadata filters that can be applied
 
                         Available metadata schema:
                         {json.dumps(metadata_schema_json, indent=2)}
 
                         Only include filters if they are clearly implied by the query. If no filters apply, set filters to null.
-                        The semantic query should focus on the core content need, removing metadata-specific terms.""",
+                        
+                        For the semantic query:
+                        - Keep topic-related terms (e.g., "vector search", "RAG", "embeddings") 
+                        - Remove explicit metadata terms (e.g., "beginner", "advanced", "tutorial", "documentation", "research")
+                        - Focus on the core content need
+
+                        Examples:
+                        - "I need documentation for vector search" → semantic: "vector search", filters: {{"content_type": "documentation", "topic": "vector_search"}}
+                        - "Show me beginner tutorials about RAG" → semantic: "RAG", filters: {{"difficulty": "beginner", "content_type": "tutorial", "topic": "rag"}}""",
                     },
                     {"role": "user", "content": f"User query: '{query}'"},
                 ],
