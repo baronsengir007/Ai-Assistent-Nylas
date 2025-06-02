@@ -4,7 +4,7 @@
 
 Langfuse is an open-source LLM engineering platform that provides observability, evaluation, and prompt management for AI applications. Unlike traditional monitoring tools, Langfuse is designed for the challenges of building with large language models, where non-deterministic outputs, multi-step workflows, and the need to track costs and quality make debugging challenging.
 
-The platform is particularly valuable because it's model and framework agnostic, meaning you can use it with OpenAI, Anthropic, local models, PydanticAI, LlamaIndex, or any other AI toolchain. This flexibility makes it an essential tool for production AI applications where you need consistent monitoring across different components and providers.
+The platform is particularly valuable because it's model and framework agnostic, meaning you can use it with OpenAI, Anthropic, local models, [PydanticAI](https://langfuse.com/docs/integrations/pydantic-ai), LlamaIndex, or any other AI toolchain. This flexibility makes it an essential tool for production AI applications where you need consistent monitoring across different components and providers.
 
 ## Getting Started with Langfuse
 
@@ -37,7 +37,7 @@ Langfuse can help with:
 
 ## Prompt Management in Practice
 
-Langfuse's prompt management acts as a Content Management System (CMS) for your AI prompts, enabling you to decouple prompt engineering from application deployment. Instead of hardcoding prompts in your codebase, you can store, version, and manage them centrally through Langfuse.
+Langfuse's [prompt management](https://langfuse.com/docs/prompts/get-started) acts as a Content Management System (CMS) for your AI prompts, enabling you to decouple prompt engineering from application deployment. Instead of hardcoding prompts in your codebase, you can store, version, and manage them centrally through Langfuse.
 
 ### Key Features
 

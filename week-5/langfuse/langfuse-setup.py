@@ -56,9 +56,9 @@ class CustomerQuery(BaseModel):
 
 @observe()
 def analyze_customer_query(query: str) -> CustomerQuery:
-    response = openai.responses.parse(
+    response = openai.beta.chat.completions.parse(
         model="gpt-4.1",
-        input=[
+        messages=[
             {
                 "role": "system",
                 "content": """Analyze customer queries and classify them.
@@ -75,11 +75,11 @@ def analyze_customer_query(query: str) -> CustomerQuery:
             },
             {"role": "user", "content": f"Customer query: {query}"},
         ],
-        text_format=CustomerQuery,
+        response_format=CustomerQuery,
         temperature=0.1,
     )
 
-    analysis = response.output_parsed
+    analysis = response.choices[0].message.parsed
 
     # Add metadata to LangFuse
     langfuse_context.update_current_observation(
