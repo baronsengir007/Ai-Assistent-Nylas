@@ -1,6 +1,6 @@
 # Langfuse LLM Observability Platform
 
-## What is Langfuse and Why AI Engineers Need It
+## Introduction to Langfuse
 
 Langfuse is an open-source LLM engineering platform that provides observability, evaluation, and prompt management for AI applications. Unlike traditional monitoring tools, Langfuse is designed for the challenges of building with large language models, where non-deterministic outputs, multi-step workflows, and the need to track costs and quality make debugging challenging.
 
@@ -28,12 +28,12 @@ Langfuse also offers [self-hosting options](https://langfuse.com/docs/deployment
 
 ## The Benefits of Langfuse
 
-Languse can help with:
+Langfuse can help with:
 
-- Tracing and Debugging
-- Cost Optimization and Usage Tracking
-- Advanced Prompt Management
-- Scoring and Evaluations
+- Tracing and debugging
+- Cost optimization and usage tracking
+- Advanced prompt management
+- Scoring and evaluations
 
 ## Prompt Management in Practice
 
@@ -80,3 +80,26 @@ The customer support automation example demonstrates real-world usage patterns i
 ## Additional Resources and Next Steps
 
 Langfuse offers extensive documentation and integration guides at [langfuse.com/docs](https://langfuse.com/docs), including specific integration examples for popular frameworks. The platform also provides an [interactive demo](https://langfuse.com/docs/demo) where you can explore the interface and features without setting up your own account.
+
+## SDK Versions: v2 (Current Default) and v3 (Beta)
+
+**Important Note for Developers:** As of 2025, Langfuse offers two SDK versions with different capabilities and maturity levels.
+
+### Python SDK v2 (Current Production Default)
+
+- **Status**: Stable and production-ready
+- **Installation**: `pip install langfuse` (currently installs v2 by default)
+- **Features**: Full feature set including decorators, low-level SDK, and integrations
+- **Documentation**: Available at [langfuse.com/docs/sdk/python](https://langfuse.com/docs/sdk/python/decorators)
+
+### Python SDK v3 (Beta - OpenTelemetry-based)
+
+- **Status**: Beta release (as of early 2025)
+- **Installation**: `pip install "langfuse>=3.0.0b2"`
+- **Key Features**: 
+  - Built on OpenTelemetry for better third-party integrations
+  - Improved developer experience with more intuitive APIs
+  - Unified context sharing and automatic span nesting
+  - Seamless integration with any OpenTelemetry-instrumented library
+- **Requirements**: Langfuse platform version >= 3.63.0 for self-hosted instances
+- **Documentation**: Available at [langfuse.com/docs/sdk/python/sdk-v3](https://langfuse.com/docs/sdk/python/sdk-v3)
