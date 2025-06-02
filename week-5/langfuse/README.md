@@ -10,7 +10,7 @@ The platform is particularly valuable because it's model and framework agnostic,
 
 Setting up Langfuse is straightforward and free to get started. Head to [langfuse.com](https://langfuse.com) and create an account using GitHub or email. The platform offers a free tier to get started.
 
-Once you have an account, create a new project and you'll receive three credentials: a public key, secret key, and host URL. These should be stored in your environment variables as `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST`. The setup is minimally invasive - in most cases, you can start getting value from Langfuse by adding a single decorator to your functions or importing the OpenAI integration.
+Once you have an account, create a new project and you'll receive three credentials: a public key, secret key, and host URL. These should be stored in your environment variables as `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST`. The setup is minimally invasive. In most cases, you can start getting value from Langfuse by adding a single decorator to your functions or importing the OpenAI integration.
 
 Langfuse also offers [self-hosting options](https://langfuse.com/docs/deployment/self-host) if you prefer to keep your data within your own infrastructure, which is valuable for enterprise AI applications with strict data governance requirements.
 
@@ -26,27 +26,14 @@ Langfuse also offers [self-hosting options](https://langfuse.com/docs/deployment
 
 - **Scores** provide the evaluation layer, allowing you to attach quality metrics to any trace, observation, or session. These can be numeric values, boolean flags, or categorical assessments, and they can come from automated evaluations, user feedback, or manual annotation.
 
-## The Three Major Benefits of Langfuse
+## The Benefits of Langfuse
 
-### 1. Tracing and Debugging
+Languse can help with:
 
-Langfuse's tracing capabilities provide visibility into your AI applications. Unlike traditional logging, Langfuse captures the full execution context including prompts, completions, intermediate steps, and the relationships between them. This is crucial for AI applications because errors often depend on specific input data or prompt variations that are impossible to reproduce without seeing the execution context.
-
-The platform automatically tracks timing information, allowing you to identify performance bottlenecks in AI workflows. You can see how long each LLM call takes, where retrieval operations are slow, and which parts of your pipeline are causing latency issues. This insight is essential for optimizing AI applications for production use.
-
-### 2. Cost Optimization and Usage Tracking
-
-One of the immediate benefits of Langfuse is its automatic cost tracking and optimization features. The platform automatically calculates and tracks token usage and costs across all your LLM providers, giving you insights into where your AI budget is being spent. This is valuable as AI applications scale and costs can quickly spiral out of control without proper monitoring.
-
-Langfuse provides breakdowns by user, feature, model, and time period, making it easy to identify cost drivers and optimize your application. You can track costs across different models and providers, helping you make decisions about which models to use for different use cases. The platform also helps you identify inefficient prompts or excessive API calls that might be driving up costs.
-
-### 3. Advanced Prompt Management
-
-Langfuse's prompt management system addresses one of the challenging aspects of AI application development: managing and iterating on prompts in production. The platform provides centralized prompt storage with version control, allowing you to deploy new prompts without code changes and quickly rollback if issues arise.
-
-The prompt management system includes A/B testing capabilities, performance metrics comparison, and integration with the tracing system to understand how prompt changes affect application behavior. You can track which prompt versions perform better, monitor quality metrics across different prompts, and collaborate with non-technical team members who can update prompts through the web interface without touching code.
-
-This is powerful when combined with Langfuse's evaluation features, as you can automatically score different prompt versions and make data-driven decisions about which prompts to deploy to production.
+- Tracing and Debugging
+- Cost Optimization and Usage Tracking
+- Advanced Prompt Management
+- Scoring and Evaluations
 
 ## Prompt Management in Practice
 
