@@ -1,0 +1,38 @@
+# RAG Evaluation Insights Report
+==================================================
+
+## 🏆 Best Overall Method: semantic
+- MRR: 0.8812
+- Precision@1: 0.8171
+- Success Rate: 0.9921
+
+## 📊 Method Comparisons
+
+**Best MRR:** semantic (0.8812)
+**Best PRECISION_AT_1:** semantic (0.8171)
+**Best RECALL:** hybrid_reranking (0.9934)
+**Fastest Method (avg_execution_time_ms):** hybrid (361.3ms)
+
+## 🔍 Query Type Analysis
+
+**Real Questions:**
+- Best method: semantic (MRR: 0.8519)
+- Total queries: 496
+
+**Synthetic Questions:**
+- Best method: semantic (MRR: 0.9364)
+- Total queries: 264
+
+## 💡 Key Insights
+
+- **Speed vs Quality Trade-off:** hybrid is fastest (361.3ms) but semantic has best quality (MRR: 0.8812)
+
+- **semantic Precision Degradation:** 87.9% from P@1 to P@10
+- **hybrid_reranking Precision Degradation:** 86.0% from P@1 to P@10
+- **hybrid Precision Degradation:** 85.2% from P@1 to P@10
+
+## 📋 Recommendations
+
+- Consider the speed vs quality trade-off based on your use case
+- Monitor precision degradation at higher K values
+- Test with larger datasets to validate these findings
