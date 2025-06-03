@@ -2,7 +2,7 @@
 
 ## What is LLM Guard?
 
-LLM Guard is a **security toolkit** that acts as a protective layer for Large Language Model applications. Unlike traditional API-based security solutions, LLM Guard runs **entirely on your machine** using open-source transformer models from [Hugging Face](https://huggingface.co/), giving you complete control over your data and security policies.
+[LLM Guard](https://protectai.github.io/llm-guard/) is a **security toolkit** that acts as a protective layer for Large Language Model applications. Unlike traditional API-based security solutions, LLM Guard runs **entirely on your machine** using open-source transformer models from [Hugging Face](https://huggingface.co/), giving you complete control over your data and security policies.
 
 ### How LLM Guard Fits Into Your Workflow
 
@@ -84,27 +84,7 @@ When you first run LLM Guard, it automatically downloads transformer models to y
 ## Model Storage & Caching
 
 ### Where Models Are Stored
-Models are **NOT** stored in your virtual environment. Instead, they live in a **global cache**:
-
-**Unix/Linux/macOS:**
-```bash
-# Global cache location (shared across all projects)
-~/.cache/huggingface/hub/
-
-# Example paths:
-~/.cache/huggingface/hub/models--protectai--deberta-v3-base-prompt-injection-v2/  # 721MB
-~/.cache/huggingface/hub/models--Isotonic--deberta-v3-base_finetuned_ai4privacy_v2/  # 712MB
-```
-
-**Windows:**
-```cmd
-# Global cache location
-%USERPROFILE%\.cache\huggingface\hub\
-
-# Example paths:
-C:\Users\{username}\.cache\huggingface\hub\models--protectai--deberta-v3-base-prompt-injection-v2\
-C:\Users\{username}\.cache\huggingface\hub\models--Isotonic--deberta-v3-base_finetuned_ai4privacy_v2\
-```
+Models are **NOT** stored in your virtual environment. Instead, they live in a **global cache**
 
 ### Managing Disk Usage
 
@@ -208,17 +188,6 @@ scanner = Anonymize(
     use_faker=True                          # Generate realistic fake data
 )
 ```
-
-### Performance Optimization
-```python
-# For fastest performance (ONNX runtime)
-scanner = Anonymize(vault, use_onnx=True, recognizer_conf=BERT_BASE_NER_CONF)
-
-# For maximum accuracy
-scanner = Anonymize(vault, recognizer_conf=DEBERTA_AI4PRIVACY_v2_CONF, threshold=0.3)
-```
-
-**Note**: First run will trigger model downloads. Ensure good internet connection and ~2GB free space.
 
 ## Documentation
 
