@@ -25,6 +25,8 @@ dependencies = [
     "langfuse>=2.60.7",
     "sentry-sdk>=2.29.1",
     "logfire>=3.16.1",
+    "llm-guard>=0.3.16",
+    "pip>=25.1.1",
 ]
 
 [dependency-groups]
