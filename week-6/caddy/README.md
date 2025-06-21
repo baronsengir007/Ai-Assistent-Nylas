@@ -1,4 +1,4 @@
-# Caddy Deployment Guide
+# Production Setup with SSL
 
 This guide assumes you have followed the steps in [GenAI Launchpad Deployment Guide](../deployment/README.md).
 
