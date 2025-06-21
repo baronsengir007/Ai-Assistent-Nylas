@@ -94,6 +94,43 @@ By default, Hetzner servers have restrictive firewall settings that block most p
 **Security recommendation:**
 Just like with SSH (port 22), restricting access to your IP address only prevents unauthorized access to your application services. This is especially important since these ports will expose your database interface and API endpoints.
 
+**Configure Docker to allow external API access:**
+
+Since we're not using a reverse proxy in this setup, you also need to modify the Docker Compose configuration to make your API accessible from external connections (not just localhost):
+
+4. **Edit the Docker Compose file:**
+   ```bash
+   nano /opt/genai-launchpad-quickstart/docker/docker-compose.launchpad.yml
+   ```
+
+5. **Find the API service section** and locate the ports configuration:
+   ```yaml
+   api:
+     build:
+       context: ..
+       dockerfile: docker/Dockerfile.api
+     container_name: "${PROJECT_NAME}_api"
+     depends_on:
+       - db
+       - redis
+     ports:
+       - "127.0.0.1:8080:8080"  # This line needs to be changed
+   ```
+
+6. **Update the ports binding:**
+   Change the line from:
+   ```yaml
+   - "127.0.0.1:8080:8080"
+   ```
+   to:
+   ```yaml
+   - "8080:8080"
+   ```
+
+**Understanding the change:**
+- **`127.0.0.1:8080:8080`** only allows connections from localhost (the server itself)
+- **`8080:8080`** allows connections from any IP address, making your API accessible from external clients
+- This change is necessary because the firewall rules you created above will only work if the service itself accepts external connections
 
 ## Step 4: Start the Application
 
