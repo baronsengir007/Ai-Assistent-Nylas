@@ -1,5 +1,7 @@
 # Guide for Windows: Creating an SSH Key
 
+Since I am on MacOS, I cannot properly test this. If you run into any errors following these steps, please let me know and I'll update this file.
+
 ## Checking Your SSH Key
 
 Before creating a new key, check if you already have one:
@@ -15,7 +17,7 @@ or
 
    ```powershell
    dir C:\Users\YourUsername\.ssh
-```
+   ```
 
 3. Look for files named `id_rsa.pub`, `id_ed25519.pub`, or similar files ending with `.pub` (Ed25519 is newer, more secure, and faster than RSA - use Ed25519 for all new keys.)
 4. If these files exist, you already have SSH keys
