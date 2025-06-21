@@ -22,7 +22,7 @@ Navigate to your GitHub account and create a new repository called `genai-launch
 After creating your repository, push all the cloned code to your new repository so you have complete ownership and control over the codebase.
 
 **Test your setup locally:**
-Before deploying to the server, configure your environment variables in the `.env` file, start the Docker containers, and run the `send_event` file to verify that everything is working correctly on your local machine.
+Before deploying to the server, configure your environment variables in the `.env` file, create a virtual environment with `uv venv`, install the dependencies with `uv sync`, start the Docker containers, and run the `send_event` file to verify that everything is working correctly on your local machine.
 
 ## Step 2: Deploy Your Project to the Server
 
