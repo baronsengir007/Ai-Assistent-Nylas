@@ -1,4 +1,4 @@
-# Deploying the GenAI Launchpad to Server
+# Deploying the GenAI Launchpad to a Server
 
 ## Introduction
 
