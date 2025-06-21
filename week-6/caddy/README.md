@@ -41,10 +41,6 @@ graph TB
     E --> G["Kong API Gateway<br/>(Internal Docker Network)"]
     
     G --> H["Supabase Studio<br/>(Dashboard)"]
-    G --> I["GoTrue<br/>(Authentication)"]
-    G --> J["PostgREST<br/>(Database API)"]
-    G --> K["Storage API"]
-    G --> L["Edge Functions"]
     G --> M["Supabase PostgreSQL<br/>(Database)"]
     
     F --> N["Redis Cache"]
@@ -60,10 +56,6 @@ graph TB
     style F fill:#e8f5e8
     style G fill:#f3e5f5
     style H fill:#fff3e0
-    style I fill:#fff3e0
-    style J fill:#fff3e0
-    style K fill:#fff3e0
-    style L fill:#fff3e0
     style M fill:#fff3e0
     style P fill:#fce4ec
 ```
