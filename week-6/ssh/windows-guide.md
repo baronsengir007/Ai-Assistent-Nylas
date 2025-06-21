@@ -7,14 +7,14 @@ Before creating a new key, check if you already have one:
 1. Open PowerShell or Command Prompt
 2. Run this command to see if you have existing SSH keys:
 
-```powershell
-dir ~/.ssh
-```
+   ```powershell
+   dir ~/.ssh
+   ```
 
 or
 
-```powershell
-dir C:\Users\YourUsername\.ssh
+   ```powershell
+   dir C:\Users\YourUsername\.ssh
 ```
 
 3. Look for files named `id_rsa.pub`, `id_ed25519.pub`, or similar files ending with `.pub` (Ed25519 is newer, more secure, and faster than RSA - use Ed25519 for all new keys.)
@@ -31,9 +31,9 @@ If you don't have an SSH key or want to create a new one:
 
 2. **Generate a new SSH key**:
 
-```powershell
-ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_genai_accelerator_prod -C "your_email@example.com"
-```
+   ```powershell
+   ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_genai_accelerator_prod -C "your_email@example.com"
+   ```
 
    - Replace `id_ed25519_genai_accelerator_prod` with your actual file name for reference
    - Replace `your_email@example.com` with your actual email (this just serves as a label)
@@ -45,17 +45,17 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_genai_accelerator_prod -C "your_email
 
 4. **View your public key**:
 
-```powershell
-Get-Content ~/.ssh/id_ed25519_genai_accelerator_prod.pub
-```
+   ```powershell
+   Get-Content ~/.ssh/id_ed25519_genai_accelerator_prod.pub
+   ```
 
    - The output is your public key, which you'll add to servers you want to access
 
 5. **Copy your public key to clipboard**:
 
-```powershell
-Get-Content ~/.ssh/id_ed25519_genai_accelerator_prod.pub | clip
-```
+   ```powershell
+   Get-Content ~/.ssh/id_ed25519_genai_accelerator_prod.pub | clip
+   ```
 
 ## Removing SSH Keys
 

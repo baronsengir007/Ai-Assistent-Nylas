@@ -5,9 +5,9 @@
 1. Open Terminal
 2. Run this command:
 
-```bash
-ls -la ~/.ssh
-```
+   ```bash
+   ls -la ~/.ssh
+   ```
 
 3. Look for files named `id_rsa.pub`, `id_ed25519.pub`, or similar files ending with `.pub` (Ed25519 is newer, more secure, and faster than RSA - use Ed25519 for all new keys.)
 4. If these files exist, you already have SSH keys
@@ -20,9 +20,9 @@ ls -la ~/.ssh
 
 2. **Generate a new SSH key**:
 
-```bash
-ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_genai_accelerator_prod -C "your_email@example.com"
-```
+   ```bash
+   ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_genai_accelerator_prod -C "your_email@example.com"
+   ```
 
    - Replace `id_ed25519_genai_accelerator_prod` with your actual file name for reference
    - Replace `your_email@example.com` with your actual email (this just serves as a label)
@@ -34,17 +34,17 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_genai_accelerator_prod -C "your_email
 
 4. **View your public key**:
 
-```bash
-cat ~/.ssh/id_ed25519_genai_accelerator_prod.pub
-```
+   ```bash
+   cat ~/.ssh/id_ed25519_genai_accelerator_prod.pub
+   ```
 
    - The output is your public key, which you'll add to servers you want to access
 
 5. **Copy your public key to clipboard**:
 
-```bash
-cat ~/.ssh/id_ed25519_genai_accelerator_prod.pub | pbcopy
-```
+   ```bash
+   cat ~/.ssh/id_ed25519_genai_accelerator_prod.pub | pbcopy
+   ```
 
 ## Removing SSH Keys
 
