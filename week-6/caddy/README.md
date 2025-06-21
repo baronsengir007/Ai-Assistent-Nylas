@@ -100,31 +100,6 @@ Replace the contents with:
 
 ```caddy
 # API Service - Gen AI Launchpad
-api.your-domain.com {
-    log {
-        output file /var/log/caddy/api.log
-        format console
-        level info
-    }
-    reverse_proxy api:8080
-}
-
-# Supabase Service - Kong API Gateway
-supabase.your-domain.com {
-    log {
-        output file /var/log/caddy/supabase.log  
-        format console
-        level info
-    }
-    reverse_proxy kong:8000
-}
-```
-
-### Alternative: Using Environment Variables (Recommended)
-For better maintainability, you can use environment variables in your Caddyfile:
-
-```caddy
-# API Service - Gen AI Launchpad
 {$CADDY_DOMAIN_API} {
     log {
         output file /var/log/caddy/api.log
