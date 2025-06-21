@@ -188,7 +188,7 @@ nano .env
 ```
 ### Step 4: Stop Existing Services
 ```bash
-/stop.sh
+./stop.sh
 ```
 
 ### Step 5: Update Firewall Rules
