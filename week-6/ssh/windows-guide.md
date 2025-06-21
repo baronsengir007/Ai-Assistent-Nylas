@@ -19,7 +19,8 @@ or
    dir C:\Users\YourUsername\.ssh
    ```
 
-3. Look for files named `id_rsa.pub`, `id_ed25519.pub`, or similar files ending with `.pub` (Ed25519 is newer, more secure, and faster than RSA - use Ed25519 for all new keys.)
+3. Look for files named `id_rsa.pub`, `id_ed25519.pub`, or similar files ending with `.pub` 
+   - Ed25519 is newer, more secure, and faster than RSA - use Ed25519 for all new keys.
 4. If these files exist, you already have SSH keys
 5. **Best Practice**: Create a new SSH key for every new production environment. We recommend creating a new one for this tutorial as well, even if you already have existing SSH keys.
 
@@ -63,7 +64,7 @@ If you don't have an SSH key or want to create a new one:
 
 **Delete the key files** from your local machine:
 
-```powershell
-Remove-Item ~/.ssh/id_ed25519_genai_accelerator_prod
-Remove-Item ~/.ssh/id_ed25519_genai_accelerator_prod.pub
-```
+   ```powershell
+   Remove-Item ~/.ssh/id_ed25519_genai_accelerator_prod
+   Remove-Item ~/.ssh/id_ed25519_genai_accelerator_prod.pub
+   ```
