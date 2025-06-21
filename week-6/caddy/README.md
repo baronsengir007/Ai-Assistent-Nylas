@@ -1,4 +1,4 @@
-# Production Setup with SSL
+# Deploying the GenAI Launchpad - Production Setup with SSL
 
 This guide assumes you have followed the steps in [GenAI Launchpad Deployment Guide](../deployment/README.md).
 
