@@ -118,8 +118,6 @@ Verify everything is running correctly by running:
 ./logs.sh
 ```
 
-
-
 ## Step 5: Test Your API Access
 
 Once your deployment is complete and your API is properly exposed, you need to verify that everything is working correctly.
