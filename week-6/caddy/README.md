@@ -99,7 +99,7 @@ The Caddyfile defines how Caddy should route traffic. Here's the configuration f
 Replace the contents with:
 
 ```caddy
-# API Service - Gen AI Launchpad
+# API Service - GenAI Launchpad
 {$CADDY_DOMAIN_API} {
     log {
         output file /var/log/caddy/api.log
@@ -194,6 +194,67 @@ nano .env
 ### Step 5: Update Firewall Rules
 Remove the old `8000` and `8080` port-specific rules and allow only HTTP/HTTPS
 
+## Firewall Rules with Caddy: What Changes
+
+When using Caddy as a reverse proxy, your firewall configuration changes significantly:
+
+### Without Caddy (Previous Setup):
+- **Port 22**: SSH access (restricted to your IP)
+- **Port 8000**: Direct Supabase access (restricted to your IP)  
+- **Port 8080**: Direct API access (restricted to your IP)
+
+### With Caddy (New Setup):
+- **Port 22**: SSH access (keep restricted to your IP)
+- **Port 80**: HTTP traffic (can be open to everyone - Caddy handles routing)
+- **Port 443**: HTTPS traffic (can be open to everyone - Caddy handles routing)
+- **Ports 8000/8080**: No longer need direct external access (remove these)
+
+## IP Whitelisting for Supabase Dashboard
+
+If you want to protect your Supabase dashboard with IP restrictions, you have two options:
+
+### Caddy-Level IP Restrictions (Recommended)
+
+Modify your Caddyfile to add IP restrictions to the Supabase subdomain:
+
+```caddy
+# API Service - GenAI Launchpad (Public Access)
+{$CADDY_DOMAIN_API} {
+    log {
+        output file /var/log/caddy/api.log
+        format console
+        level info
+    }
+    reverse_proxy api:8080
+}
+
+# Supabase Service - IP Restricted Access
+{$CADDY_DOMAIN_SUPABASE} {
+    # IP whitelist - replace with your actual IP address
+    @allowed_ips {
+        remote_ip 203.0.113.42  # Replace with your IP
+        # Add more IPs if needed:
+        # remote_ip 198.51.100.25
+    }
+    
+    # Block all other IPs
+    handle @allowed_ips {
+        log {
+            output file /var/log/caddy/supabase.log
+            format console
+            level info
+        }
+        reverse_proxy kong:8000
+    }
+    
+    # Return 403 Forbidden for unauthorized IPs
+    handle {
+        respond "Access Denied" 403
+    }
+}
+```
+
+This gives you the security you want for Supabase while keeping your API publicly accessible for your application users.
 
 ### Step 6: Start Services with Caddy
 ```bash

@@ -1,4 +1,4 @@
-# API Service - Gen AI Launchpad
+# API Service - GenAI Launchpad
 {$CADDY_DOMAIN_API} {
     log {
         output file /var/log/caddy/api.log
