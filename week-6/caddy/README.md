@@ -4,7 +4,7 @@ This guide assumes you have followed the steps in [GenAI Launchpad Deployment Gu
 
 ## Introduction to Caddy
 
-**Caddy** is a modern, open-source web server written in Go that automatically provides HTTPS using Let's Encrypt certificates. It's designed to be simple to use and configure, making it an excellent choice for reverse proxy setups.
+[Caddy](https://caddyserver.com/) is a modern, open-source web server written in Go that automatically provides HTTPS using Let's Encrypt certificates. It's designed to be simple to use and configure, making it an excellent choice for reverse proxy setups.
 
 ## What is Kong and Its Role in Supabase
 

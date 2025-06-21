@@ -1,7 +1,9 @@
 import requests
 
-SERVER_IP_ADDRESS = "167.235.58.55"
-url = f"http://{SERVER_IP_ADDRESS}:8080/events"
+# SERVER_IP_ADDRESS = "167.235.58.55"
+# url = f"http://{SERVER_IP_ADDRESS}:8080/events"
+
+url = "http://api.datalumina.co/events"
 
 data = {
     "from_email": "sarah.smith@example.com",
