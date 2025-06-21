@@ -17,8 +17,8 @@ This guide will walk you through how to set up a server on Hetzner and connect t
 **Official Hetzner Documentation:**
 
 - [Creating a Server](https://docs.hetzner.com/cloud/servers/getting-started/creating-a-server)
-- [Connecting to the Server](https://docs.hetzner.com/cloud/servers/getting-started/connecting-to-the-server)
 - [Creating a Firewall](https://docs.hetzner.com/cloud/firewalls/getting-started/creating-a-firewall)
+- [Connecting to the Server](https://docs.hetzner.com/cloud/servers/getting-started/connecting-to-the-server)
 
 Follow these guides in order: first create your server, then use the connection guide to SSH into it. Once you're connected, you'll be ready to deploy your application!
 
