@@ -107,9 +107,6 @@ huggingface-cli scan-cache
 ```bash
 # Interactive deletion
 huggingface-cli delete-cache
-
-# Delete all cached models
-huggingface-cli delete-cache --confirm
 ```
 
 ## Model Availability Across Scanners
