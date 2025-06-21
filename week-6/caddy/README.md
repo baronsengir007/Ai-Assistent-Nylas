@@ -1,4 +1,6 @@
-# Gen AI Launchpad Quickstart - Caddy Deployment Guide
+# Caddy Deployment Guide
+
+This guide assumes you have followed the steps in [GenAI Launchpad Deployment Guide](../deployment/README.md).
 
 ## Introduction to Caddy
 
@@ -35,7 +37,7 @@ graph TB
     C --> D["api.your-domain.com<br/>→ API Container:8080"]
     C --> E["supabase.your-domain.com<br/>→ Kong:8000"]
     
-    D --> F["Gen AI Launchpad API<br/>(Internal Docker Network)"]
+    D --> F["GenAI Launchpad API<br/>(Internal Docker Network)"]
     E --> G["Kong API Gateway<br/>(Internal Docker Network)"]
     
     G --> H["Supabase Studio<br/>(Dashboard)"]
@@ -97,15 +99,6 @@ Name: supabase
 Value: YOUR_SERVER_IP_ADDRESS
 TTL: 1 Hour (3600 seconds)
 ```
-
-### Step 3: Verify DNS Propagation
-After creating the records, use online tools like `whatsmydns.net` or command line tools to verify:
-```bash
-# Check if DNS has propagated
-nslookup api.your-domain.com
-nslookup supabase.your-domain.com
-```
-
 **Note**: DNS propagation can take 24-48 hours, but usually completes within 1-2 minutes.
 
 ## Caddyfile Configuration
@@ -219,7 +212,7 @@ ssh -i ~/.ssh/id_ed25519_genai_accelerator_prod root@your-server-ip
 
 ### Step 2: Update Your Repository
 ```bash
-cd /path/to/genai-launchpad-quickstart
+cd /opt/genai-launchpad-quickstart
 git pull origin main
 ```
 
@@ -231,17 +224,17 @@ nano .env
 ```
 ### Step 4: Stop Existing Services
 ```bash
-cd docker && ./stop.sh
+/stop.sh
 ```
 
 ### Step 5: Update Firewall Rules
-Remove the old 8000 and 8080 port-specific rules and allow only HTTP/HTTPS
+Remove the old `8000` and `8080` port-specific rules and allow only HTTP/HTTPS
 
 
 ### Step 6: Start Services with Caddy
 ```bash
 # Build and start all services including Caddy
-cd docker && ./start.sh
+./start.sh
 
 # Check if all services are running
 docker ps
