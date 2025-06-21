@@ -1,5 +1,17 @@
 # Creating a Server on Hetzner
 
+## Prerequisites: SSH Key Setup
+
+Before creating a server on Hetzner, you'll need to have an SSH key ready.
+
+**Create your SSH key first:**
+- **macOS users**: Follow the [macOS SSH Key Guide](../ssh/macOS-guide.md)
+- **Windows users**: Follow the [Windows SSH Key Guide](../ssh/windows-guide.md)
+
+Once you have your SSH key created and copied to your clipboard, you can proceed with creating your Hetzner server below.
+
+---
+
 This guide will walk you through how to set up a server on Hetzner and connect to it via SSH. Instead of duplicating all the steps here, I'm linking directly to Hetzner's official documentation below. This ensures you always get the most up-to-date instructions straight from the source, and you can trust that the information is accurate and maintained by the Hetzner team themselves.
 
 **Official Hetzner Documentation:**
