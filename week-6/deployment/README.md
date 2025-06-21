@@ -98,7 +98,29 @@ ports:
 **Important security consideration:**
 This configuration exposes your API directly to the internet without additional security layers. For production deployments, you should consider implementing a reverse proxy solution like Caddy   with SSL certificates to provide better security and encrypted connections.
 
-## Step 4: Test Your API Access
+## Step 4: Start the Application
+
+Navigate to the docker/ directory:
+
+```bash
+cd /opt/genai-launchpad/docker
+```
+
+Run the startup script:
+
+```bash
+./start.sh
+```
+
+Verify everything is running correctly by running:
+
+```bash
+./logs.sh
+```
+
+
+
+## Step 5: Test Your API Access
 
 Once your deployment is complete and your API is properly exposed, you need to verify that everything is working correctly.
 
