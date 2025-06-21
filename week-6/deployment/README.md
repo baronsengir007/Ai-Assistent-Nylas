@@ -117,24 +117,33 @@ Verify everything is running correctly by running:
 
 ## Step 5: Run the Database Migrations
 
-Create and apply database migrations using Alembic to set up your database schema:
+Create and apply database migrations using Alembic to set up your database schema. Since Alembic and other required tools are not installed directly on the server, we need to run these commands from within the Docker container where all dependencies are available.
 
 1. **Navigate to the app directory:**
    ```bash
-   cd ../app
+   cd /opt/genai-launchpad-quickstart/app
    ```
+   This is where the Alembic configuration and migration files are located in your project structure.
 
 2. **Create a new migration:**
    ```bash
-   ./makemigration.sh
+   docker exec -it launchpad_api ./makemigration.sh
    ```
    This script will prompt you for a message to describe the migration. You can enter something like: `init db`
 
 3. **Apply the migration:**
    ```bash
-   ./migrate.sh
+   docker exec -it launchpad_api ./migrate.sh
    ```
    This will apply the migration that was just created, setting up your database tables and structure.
+
+**Understanding the Docker commands:**
+- **`docker exec`**: Executes a command inside a running Docker container
+- **`-it`**: Interactive terminal flags that allow you to interact with the command (needed for the migration message prompt)
+- **`launchpad_api`**: The name of the Docker container running your API service
+- **`./makemigration.sh` and `./migrate.sh`**: The migration scripts that run Alembic commands
+
+We use these Docker commands because Alembic and the Python environment with all dependencies are contained within the Docker container, not installed directly on the server. This approach ensures consistency and avoids potential conflicts with different Python versions or missing dependencies on the host system.
 
 ## Step 6: Test Your API Access
 
