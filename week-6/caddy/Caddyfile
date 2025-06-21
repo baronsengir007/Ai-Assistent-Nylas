@@ -1,0 +1,19 @@
+# API Service - Gen AI Launchpad
+{$CADDY_DOMAIN_API} {
+    log {
+        output file /var/log/caddy/api.log
+        format console
+        level info
+    }
+    reverse_proxy api:8080
+}
+
+# Supabase Service - Kong API Gateway
+{$CADDY_DOMAIN_SUPABASE} {
+    log {
+        output file /var/log/caddy/supabase.log
+        format console
+        level info
+    }
+    reverse_proxy kong:8000
+}
