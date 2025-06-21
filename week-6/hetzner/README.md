@@ -63,4 +63,4 @@ When setting up your own firewall, replace the example IP address with your actu
 
 ## Note About Static IPs
 
-At Datalumina, we use NordLayer which gives all our developers the same static IP address. This means any team member can access our servers. If you're working solo, use your home/office IP. If it changes frequently, you might want to consider a VPN service with a static IP.
+At Datalumina, we use [NordLayer](https://nordlayer.com/) which gives all our developers the same static IP address. This means any team member can access our servers. If you're working solo, use your home/office IP. If it changes frequently, you might want to consider a VPN service with a static IP.
