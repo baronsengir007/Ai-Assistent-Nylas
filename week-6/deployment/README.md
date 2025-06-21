@@ -69,41 +69,38 @@ Once you've cloned your repository on the server, you'll need to configure the e
    ```
    This should show your `.env` file with the correct permissions.
 
-## Step 3: Exposing the API Endpoint (Without Reverse Proxy)
+## Step 3: Exposing the API and Supabase Ports
 
-By default, the API service is configured to only accept connections from localhost, which prevents external access. To make your API accessible from the internet, you need to modify the port binding configuration.
+By default, Hetzner servers have restrictive firewall settings that block most ports for security. You need to create additional firewall rules to allow access to your application ports while maintaining security by restricting access to your IP address only.
 
-**Required configuration change:**
+**Create firewall rules for your application ports:**
 
-Navigate to your Docker Compose file and locate the API service configuration in `docker/docker-compose.launchpad.yml`. You'll need to update the ports section as follows:
+1. **Navigate to your Hetzner Cloud Console** and go to your server's firewall settings
 
-```yaml
-# Change this restrictive binding:
-ports:
-  - "127.0.0.1:8080:8080"
+2. **Add a rule for Supabase (Port 8000):**
+   - **Direction:** Inbound
+   - **Protocol:** TCP
+   - **Port:** 8000
+   - **Source:** Your IP address (find it at [whatismyipaddress.com](https://whatismyipaddress.com))
+   - **Description:** Supabase access
 
-# To this open binding:
-ports:
-  - "0.0.0.0:8080:8080"
-```
+3. **Add a rule for API (Port 8080):**
+   - **Direction:** Inbound  
+   - **Protocol:** TCP
+   - **Port:** 8080
+   - **Source:** Your IP address (same as above)
+   - **Description:** API access
 
-**Understanding the change:**
-- `127.0.0.1:8080:8080` only allows connections from localhost (the server itself)
-- `0.0.0.0:8080:8080` allows connections from any IP address, making your API publicly accessible
+**Security recommendation:**
+Just like with SSH (port 22), restricting access to your IP address only prevents unauthorized access to your application services. This is especially important since these ports will expose your database interface and API endpoints.
 
-**After making this change:**
-- Your API will be accessible at: `http://YOUR_SERVER_IP:8080`
-- Supabase services will be accessible at: `http://YOUR_SERVER_IP:8000` (or your configured KONG_HTTP_PORT)
-
-**Important security consideration:**
-This configuration exposes your API directly to the internet without additional security layers. For production deployments, you should consider implementing a reverse proxy solution like Caddy   with SSL certificates to provide better security and encrypted connections.
 
 ## Step 4: Start the Application
 
 Navigate to the docker/ directory:
 
 ```bash
-cd /opt/genai-launchpad/docker
+cd /opt/genai-launchpad-quickstart/docker
 ```
 
 Run the startup script:
@@ -118,12 +115,49 @@ Verify everything is running correctly by running:
 ./logs.sh
 ```
 
-## Step 5: Test Your API Access
+## Step 5: Run the Database Migrations
+
+Create and apply database migrations using Alembic to set up your database schema:
+
+1. **Navigate to the app directory:**
+   ```bash
+   cd ../app
+   ```
+
+2. **Create a new migration:**
+   ```bash
+   ./makemigration.sh
+   ```
+   This script will prompt you for a message to describe the migration. You can enter something like: `init db`
+
+3. **Apply the migration:**
+   ```bash
+   ./migrate.sh
+   ```
+   This will apply the migration that was just created, setting up your database tables and structure.
+
+## Step 6: Test Your API Access
 
 Once your deployment is complete and your API is properly exposed, you need to verify that everything is working correctly.
 
+**Access Supabase Studio:**
+First, verify that Supabase is running and your database is properly set up:
+
+1. **Open your browser** and navigate to:
+   ```
+   http://YOUR_SERVER_IP:8000
+   ```
+   Replace `YOUR_SERVER_IP` with your actual server's IP address.
+
+2. **Authenticate with Supabase:**
+   - **Username:** `supabase`
+   - **Password:** `supabase`
+
+3. **Verify the database setup:**
+   Once logged in to Supabase Studio, navigate to the Tables section and confirm that the `events` table exists and is properly configured.
+
 **Run the test script:**
-Execute the `week-6/deployment/request.py` script to send test events (update with your server public IP) to your deployed endpoint. This script will help you verify that your API is responding correctly and processing requests as expected.
+After verifying Supabase is accessible, test your API endpoint by executing the `week-6/deployment/request.py` script. Make sure to update the script with your server's public IP address before running it. This script will help you verify that your API is responding correctly and processing requests as expected.
 
 **Monitor your deployment:**
 While running the test script, monitor the logs on your server through the terminal to observe real-time activity and ensure there are no errors in the processing pipeline.
