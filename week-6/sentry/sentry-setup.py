@@ -43,7 +43,6 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 """
-When you open http://localhost:8000/sentry-debug/ or http://localhost:8000/key-error/ with your browser, a transaction in the Performance section of Sentry will be created.
-Additionally, an error event will be sent to Sentry and will be connected to the transaction.
+When you open http://localhost:8000/sentry-debug/ or http://localhost:8000/key-error/ with your browser, a transaction in the Performance section of Sentry will be created. Additionally, an error event will be sent to Sentry and will be connected to the transaction.
 It takes a couple of moments for the data to appear in Sentry.
 """
