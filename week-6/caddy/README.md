@@ -211,11 +211,19 @@ When using Caddy as a reverse proxy, your firewall configuration changes signifi
 
 ## IP Whitelisting for Supabase Dashboard
 
-If you want to protect your Supabase dashboard with IP restrictions, you have two options:
+If you want to protect your Supabase dashboard with IP restrictions, you can configure this at the Caddy level using environment variables.
 
 ### Caddy-Level IP Restrictions (Recommended)
 
-Modify your Caddyfile to add IP restrictions to the Supabase subdomain:
+First, add the IP whitelist environment variable to your `docker/.env` file:
+
+```bash
+CADDY_DOMAIN_API=api.your-domain.com
+CADDY_DOMAIN_SUPABASE=supabase.your-domain.com
+CADDY_IP_WHITELIST=203.0.113.42 198.51.100.25  # Replace with your actual IPs (space-separated)
+```
+
+Then modify your Caddyfile to add IP restrictions to the Supabase subdomain:
 
 ```caddy
 # API Service - GenAI Launchpad (Public Access)
@@ -230,20 +238,18 @@ Modify your Caddyfile to add IP restrictions to the Supabase subdomain:
 
 # Supabase Service - IP Restricted Access
 {$CADDY_DOMAIN_SUPABASE} {
-    # IP whitelist - replace with your actual IP address
-    @allowed_ips {
-        remote_ip 203.0.113.42  # Replace with your IP
-        # Add more IPs if needed:
-        # remote_ip 198.51.100.25
+    log {
+        output file /var/log/caddy/supabase.log
+        format console
+        level info
     }
     
-    # Block all other IPs
+    @allowed_ips {
+        remote_ip {$CADDY_IP_WHITELIST}
+    }
+    
+    # Handle allowed IPs
     handle @allowed_ips {
-        log {
-            output file /var/log/caddy/supabase.log
-            format console
-            level info
-        }
         reverse_proxy kong:8000
     }
     
@@ -253,6 +259,11 @@ Modify your Caddyfile to add IP restrictions to the Supabase subdomain:
     }
 }
 ```
+
+**Key improvements in Caddy v2:**
+- Use environment variables for IP whitelist management
+- Multiple IPs can be specified space-separated in the environment variable
+- Cleaner syntax with proper matcher handling
 
 This gives you the security you want for Supabase while keeping your API publicly accessible for your application users.
 
