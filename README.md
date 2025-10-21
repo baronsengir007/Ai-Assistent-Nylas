@@ -1,40 +1,102 @@
-# GenAI Accelerator Labs
+# AI Executive Assistant
 
-Welcome to the official repository for the AI Engineering Accelerator program's hands-on labs! This repository contains all the practical exercises, code examples, and projects you'll be working on throughout the six-week accelerator.
+## Introduction
 
-## Overview
+This project creates a personal AI assistant focused on email and calendar management, inspired by Dan Martell's business book "Buy Back Your Time." The core philosophy is that managing your inbox and calendar are among the first tasks entrepreneurs should delegate as their workload grows. With modern AI capabilities, we can now create an AI executive assistant to handle these responsibilities effectively.
 
-This repository is structured to follow the course curriculum, with dedicated folders for each week's exercises. As you progress through the accelerator, you'll build increasingly complex AI applications, culminating in a complete project that leverages the GenAI Launchpad framework.
+The AI Executive Assistant monitors your inbox, processes emails intelligently, and manages calendar events automatically - freeing up your valuable time to focus on strategic priorities.
 
-## Repository Structure
+## Why Nylas?
 
+This project leverages the [Nylas API platform](https://www.nylas.com/) for several key advantages:
+
+- **Unified API**: Nylas provides a single API to connect with Gmail, Outlook, Exchange, and other email/calendar providers
+- **Authentication Handling**: Nylas manages OAuth flows and credential refreshing
+- **Webhooks**: Real-time notifications for email and calendar events
+- **Future Flexibility**: Easily switch email providers without changing your application code
+
+Using Nylas significantly reduces development time and complexity compared to building direct integrations with multiple email and calendar services.
+
+## Project Benefits
+
+Beyond creating a useful tool, this project demonstrates fundamental concepts for building end-to-end AI applications:
+
+1. **System Integration**: Monitoring incoming data via webhooks
+2. **Data Storage**: Organizing and persisting information
+3. **AI Processing**: Analyzing content with AI models
+4. **Closed-Loop Functionality**: Taking actions based on AI decisions
+
+This foundation not only teaches the core components of practical AI applications but also creates an extensible platform that community members can enhance with additional tools and capabilities.
+
+## Architecture Overview
+
+```mermaid
+---
+config:
+  layout: fixed
+  theme: neutral
+  look: neo
+---
+flowchart LR
+ subgraph External["External Services"]
+        Email["Email"]
+        Calendar["Calendar"]
+  end
+ subgraph Nylas["Nylas API Platform"]
+        NylasAPI["Nylas Unified API"]
+        NylasWH["Nylas Webhook Service"]
+  end
+ subgraph Database["Database Layer"]
+        PostgreSQL[("PostgreSQL")]
+        RawEvents["Raw Events"]
+        ProcessedResults["Processed Results"]
+  end
+ subgraph Workflows["AI Workflows"]
+        EmailProcessing["Email Analysis Workflow"]
+        CalendarProcessing["Calendar Management Workflow"]
+  end
+ subgraph Workers["Async Processing"]
+        Celery["Celery Worker"]
+        Workflows
+  end
+ subgraph Backend["Custom Python Backend"]
+        FastAPI["FastAPI Application"]
+        Database
+        Workers
+  end
+    Email --> NylasAPI
+    Calendar --> NylasAPI
+    NylasAPI --> NylasWH
+    NylasWH -- Webhook Events --> FastAPI
+    FastAPI -- Store Raw Events --> RawEvents
+    FastAPI -- Queue Tasks --> Celery
+    Celery --> EmailProcessing & CalendarProcessing
+    EmailProcessing -- Email Actions --> NylasAPI
+    CalendarProcessing -- Calendar Updates --> NylasAPI
+    EmailProcessing -- Store Results --> ProcessedResults
+    CalendarProcessing -- Store Results --> ProcessedResults
+    NylasAPI -- Send Responses --> Email
+    NylasAPI -- Update Calendar --> Calendar
+    RawEvents -.-> PostgreSQL
+    ProcessedResults -.-> PostgreSQL
 ```
-genai-accelerator-labs/
-├── week-1/           # Python Fundamentals & Development Environment
-├── week-2/           # Design Patterns for AI Engineering
-├── week-3/           # Event-Driven Architecture & Containerization
-├── week-4/           # Retrieval Augmented Generation (RAG)
-├── week-5/           # LLM Observability, Monitoring & Evaluation
-├── week-6/           # Deploying Your AI Applications
+
+
+## Slack Interaction Layer
+
+```mermaid
+---
+config:
+  look: neo
+  theme: neutral
+  layout: dagre
+---
+flowchart LR
+    User(("User")) -- Instructions --> Slack["Slack"]
+    Slack -- Forward commands --> Backend["FastAPI Backend"]
+    Backend -- Process --> Workflows["AI Workflows"]
+    Workflows -- Execute actions --> Nylas["Nylas API"]
+    Nylas -- Email & Calendar Events --> Backend
+    Workflows -- Important updates --> Slack
+    Slack -- Notifications --> User
 ```
-
-## Getting Started
-
-1. Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/datalumina/genai-accelerator-labs.git
-   cd genai-accelerator-labs
-   ```
-
-2. Each week's folder contains code exercises and instructions to follow along.
-
-3. Complete the exercises in order, as each builds upon skills learned in previous sessions.
-
-
-## Prerequisites
-
-- Python 3.10 or newer
-- Python IDE (Cursor, PyCharm, VS Code, Windsurf, etc.)
-- UV package manager
-- GitHub account
-- Basic Python programming knowledge
