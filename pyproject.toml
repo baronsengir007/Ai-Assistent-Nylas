@@ -1,37 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "genai-accelerator-labs"
+name = "ai-assistant"
 version = "0.1.0"
-description = "Lab exercises for the GenAI Accelerator by Datalumina"
+description = "AI Executive Assistant for email and calendar management"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"},
+]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
 dependencies = [
-    "ipykernel>=6.29.5",
-    "matplotlib>=3.10.1",
-    "numpy>=2.2.5",
-    "nylas>=6.9.0",
-    "openai>=1.77.0",
-    "pydantic-ai>=0.2.3",
-    "pydantic>=2.11.4",
-    "python-dotenv>=1.1.0",
-    "tiktoken>=0.1.1",
-    "fastapi>=0.115.12",
-    "sqlalchemy>=2.0.41",
-    "celery>=5.5.2",
-    "redis>=6.1.0",
-    "pgvector>=0.4.1",
-    "psycopg[binary]>=3.2.9",
-    "docling>=2.15.1",
-    "langfuse>=2.60.7",
-    "sentry-sdk>=2.29.1",
-    "logfire>=3.16.1",
-    "llm-guard>=0.3.16",
-    "pip>=25.1.1",
-    "datasets>=3.6.0",
-    "seaborn>=0.13.2",
-    "mcp[cli]>=1.8.1",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "nylas>=6.0.0",
+    "jinja2>=3.1.0",
+    "python-multipart>=0.0.6",
+    "requests>=2.31.0",
 ]
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
-    "jupyter>=1.1.1",
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.7.0",
+    "pre-commit>=3.5.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/baronsengir007/Ai-Assistent-Nylas"
+Repository = "https://github.com/baronsengir007/Ai-Assistent-Nylas"
+Issues = "https://github.com/baronsengir007/Ai-Assistent-Nylas/issues"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
